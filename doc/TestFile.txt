@@ -2,3 +2,4 @@ Name: Jolene Poulin, ccid: jcpoulin, Git: nienna73
 Name: Monica Bui, ccid:bui1, Git:bui1
 Name: Fangting Chen, ccid: fc1, Git: Finicft
 Name: Atharv "Atty" Vohra, CCID: atharv, Git: AtharvVohra (because the world isn't generic already)
+Name: Shuai Li, CCID:Shuai3, Git:f30jimi
