@@ -1,2 +1,4 @@
 Name: Jolene Poulin, ccid: jcpoulin, Git: nienna73
 Name: Monica Bui, ccid:bui1, Git:bui1
+Name: Fangting Chen, ccid: fc1, Git: Finicft
+
