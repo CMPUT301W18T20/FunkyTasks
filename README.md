@@ -1,4 +1,4 @@
-Copyright 2018 CMPUT301W18T20
+Copyright 2018 Monica Bui, Jolene Poulin, Shuai Li, Atharv Vohra, Eivenlour David, Fangting Chen
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
