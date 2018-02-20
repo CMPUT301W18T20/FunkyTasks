@@ -15,6 +15,12 @@ public class UserTest extends TestCase {
 
 
 
+    @Test
+    public void testAddTask(){
+        User user = new User("Kenw", "kenw@ualberta.ca", "101-001-0011");
+        Task task = new task()
+
+    }
 
     @Test
     public void testGetUsername() {

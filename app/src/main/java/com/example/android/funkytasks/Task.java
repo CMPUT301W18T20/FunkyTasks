@@ -11,13 +11,13 @@ public class Task {
 
     private String title;
     private String description;
-    private String requester;
+    private User requester;
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
     private ArrayList<User> bidders;
 
 
-    Task(String title, String description,String requester){
+    Task(String title, String description,User requester){
         // constructor for task object
         this.title = title;
         this.description = description;
@@ -62,10 +62,10 @@ public class Task {
     public String getStatus(){
         return this.status;
     }
-    public void setRequester(String newRequester){
+    public void setRequester(User newRequester){
         this.requester=newRequester;
     }
-    public String getRequester(){
+    public User getRequester(){
         return this.requester;
     }
 
