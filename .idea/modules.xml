@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FunkyTasks.iml" filepath="$PROJECT_DIR$/FunkyTasks.iml" />
+      <module fileurl="file://C:\Users\Atharv\Desktop\UofA\Winter Term 2018\Cmput 301\FunkyTasks\FunkyTasks.iml" filepath="C:\Users\Atharv\Desktop\UofA\Winter Term 2018\Cmput 301\FunkyTasks\FunkyTasks.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://C:\Users\Atharv\Desktop\UofA\Winter Term 2018\Cmput 301\FunkyTasks\app\app.iml" filepath="C:\Users\Atharv\Desktop\UofA\Winter Term 2018\Cmput 301\FunkyTasks\app\app.iml" />
     </modules>
   </component>
 </project>
