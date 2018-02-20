@@ -1,5 +1,7 @@
 package com.example.android.funkytasks;
 
+import java.util.ArrayList;
+
 /**
  * Created by MonicaB on 2018-02-20.
  */
@@ -12,6 +14,8 @@ public class Task {
     private String requester;
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
+    private ArrayList<User> bidders;
+
 
     Task(String title, String description,String requester){
         // constructor for task object
@@ -19,7 +23,19 @@ public class Task {
         this.description = description;
         this.requester = requester;
         this.status = statuses[0];
+        bidders = new ArrayList<User>();
+    }
 
+    public ArrayList<User> getBidders() {
+        return bidders;
+    }
+
+    public void setBidders(ArrayList<User> bidders) {
+        this.bidders = bidders;
+    }
+
+    public void addBidders(User newBidder){
+        bidders.add(newBidder);
     }
 
     public String getTitle(){
