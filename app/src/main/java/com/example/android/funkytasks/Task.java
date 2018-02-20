@@ -6,6 +6,7 @@ package com.example.android.funkytasks;
 
 public class Task {
     // title, description, status, lowest bid,
+
     private String title;
     private String description;
     private String poster;
