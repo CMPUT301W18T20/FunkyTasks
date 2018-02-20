@@ -1,6 +1,9 @@
 package com.example.android.funkytasks;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+
+import junit.framework.TestCase;
 
 import org.junit.Test;
 
@@ -8,17 +11,14 @@ import org.junit.Test;
  * Created by fc1 on 2018-02-20.
  */
 
-public class UserTest extends ActivityInstrumentationTestCase2 {
+public class UserTest extends TestCase {
 
 
-    public UserTest(){
-        super(LoginActivity.class);
-    }
+
 
     @Test
     public void testGetUsername() {
         User user = new User("Kenw", "kenw@ualberta.ca", "101-001-0011");
-
         assertEquals("Kenw", user.getUsername());
 
     }
@@ -52,13 +52,15 @@ public class UserTest extends ActivityInstrumentationTestCase2 {
     @Test
     public void testGetRating() {
         User user = new User("Kenw", "kenw@ualberta.ca", "101-001-0011");
-        assertEquals(3, user.getRating());
+        Double rating = 3.0;
+        assertEquals(rating, user.getRating());
     }
 
     @Test
     public void testSetRating() {
         User user = new User("Kenw", "kenw@ualberta.ca", "101-001-0011");
         user.setRating(5);
-        assertEquals(5, user.getRating());
+        Double rating = 5.0;
+        assertEquals(rating, user.getRating());
     }
 }
