@@ -9,15 +9,15 @@ public class Task {
 
     private String title;
     private String description;
-    private String poster;
+    private String requester;
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
 
-    Task(String title, String description,String poster){
+    Task(String title, String description,String requester){
         // constructor for task object
         this.title = title;
         this.description = description;
-        this.poster = poster;
+        this.requester = requester;
         this.status = statuses[0];
 
     }
@@ -46,11 +46,11 @@ public class Task {
     public String getStatus(){
         return this.status;
     }
-    public void setPoster(String newPoster){
-        this.poster=newPoster;
+    public void setRequester(String newRequester){
+        this.requester=newRequester;
     }
-    public String getPoster(){
-        return this.poster;
+    public String getRequester(){
+        return this.requester;
     }
 
 }

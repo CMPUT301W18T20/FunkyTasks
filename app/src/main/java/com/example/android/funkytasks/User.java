@@ -1,5 +1,7 @@
 package com.example.android.funkytasks;
 
+import java.util.ArrayList;
+
 /**
  * Created by MonicaB on 2018-02-20.
  */
@@ -10,13 +12,24 @@ public class User {
     private String email;
     private String phonenumber;
     private double rating;
+    private ArrayList<Task> tasks = new ArrayList<Task>();
 
     User(String username, String email, String phonenumber){
         this.username = username;
         this.email = email;
         this.phonenumber = phonenumber;
         this.rating = 3;
+
     }
+
+    public void addTask(Task newTask){
+        tasks.add(newTask);
+    }
+
+    public ArrayList<Task> getTasks(){
+        return this.tasks;
+    }
+
 
     public String getUsername(){
         return this.username;
