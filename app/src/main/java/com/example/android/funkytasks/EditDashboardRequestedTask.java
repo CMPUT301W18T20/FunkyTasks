@@ -26,31 +26,6 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         description=(EditText) findViewById(R.id.editDescription) ;
         bidList = (ListView) findViewById(R.id.bidList);
 
-        final ArrayAdapter adapter = new ArrayAdapter<User>(.this, android.R.layout.simple_list_item_multiple_choice, sublist);
-
-
-
-
-        Intent intent = getIntent();
-        Bundle extras = getIntent().getExtras();
-        final int theTask= extras.getInt("id");
-        setDetails(theTask);
-
     }
-
-
-
-
-
-    private void setDetails(int i){
-        title.setText(tasksArrayList.get(i).getTitle());
-        description.setText(tasksArrayList.get(i).getDescription());
-
-
-    }
-    private void setBids(){
-
-
-
-    }
+    
 }
