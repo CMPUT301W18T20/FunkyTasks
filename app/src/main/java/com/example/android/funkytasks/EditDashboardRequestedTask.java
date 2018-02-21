@@ -16,7 +16,6 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard_requested_task);
 
-<<<<<<< HEAD
         TextView title = (TextView) findViewById(R.id.Title);
         TextView description = (TextView) findViewById(R.id.Description);
         EditText newTitle = (EditText) findViewById(R.id.editTitle);
@@ -27,8 +26,4 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     }
 
 
-=======
-
-    }
->>>>>>> d5d18ab75066f501474f2cf8959da71edb6b8ffb
 }
