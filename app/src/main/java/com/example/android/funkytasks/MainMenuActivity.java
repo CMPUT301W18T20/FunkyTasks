@@ -2,11 +2,16 @@ package com.example.android.funkytasks;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -36,8 +41,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 sendToDashboard(view);
             }
         });
-    }
 
+    }
 
     public void sendToDashboard(View view){
         Intent intent = new Intent(this, TaskDashboardActivity.class);
