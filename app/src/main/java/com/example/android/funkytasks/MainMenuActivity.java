@@ -28,6 +28,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
         Task task1= new Task("Funky","make ken happy",userArrayList.get(0));
+        bid bid1= new bid(userArrayList.get(0),10.0);
+        task1.addBid(bid1);
         tasksArrayList.add(task1);
 
 
@@ -45,7 +47,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void sendToDashboard(View view){
-        Intent intent = new Intent(this, TaskDashboardActivity.class);
+        Intent intent = new Intent(this, DashboardRequestedTask.class);
         startActivity(intent);
     }
     public void sendToCreateTaskActivity(View view){

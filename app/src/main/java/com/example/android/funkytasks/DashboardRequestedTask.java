@@ -35,10 +35,12 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
 
         Bundle extras = getIntent().getExtras();
-        final int ID= extras.getInt("id");
+
 
         //set task details
-        setTaskDetails(ID);
+        setTaskDetails();
+        //set bids
+        setBids();
 
         //to edit task details
         edit=(Button)findViewById(R.id.buttonEdit);
@@ -76,15 +78,20 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     //set title and description
-    public void setTaskDetails(int ID) {
+    public void setTaskDetails() {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
-        titleValue.setText(tasksArrayList.get(ID).getTitle());
-        descriptionValue.setText(tasksArrayList.get(ID).getDescription());
+        titleValue.setText(tasksArrayList.get(0).getTitle());
+        descriptionValue.setText(tasksArrayList.get(0).getDescription());
 
     }
 
-    public void setBids(int ID){
+    public void setBids(){
+        bidListView=(ListView) findViewById(R.id.listView);
+
+        ArrayAdapter<bid> adapter= new ArrayAdapter<bid>(DashboardRequestedTask.this,android.R.layout.simple_list_item_multiple_choice,tasksArrayList.get(0).getBids());
+        bidListView.setAdapter(adapter);
+
 
     }
 
