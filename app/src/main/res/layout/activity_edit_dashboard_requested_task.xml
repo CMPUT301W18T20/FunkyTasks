@@ -31,26 +31,50 @@
         android:minLines="3"
         android:maxLines="10"
         android:text="description"
+<<<<<<< HEAD
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Description" />
+=======
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <Button
+        android:id="@+id/buttonFinishDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="132dp"
+        android:text="Edit finish date"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+>>>>>>> d5d18ab75066f501474f2cf8959da71edb6b8ffb
 
     <Button
         android:id="@+id/buttonLocation"
         android:layout_width="140dp"
         android:layout_height="46dp"
         android:layout_marginLeft="16dp"
+<<<<<<< HEAD
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+=======
+>>>>>>> d5d18ab75066f501474f2cf8959da71edb6b8ffb
         android:text="edit location"
         app:layout_constraintLeft_toLeftOf="parent"
+<<<<<<< HEAD
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editDescription" />
+=======
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.737" />
+>>>>>>> d5d18ab75066f501474f2cf8959da71edb6b8ffb
 
     <Button
         android:id="@+id/buttonDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -68,10 +92,17 @@
         android:layout_marginTop="16dp"
         android:text="Title"
         android:textSize="24sp"
+=======
+        android:layout_marginBottom="56dp"
+        android:text="done!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
+>>>>>>> d5d18ab75066f501474f2cf8959da71edb6b8ffb
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+<<<<<<< HEAD
     <TextView
         android:id="@+id/Description"
         android:layout_width="wrap_content"
@@ -82,5 +113,7 @@
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTitle" />
+=======
+>>>>>>> d5d18ab75066f501474f2cf8959da71edb6b8ffb
 
 </android.support.constraint.ConstraintLayout>
