@@ -35,24 +35,19 @@ public class Task {
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
 
-
     public ArrayList<bid> getBids() {
         return bids;
     }
-
     public void setBid(ArrayList<bid> bidders) {
         this.bids = bids;
     }
-
     public void addBid(bid newBidder){
         bids.add(newBidder);
     }
-
     public String getTitle(){
         return this.title;
     }
