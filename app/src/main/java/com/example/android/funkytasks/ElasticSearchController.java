@@ -104,6 +104,10 @@ public class ElasticSearchController {
                     + "    }\n"
                     + "}";
 
+            //https://www.elastic.co/guide/en/elasticsearch/reference/2.3/query-dsl-term-query.html
+
+            //bingo the link above may help me
+
             return user;
         }
 
@@ -116,6 +120,10 @@ public class ElasticSearchController {
 
 
     //TODO delete a specific task (status=done)
+
+    //TODO update a user's contact info
+
+    //TODO update a task's status in database
 
 
 
