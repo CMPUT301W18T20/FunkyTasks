@@ -8,4 +8,60 @@
     tools:context="com.example.android.funkytasks.CreateTaskActivity"
     tools:showIn="@layout/activity_create_task">
 
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add New Task"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="112dp"
+        tools:layout_editor_absoluteY="4dp" />
+
+    <TextView
+        android:id="@+id/textViewAddTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="46dp" />
+
+
+    <EditText
+        android:id="@+id/AddTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/textViewAddTitle"
+        tools:layout_editor_absoluteY="97dp" />
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:textSize="25sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="157dp" />
+
+    <EditText
+        android:id="@+id/AddDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/textViewDescription"
+        tools:layout_editor_absoluteY="217dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Status: Requested"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="310dp" />
+
+
 </android.support.constraint.ConstraintLayout>
