@@ -1,8 +1,12 @@
 package com.example.android.funkytasks;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import io.searchbox.annotations.JestId;
+
+import static java.util.Collections.*;
 
 /**
  * Created by MonicaB on 2018-02-20.
@@ -17,6 +21,7 @@ public class Task {
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
     private ArrayList<bid> bids;
+    private ArrayList<Integer> bidsAmount;
 
     @JestId
     private String id;
@@ -32,13 +37,18 @@ public class Task {
     }
 
 
+    //public int getLowestBid(){
+        //for (int i = 0; i < bids.size(); i++){
+            // amount = bids.
+        //}
+
+    //}
     public String getId() {
         return id;
     }
     public void setId(String id) {
         this.id = id;
     }
-
     public ArrayList<bid> getBids() {
         return bids;
     }
