@@ -16,7 +16,7 @@ public class Task {
     private User requester;
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
-    private ArrayList<User> bidders;
+    private ArrayList<bid> bids;
 
     @JestId
     private String id;
@@ -28,7 +28,7 @@ public class Task {
         this.description = description;
         this.requester = requester;
         this.status = statuses[0];
-        bidders = new ArrayList<User>();
+        bids = new ArrayList<bid>();
     }
 
 
@@ -41,16 +41,16 @@ public class Task {
     }
 
 
-    public ArrayList<User> getBidders() {
-        return bidders;
+    public ArrayList<bid> getBids() {
+        return bids;
     }
 
-    public void setBidders(ArrayList<User> bidders) {
-        this.bidders = bidders;
+    public void setBid(ArrayList<bid> bidders) {
+        this.bids = bids;
     }
 
-    public void addBidders(User newBidder){
-        bidders.add(newBidder);
+    public void addBid(bid newBidder){
+        bids.add(newBidder);
     }
 
     public String getTitle(){
