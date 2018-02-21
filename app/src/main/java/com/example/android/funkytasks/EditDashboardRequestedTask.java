@@ -22,10 +22,6 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard_requested_task);
 
-        title=(EditText) findViewById(R.id.editText);
-        description=(EditText) findViewById(R.id.editDescription) ;
-        bidList = (ListView) findViewById(R.id.bidList);
 
     }
-
 }
