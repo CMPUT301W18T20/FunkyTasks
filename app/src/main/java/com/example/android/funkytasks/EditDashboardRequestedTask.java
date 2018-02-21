@@ -3,29 +3,27 @@ package com.example.android.funkytasks;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import static com.example.android.funkytasks.MainMenuActivity.tasksArrayList;
 
 public class EditDashboardRequestedTask extends AppCompatActivity {
-
-    private EditText title;
-    private EditText description;
-    private Button editTask;
-    private ListView bidList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard_requested_task);
 
-        title=(EditText) findViewById(R.id.editText);
-        description=(EditText) findViewById(R.id.editDescription) ;
-        bidList = (ListView) findViewById(R.id.bidList);
+        TextView title = (TextView) findViewById(R.id.Title);
+        TextView description = (TextView) findViewById(R.id.Description);
+        EditText newTitle = (EditText) findViewById(R.id.editTitle);
+        EditText newDescription = (EditText) findViewById(R.id.editDescription);
+        Button done = (Button) findViewById(R.id.buttonDone);
+        Button location = (Button) findViewById(R.id.buttonLocation);
 
     }
+
 
 }
