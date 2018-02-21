@@ -16,12 +16,14 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity{
 
 
-    ArrayList<User> userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+    ArrayList<User> userArrayList = new ArrayList<User>();
+//            ((GlobalVariables) this.getApplication()).getUserArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
 
         User testuser1 = new User("Jim", "jim@ualberta.ca", "6666969642");
 
