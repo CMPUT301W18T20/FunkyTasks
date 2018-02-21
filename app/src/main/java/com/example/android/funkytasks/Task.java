@@ -2,6 +2,8 @@ package com.example.android.funkytasks;
 
 import java.util.ArrayList;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by MonicaB on 2018-02-20.
  */
@@ -16,6 +18,9 @@ public class Task {
     private String[] statuses={"requested","bidded","asigned","done"};
     private ArrayList<User> bidders;
 
+    @JestId
+    private String id;
+
 
     Task(String title, String description,User requester){
         // constructor for task object
@@ -25,6 +30,16 @@ public class Task {
         this.status = statuses[0];
         bidders = new ArrayList<User>();
     }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 
     public ArrayList<User> getBidders() {
         return bidders;
