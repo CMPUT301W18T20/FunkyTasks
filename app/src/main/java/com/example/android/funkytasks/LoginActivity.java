@@ -15,9 +15,7 @@ import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity{
 
-
     ArrayList<User> userArrayList = new ArrayList<User>();
-//            ((GlobalVariables) this.getApplication()).getUserArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +53,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     public void checkUserName(String username){
+
         for (User user: userArrayList){
             Log.e("HALP", user.getUsername());
             if(username.equals(user.getUsername())){

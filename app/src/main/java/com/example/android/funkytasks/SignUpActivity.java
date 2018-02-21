@@ -12,13 +12,15 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class SignUpActivity extends AppCompatActivity {
-
-    ArrayList<User> userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+    ArrayList<User> userArrayList = new ArrayList<User>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -53,6 +55,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void checkForClash(String username, String phone, String email){
+        User userToAdd = new User(username, email, phone);
+
         for(User user: userArrayList){
             if(username.equals(user.getUsername())){
                 Toast.makeText(SignUpActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
@@ -64,6 +68,8 @@ public class SignUpActivity extends AppCompatActivity {
                 Toast.makeText(SignUpActivity.this, "E-mail already in use", Toast.LENGTH_SHORT).show();
             }
             else{
+                userArrayList.add(userToAdd);
+                ((GlobalVariables) this.getApplication()).setUserArrayList(userArrayList);
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
             }

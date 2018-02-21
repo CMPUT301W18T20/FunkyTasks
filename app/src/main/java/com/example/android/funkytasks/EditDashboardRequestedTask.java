@@ -27,5 +27,5 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         bidList = (ListView) findViewById(R.id.bidList);
 
     }
-    
+
 }
