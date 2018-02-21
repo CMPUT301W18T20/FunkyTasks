@@ -29,15 +29,11 @@ public class ListViewAdapter extends ArrayAdapter<Task>{
             view = LayoutInflater.from(getContext()).inflate(R.layout.listviewitem, parent, false);
         }
         // Lookup view for data population
-        TextView name = (TextView) view.findViewById(R.id.name);
-        TextView charge = (TextView) view.findViewById(R.id.charge);
-        TextView comments = (TextView) view.findViewById(R.id.comments);
-        TextView date = (TextView) view.findViewById(R.id.date);
+        TextView title = (TextView) view.findViewById(R.id.taskTitle);
+        TextView status = (TextView) view.findViewById(R.id.taskStatus);
 
-        name.setText(sub.getName());
-        charge.setText(sub.getCharge());
-        comments.setText(sub.getComment());
-        date.setText(sub.getStartDate());
+        title.setText(task.getTitle());
+        status.setText(task.getStatus());
 
 
         return view;
