@@ -18,7 +18,7 @@ public class TaskTest extends TestCase{
     private String inputStatus = "requested";
     private User inputRequester =new User("Ken", "ken@ualberta.ca", "7806668888");
     private User bidder1 =new User("Jimi", "ken@ualberta.ca", "7806668888");
-    private ArrayList<User> bidders = new ArrayList<User>();
+    private ArrayList<bid> bids = new ArrayList<bid>();
     private Task test=new Task(inputTitle,inputDescription,inputRequester);
 
 
@@ -104,36 +104,29 @@ public class TaskTest extends TestCase{
 
     }
 
-//    @Test
-//    public void testGetBidders() throws Exception{
-//        ArrayList<User> output = test.getBidders();
-//        if(!output.equals(bidders)){
-//            System.out.print("Error in getBidder");
-//        }
-//
-//    }
-//    @Test
-//    public void testSetBidders() throws Exception{
-//        test.setBidders(bidders);
-//        ArrayList<User> output = test.getBidders();
-//        if(!output.equals(bidders)){
-//            System.out.print("Error in setBidder");
-//        }
-//
-//    }
-//
-//    @Test
-//    public void testAddBidders() throws Exception{
-//        test.addBidders(bidder1);
-//        bidders.add(bidder1);
-//        ArrayList<User> output = test.getBidders();
-//
-//        if(!output.equals(bidders)){
-//            System.out.print("Error in addBidder");
-//        }
-//
-//    }
+    @Test
+    public void testGetBids() throws Exception{
+        bid newBid=new bid(bidder1,10.0);
+        test.addBid(newBid);
+        bids.add(newBid);
+        assertEquals(test.getBids(),bids);
 
+    }
+
+    @Test
+    public void testSetBids() throws Exception{
+
+    }
+    @Test
+    public void testAddBids() throws Exception{
+
+        bid newBid=new bid(bidder1,10.0);
+        bids.add(newBid);
+        test.addBid(newBid);
+        assertEquals(test.getBids(),bids);
+
+
+    }
 
 
 

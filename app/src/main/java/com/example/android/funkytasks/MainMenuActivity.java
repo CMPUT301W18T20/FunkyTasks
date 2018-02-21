@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class MainMenuActivity extends AppCompatActivity {
     public static ArrayList<Task> tasksArrayList = new ArrayList<Task>();
+    ArrayList<User> userArrayList = new ArrayList<User>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,11 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+        Task task1= new Task("Funky","make ken happy",userArrayList.get(0));
+        tasksArrayList.add(task1);
+
 
 
         Intent intent = getIntent();

@@ -17,9 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/taskTitle"
-        android:text="Task Decription" />
+        android:layout_alignParentStart="true"/>
 
     <TextView
         android:id="@+id/taskStatus"
@@ -27,8 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/taskDescription"
-        android:text="Task Status" />
+        android:layout_below="@+id/taskDescription"/>
 
     <TextView
         android:id="@+id/taskBid"

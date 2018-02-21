@@ -29,6 +29,12 @@ public class LoginActivity extends AppCompatActivity{
         Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
     }
 
+    @Override
+    protected void onStart () {
+        super.onStart();
+        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+    }
+
     public void sendToMainMenu(View view){
 
         String username;
@@ -56,14 +62,16 @@ public class LoginActivity extends AppCompatActivity{
 
         for (User user: userArrayList){
             Log.e("HALP", user.getUsername());
+            Log.e("Name entered", username);
             if(username.equals(user.getUsername())){
                 Intent intent = new Intent(this, MainMenuActivity.class);
                 startActivity(intent);
                 finish();
             }
             else{
-                Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
-                return;
+                continue;
+//                Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
+//                return;
             }
         }
 

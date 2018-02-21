@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+
 public class TaskDashboardActivity extends AppCompatActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();
 
@@ -18,18 +19,24 @@ public class TaskDashboardActivity extends AppCompatActivity {
         userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
         User user1 = userArrayList.get(0);
         Task task = new Task("TITLE task","description",user1);
-        bid bidz = new bid("Jim", 1.00);
+        bid bidz = new bid(user1,1.00);
         task.addBid(bidz);
 
         user1.addTask(task);
-        Intent intent = getIntent();
 
-        ListView dashboard = (ListView) findViewById(R.id.myTasks);
+        ArrayList<Task> tasks = user1.getTasks();
+
+        ListView dashboardView = (ListView) findViewById(R.id.myTasks);
 
 // get data from the table by the ListAdapter
-        ListViewAdapter dashboardAdapter = new ListViewAdapter(this, 1, user1.getTasks());
+        ListViewAdapter customAdapter = new ListViewAdapter(this, 1, tasks);
 
-        dashboard .setAdapter(dashboardAdapter);
+        dashboardView .setAdapter(customAdapter);
+        Intent intent = getIntent();
+
+
+
     }
+
 
 }
