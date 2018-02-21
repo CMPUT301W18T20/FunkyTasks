@@ -15,7 +15,7 @@ public class GlobalVariables extends Application{
         return userArrayList;
     }
 
-    public void setUserArrayList(ArrayList<User> userArrayList){
-        this.userArrayList = userArrayList;
+    public void setUserArrayList(ArrayList<User> passedArrayList){
+        this.userArrayList = passedArrayList;
     }
 }

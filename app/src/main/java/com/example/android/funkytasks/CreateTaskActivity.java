@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 public class CreateTaskActivity extends AppCompatActivity {
 
-    EditText title = (EditText)findViewById(R.id.AddTitle);
-    EditText description = (EditText) findViewById(R.id.AddDescription);
+//    EditText title = (EditText)findViewById(R.id.AddTitle);
+//    EditText description = (EditText) findViewById(R.id.AddDescription);
     private String titleValue;
     private String descriptionValue;
 
@@ -51,6 +51,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     private int checkTitle(){
+        EditText title = findViewById(R.id.AddTitle);
         titleValue = title.getText().toString().trim();                       // grab name from edit text input
         if (titleValue.length() >= 30){                    // validating name input length
             Toast.makeText(getApplicationContext(),"Title must be at least 30 characters long ",Toast.LENGTH_SHORT)
@@ -61,6 +62,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     private int checkDescription(){
+        EditText description = findViewById(R.id.AddDescription);
         descriptionValue = description.getText().toString().trim();                       // grab name from edit text input
         if (descriptionValue.length() >= 300){                    // validating name input length
             Toast.makeText(getApplicationContext(),"Description  must be at least 300 characters long ",Toast.LENGTH_SHORT)
