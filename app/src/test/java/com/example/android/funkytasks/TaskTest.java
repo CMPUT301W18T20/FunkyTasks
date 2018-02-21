@@ -104,35 +104,35 @@ public class TaskTest extends TestCase{
 
     }
 
-    @Test
-    public void testGetBidders() throws Exception{
-        ArrayList<User> output = test.getBidders();
-        if(!output.equals(bidders)){
-            System.out.print("Error in getBidder");
-        }
-
-    }
-    @Test
-    public void testSetBidders() throws Exception{
-        test.setBidders(bidders);
-        ArrayList<User> output = test.getBidders();
-        if(!output.equals(bidders)){
-            System.out.print("Error in setBidder");
-        }
-
-    }
-
-    @Test
-    public void testAddBidders() throws Exception{
-        test.addBidders(bidder1);
-        bidders.add(bidder1);
-        ArrayList<User> output = test.getBidders();
-
-        if(!output.equals(bidders)){
-            System.out.print("Error in addBidder");
-        }
-
-    }
+//    @Test
+//    public void testGetBidders() throws Exception{
+//        ArrayList<User> output = test.getBidders();
+//        if(!output.equals(bidders)){
+//            System.out.print("Error in getBidder");
+//        }
+//
+//    }
+//    @Test
+//    public void testSetBidders() throws Exception{
+//        test.setBidders(bidders);
+//        ArrayList<User> output = test.getBidders();
+//        if(!output.equals(bidders)){
+//            System.out.print("Error in setBidder");
+//        }
+//
+//    }
+//
+//    @Test
+//    public void testAddBidders() throws Exception{
+//        test.addBidders(bidder1);
+//        bidders.add(bidder1);
+//        ArrayList<User> output = test.getBidders();
+//
+//        if(!output.equals(bidders)){
+//            System.out.print("Error in addBidder");
+//        }
+//
+//    }
 
 
 

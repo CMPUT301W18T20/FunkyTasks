@@ -13,11 +13,30 @@
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/taskStatus"
+        android:id="@+id/taskDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/taskTitle"
+        android:text="Task Decription" />
+
+    <TextView
+        android:id="@+id/taskStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/taskDescription"
         android:text="Task Status" />
+
+    <TextView
+        android:id="@+id/taskBid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/taskStatus"
+        android:text="Bid" />
+
 </RelativeLayout>
