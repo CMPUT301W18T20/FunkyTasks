@@ -40,6 +40,7 @@ public class User {
         tasks.add(newTask);
     }
 
+
     public ArrayList<Task> getTasks(){
         return this.tasks;
     }
