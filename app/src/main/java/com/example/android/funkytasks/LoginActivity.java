@@ -1,5 +1,6 @@
 package com.example.android.funkytasks;
 
+import android.app.Application;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,14 +11,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-//TODO create sign up page
 //TODO check if intent is for result or not
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
-    public ArrayList<User> userArrayList = new ArrayList<User>();
 
-        @Override
+    ArrayList<User> userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         User testuser1 = new User("Jim", "jim@ualberta.ca", "6666969642");
 
         userArrayList.add(testuser1);
-
+        Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
     }
 
     public void sendToMainMenu(View view){
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         else {
+            //TODO implement alphanum check
 //            if (username.matches(".*[A-Za-z].*") && username.matches(".*[0-9].*") && username.matches("[A-Za-z0-9]*")) {
 //                checkUserName(username);
 //            } else {
@@ -56,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             if(username.equals(user.getUsername())){
                 Intent intent = new Intent(this, MainMenuActivity.class);
                 startActivity(intent);
+                finish();
             }
             else{
                 Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
@@ -68,5 +71,6 @@ public class LoginActivity extends AppCompatActivity {
     public void sendToSignUp(View view){
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
+
     }
 }
