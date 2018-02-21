@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
             checkUserName(username);
 
         }
-
     }
 
     public void checkUserName(String username){
@@ -64,5 +63,10 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    public void sendToSignUp(View view){
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
     }
 }
