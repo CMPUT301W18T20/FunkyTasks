@@ -17,8 +17,9 @@ public class TaskTest extends TestCase{
     private String inputDescription = "make Ken happy";
     private String inputStatus = "requested";
     private User inputRequester =new User("Ken", "ken@ualberta.ca", "7806668888");
-    private User bidder1 =new User("Jimi", "ken@ualberta.ca", "7806668888");
-    private ArrayList<bid> bids = new ArrayList<bid>();
+    private User bidder1 =new User("Jimi", "jimi@ualberta.ca", "7806668889");
+    private User bidder2 = new User ("Jim", "jim@ualberta.ca", "1112220000");
+    private ArrayList<Bid> bids = new ArrayList<Bid>();
     private Task test=new Task(inputTitle,inputDescription,inputRequester);
 
 
@@ -106,7 +107,7 @@ public class TaskTest extends TestCase{
 
     @Test
     public void testGetBids() throws Exception{
-        bid newBid=new bid(bidder1,10.0);
+        Bid newBid=new Bid(bidder1,10.0);
         test.addBid(newBid);
         bids.add(newBid);
         assertEquals(test.getBids(),bids);
@@ -116,11 +117,12 @@ public class TaskTest extends TestCase{
     @Test
     public void testSetBids() throws Exception{
 
+
     }
     @Test
     public void testAddBids() throws Exception{
 
-        bid newBid=new bid(bidder1,10.0);
+        Bid newBid=new Bid(bidder1,10.0);
         bids.add(newBid);
         test.addBid(newBid);
         assertEquals(test.getBids(),bids);
@@ -128,6 +130,14 @@ public class TaskTest extends TestCase{
 
     }
 
+    @Test
+    public void testGetLowestBid() throws  Exception{
+        Bid bid1 = new Bid(bidder1, 10.0);
+        Bid bid2 = new Bid(bidder2, 3.0);
+        bids.add(bid1);
+        bids.add(bid2);
+        assertEquals(bid2.getAmount(),test.getLowestBid());
+    }
 
 
 }

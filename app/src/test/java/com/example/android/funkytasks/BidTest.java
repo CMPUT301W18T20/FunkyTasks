@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 /**
  * Created by jimi on 2018-02-21.
  */
-public class bidTest {
+public class BidTest {
     @Test
     public void getAmount() throws Exception {
     }

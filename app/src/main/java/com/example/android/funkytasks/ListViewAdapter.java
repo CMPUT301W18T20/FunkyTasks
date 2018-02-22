@@ -43,8 +43,8 @@ public class ListViewAdapter extends ArrayAdapter<Task>{
 
         //TODO call method that grabs lowest bid if its not ZERo
         // for now we have temporary bid
-        ArrayList<bid> x = task.getBids();
-        bid y = x.get(0);
+        ArrayList<Bid> x = task.getBids();
+        Bid y = x.get(0);
         double z = y.getAmount();
         bid.setText(String.valueOf(z));
 

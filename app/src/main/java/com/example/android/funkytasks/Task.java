@@ -20,8 +20,8 @@ public class Task {
     private User requester;
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
-    private ArrayList<bid> bids;
-    private ArrayList<Integer> bidsAmount;
+    private ArrayList<Bid> bids;
+    private ArrayList<Double> bidsAmount;
 
     @JestId
     private String id;
@@ -33,29 +33,31 @@ public class Task {
         this.description = description;
         this.requester = requester;
         this.status = statuses[0];
-        bids = new ArrayList<bid>();
+        bids = new ArrayList<Bid>();
     }
 
 
-    //public int getLowestBid(){
-        //for (int i = 0; i < bids.size(); i++){
-            // amount = bids.
-        //}
-
-    //}
+    public double getLowestBid(){
+        for (int i = 0; i < bids.size(); i++){
+             Bid bid = bids.get(i);
+             double amount = bid.getAmount();
+             bidsAmount.add(amount);
+        }
+        return Collections.min(bidsAmount);
+    }
     public String getId() {
         return id;
     }
     public void setId(String id) {
         this.id = id;
     }
-    public ArrayList<bid> getBids() {
+    public ArrayList<Bid> getBids() {
         return bids;
     }
-    public void setBid(ArrayList<bid> bidders) {
+    public void setBid(ArrayList<Bid> bidders) {
         this.bids = bids;
     }
-    public void addBid(bid newBidder){
+    public void addBid(Bid newBidder){
         bids.add(newBidder);
     }
     public String getTitle(){

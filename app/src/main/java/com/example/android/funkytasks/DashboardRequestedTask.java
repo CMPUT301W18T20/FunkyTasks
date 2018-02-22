@@ -89,7 +89,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     public void setBids(){
         bidListView=(ListView) findViewById(R.id.listView);
 
-        ArrayAdapter<bid> adapter= new ArrayAdapter<bid>(DashboardRequestedTask.this,android.R.layout.simple_list_item_multiple_choice,tasksArrayList.get(0).getBids());
+        ArrayAdapter<Bid> adapter= new ArrayAdapter<Bid>(DashboardRequestedTask.this,android.R.layout.simple_list_item_multiple_choice,tasksArrayList.get(0).getBids());
         bidListView.setAdapter(adapter);
 
 

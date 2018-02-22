@@ -19,7 +19,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
         User user1 = userArrayList.get(0);
         Task task = new Task("TITLE task","description",user1);
-        bid bidz = new bid(user1,1.00);
+        Bid bidz = new Bid(user1,1.00);
         task.addBid(bidz);
 
         user1.addTask(task);
