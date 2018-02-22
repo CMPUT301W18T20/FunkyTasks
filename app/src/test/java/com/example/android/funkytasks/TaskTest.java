@@ -114,11 +114,7 @@ public class TaskTest extends TestCase{
 
     }
 
-    @Test
-    public void testSetBids() throws Exception{
 
-
-    }
     @Test
     public void testAddBids() throws Exception{
 

@@ -54,9 +54,6 @@ public class Task {
     public ArrayList<Bid> getBids() {
         return bids;
     }
-    public void setBid(ArrayList<Bid> bidders) {
-        this.bids = bids;
-    }
     public void addBid(Bid newBidder){
         bids.add(newBidder);
     }
