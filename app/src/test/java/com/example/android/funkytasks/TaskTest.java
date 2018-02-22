@@ -130,8 +130,8 @@ public class TaskTest extends TestCase{
     public void testGetLowestBid() throws  Exception{
         Bid bid1 = new Bid(bidder1, 10.0);
         Bid bid2 = new Bid(bidder2, 3.0);
-        bids.add(bid1);
-        bids.add(bid2);
+        test.addBid(bid1);
+        test.addBid(bid2);
         assertEquals(bid2.getAmount(),test.getLowestBid());
     }
 

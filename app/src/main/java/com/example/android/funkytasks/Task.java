@@ -21,7 +21,7 @@ public class Task {
     private String status;
     private String[] statuses={"requested","bidded","asigned","done"};
     private ArrayList<Bid> bids;
-    private ArrayList<Double> bidsAmount;
+    private double smallest;
 
     @JestId
     private String id;
@@ -37,13 +37,20 @@ public class Task {
     }
 
 
-    public double getLowestBid(){
+    public double getLowestBid() throws IllegalAccessException {
+        if (bids.size() == 0){
+            throw new IllegalAccessException();
+        }
+        smallest = bids.get(0).getAmount();
         for (int i = 0; i < bids.size(); i++){
              Bid bid = bids.get(i);
-             double amount = bid.getAmount();
-             bidsAmount.add(amount);
+             if (smallest > bid.getAmount()){
+                 smallest = bid.getAmount();
+             }
+
         }
-        return Collections.min(bidsAmount);
+        return smallest;
+
     }
     public String getId() {
         return id;
@@ -55,6 +62,7 @@ public class Task {
         return bids;
     }
     public void addBid(Bid newBidder){
+
         bids.add(newBidder);
     }
     public String getTitle(){
