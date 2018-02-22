@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity{
 
         User testuser1 = new User("Jim", "jim@ualberta.ca", "6666969642");
 
+        setTitle("Welcome to FunkyTasks!");
+
         userArrayList.add(testuser1);
         Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
     }
