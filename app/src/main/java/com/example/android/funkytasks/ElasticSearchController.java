@@ -16,6 +16,7 @@ import java.util.List;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -23,7 +24,7 @@ import io.searchbox.core.SearchResult;
 public class ElasticSearchController {
 
     private static JestDroidClient client;
-    private static String database = "http://cmput301.softwareprocess.es:8080/";
+    private static String database = "http://cmput301.softwareprocess.es:8080";
     private static String indexType = "cmput301w18t20";
     private static String userType = "user";
     private static String taskType = "task";
@@ -34,19 +35,21 @@ public class ElasticSearchController {
         protected Void doInBackground(User... newUser) {
             verifySettings();
 
-            User user = newUser[0]; // get the new created user object to post to database
+            for (User user: newUser) { // get the new created user object to post to database
 
-            Index index = new Index.Builder(database).index(indexType).type(userType).build();
+                Index index = new Index.Builder(user).index(indexType).type(userType).build();
 
-            try {
-                DocumentResult result = client.execute(index);
-                if (result.isSucceeded()) {
-                    user.setId(result.getId());
-                } else {
-                    Log.i("Error", "Some error with adding user");
+                try {
+                    DocumentResult result = client.execute(index);
+
+                    if (result.isSucceeded()) {
+                        user.setId(result.getId());
+                    } else {
+                        Log.e("Error", "Some error with adding user");
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", "The application failed to build and add the users");
                 }
-            } catch (Exception e) {
-                Log.i("Error", "The application failed to build and add the users");
             }
 
             return null;
@@ -66,11 +69,16 @@ public class ElasticSearchController {
             //https://www.elastic.co/guide/en/elasticsearch/reference/2.3/query-dsl-term-query.html
             String query = "{\n" +
                     "    \"query\" : {\n" +
-                    "        \"term\" : { \"username\" : \"" + user.getUsername() + "\" }\n" +
+                    "       \"constant_score\" : {\n" +
+                    "           \"filter\" : {\n" +
+                    "               \"term\" : {\"username\": \"" + user.getUsername() + "\"}\n" +
+                    "             }\n" +
+                    "         }\n" +
                     "    }\n" +
                     "}";
 
-            Search search = new Search.Builder(query).addIndex(database).addType(userType).build();
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try{
                 JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
@@ -98,18 +106,25 @@ public class ElasticSearchController {
             verifySettings();
 
             //https://www.elastic.co/guide/en/elasticsearch/reference/2.3/query-dsl-term-query.html
+            // http://okfnlabs.org/blog/2013/07/01/elasticsearch-query-tutorial.html#basic-queries-using-only-the-query-string
             String query = "{\n" +
                     "    \"query\" : {\n" +
-                    "        \"term\" : { \"username\" : \"" + search_parameters[0] + "\" }\n" +
+                    "       \"constant_score\" : {\n" +
+                    "           \"filter\" : {\n" +
+                    "               \"term\" : {\"username\": \"" + search_parameters[0] + "\"}\n" +
+                    "             }\n" +
+                    "         }\n" +
                     "    }\n" +
                     "}";
 
-            Search search = new Search.Builder(query).addIndex(database).addType(userType).build();
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try {
-                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if (result.isSucceeded()) {
                     User user = result.getSourceAsObject(User.class);
+                    Log.e("USER", user.getUsername());
                     return user;
                 } else {
                     Log.e("Nothing", "Theres no user in database");
@@ -119,6 +134,32 @@ public class ElasticSearchController {
             }
 
             return null;
+        }
+    }
+
+    public static class GetAllUsers extends AsyncTask<String, Void, ArrayList<User>> { // grabs user from database
+
+        @Override
+        protected ArrayList<User> doInBackground(String... search_parameters) {
+            verifySettings();
+
+            ArrayList<User> users = new ArrayList<User>();
+
+            Search search = new Search.Builder(search_parameters[0]).addIndex(indexType).addType(userType).build();
+
+            try {
+                SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                if (result.isSucceeded()) {
+                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
+                    users.addAll(foundUsers);
+                } else {
+                    Log.e("Nothing", "Theres no user in database");
+                }
+            } catch (Exception e) {
+                Log.e("Error", "Something went wrong with getting user!");
+            }
+
+            return users;
         }
     }
 
@@ -133,13 +174,18 @@ public class ElasticSearchController {
 
             String query = "{\n" +
                     "    \"query\" : {\n" +
-                    "        \"term\" : { \"username\" : \"" + search_parameters[0] + "\" }\n" +
+                    "       \"constant_score\" : {\n" +
+                    "           \"filter\" : {\n" +
+                    "               \"term\" : {\"username\": \"" + search_parameters[0] + "\"}\n" +
+                    "             }\n" +
+                    "         }\n" +
                     "    }\n" +
                     "}";
 
+
             ArrayList<Task> tasks = new ArrayList<Task>();
 
-            Search search = new Search.Builder(query).addIndex(database).addType(userType).build();
+            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try{
                 JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list

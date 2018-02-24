@@ -62,20 +62,47 @@ public class LoginActivity extends AppCompatActivity{
 
     public void checkUserName(String username){
 
-        for (User user: userArrayList){
-            Log.e("HALP", user.getUsername());
-            Log.e("Name entered", username);
-            if(username.equals(user.getUsername())){
+        // ****** uncomment this to use temporary list of username (must uncomment elastic search then)
+//        for (User user: userArrayList){
+//            Log.e("HALP", user.getUsername());
+//            Log.e("Name entered", username);
+//            if(username.equals(user.getUsername())){
+//                Intent intent = new Intent(this, MainMenuActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//            else{
+//                continue;
+////                Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
+////                return;
+//            }
+//        }
+
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(""); // grab all current users in the system
+
+        ArrayList<User> userList = new ArrayList<User>();
+        try{
+            userList = allUsers.get();
+        }
+        catch (Exception e)
+        {
+            Log.e("Error", "Failed to get list of users");
+        }
+
+        for (User postedUser: userList){
+            Log.e("postedUser",postedUser.getUsername()); // print out all users in system
+            if (postedUser.getUsername().equals(username)){
+                Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainMenuActivity.class);
+                //TODO send USER OBJECT OVER TO MAIN MENU
                 startActivity(intent);
                 finish();
             }
-            else{
-                continue;
-//                Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
-//                return;
-            }
         }
+
+        Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
+        return;
 
     }
 
