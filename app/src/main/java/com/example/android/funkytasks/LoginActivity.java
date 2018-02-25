@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity{
         allUsers.execute(""); // grab all current users in the system
 
         ArrayList<User> userList = new ArrayList<User>();
+
         try{
             userList = allUsers.get();
         }
@@ -92,6 +93,7 @@ public class LoginActivity extends AppCompatActivity{
 
         for (User postedUser: userList){
             Log.e("postedUser",postedUser.getUsername()); // print out all users in system
+            //Log.e("id posted",postedUser.getId().toString());
             if (postedUser.getUsername().equals(username)){
                 Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainMenuActivity.class);

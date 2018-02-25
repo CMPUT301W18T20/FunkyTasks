@@ -13,6 +13,7 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.searchbox.client.JestResult;
 import io.searchbox.core.DocumentResult;
@@ -44,6 +45,7 @@ public class ElasticSearchController {
 
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
+                        Log.e("Looking","good to add");
                     } else {
                         Log.e("Error", "Some error with adding user");
                     }
@@ -124,7 +126,7 @@ public class ElasticSearchController {
                 SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if (result.isSucceeded()) {
                     User user = result.getSourceAsObject(User.class);
-                    Log.e("USER", user.getUsername());
+                    Log.e("USER gotten", user.getUsername());
                     return user;
                 } else {
                     Log.e("Nothing", "Theres no user in database");
@@ -138,6 +140,8 @@ public class ElasticSearchController {
     }
 
     public static class GetAllUsers extends AsyncTask<String, Void, ArrayList<User>> { // grabs user from database
+    //TODO FIX THIS SO ALL THE USERS ARE RETURNED FROM THE LIST
+        //maybe the problem is with the getSourceasobjectlist
 
         @Override
         protected ArrayList<User> doInBackground(String... search_parameters) {
@@ -145,7 +149,7 @@ public class ElasticSearchController {
 
             ArrayList<User> users = new ArrayList<User>();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex(indexType).addType(userType).build();
+            Search search = new Search.Builder("").addIndex(indexType).addType(userType).build();
 
             try {
                 SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
