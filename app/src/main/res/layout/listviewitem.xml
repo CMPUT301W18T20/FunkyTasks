@@ -31,9 +31,8 @@
         android:id="@+id/taskBid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/taskStatus"
-        android:text="Bid" />
+        android:layout_below="@+id/taskTitle"
+        android:text="Bid"
+        android:textSize="18sp" />
 
 </RelativeLayout>
