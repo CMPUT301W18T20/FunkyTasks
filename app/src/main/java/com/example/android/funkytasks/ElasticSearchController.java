@@ -121,6 +121,7 @@ public class ElasticSearchController {
                     "         }\n" +
                     "    }\n" +
                     "}";
+            Log.e("username",search_parameters[0]);
 
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
@@ -188,13 +189,12 @@ public class ElasticSearchController {
                     "}";
 
 
-
             ArrayList<Task> tasks = new ArrayList<Task>();
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try{
-                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if(result.isSucceeded()){
                     User user = result.getSourceAsObject(User.class);
                     tasks.addAll(user.getTasks()); // grab the list of tasks for the user

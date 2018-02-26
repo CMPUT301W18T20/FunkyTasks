@@ -60,10 +60,9 @@ public class SignUpActivity extends AppCompatActivity {
         User userToAdd = new User(username, email, phone);
 
 //        for (User user : userArrayList) {
-//            if (username.equals(user.getUsername())) {
-//                Toast.makeText(SignUpActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
-//            } else if (username.length() < 8) {
-//                Toast.makeText(SignUpActivity.this, "Username needs to be at least 8 characters long", Toast.LENGTH_SHORT).show();
+        if (username.length() < 8) {
+            Toast.makeText(SignUpActivity.this, "Username needs to be at least 8 characters long", Toast.LENGTH_SHORT).show();
+        }
 //            } else if (phone.equals(user.getPhonenumber())) {
 //                Toast.makeText(SignUpActivity.this, "Phone number already in use", Toast.LENGTH_SHORT).show();
 //            } else if (email.equals(user.getEmail())) {
@@ -75,52 +74,49 @@ public class SignUpActivity extends AppCompatActivity {
 
                 // Elastic search stuff starts here -------------
 
-                ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
-                allUsers.execute(); // grab all current users in the system
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(); // grab all current users in the system
 
-                ArrayList<User> userList = new ArrayList<User>();
-                try {
-                    userList = allUsers.get();
-                } catch (Exception e) {
-                    Log.e("Error", "Failed to get list of users");
-                }
+        ArrayList<User> userList = new ArrayList<User>();
+        try {
+            userList = allUsers.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of users");
+        }
 
-                for (User postedUser : userList) {
-                    Log.e("ALl usernames", postedUser.getUsername());
-                    if (postedUser.getUsername().equals(userToAdd.getUsername())) {
-                        Toast.makeText(SignUpActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
+        for (User postedUser : userList) {
+            Log.e("ALl usernames", postedUser.getUsername());
+            if (postedUser.getUsername().equals(userToAdd.getUsername())) {
+                Toast.makeText(SignUpActivity.this, "Username Taken", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
 
-                //TODO fix bug where if u add new user is dhould be in all the user list but ITS NOT UGh
-
-
-                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
-                postUser.execute(userToAdd); // adding new user to elastic search
+        //TODO fix bug where if u add new user is dhould be in all the user list but ITS NOT UGh
 
 
+        ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+        postUser.execute(userToAdd); // adding new user to elastic search
 
-                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-                getUser.execute(userToAdd.getUsername());
 
+        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+        getUser.execute(username);
 
-                // FOR TESTING PURPOSE THAT THE USER WAS ADDED PROPERLY TO DATABASE AFTER BEING ADDED
-                User newuser;
-                try {
-                    newuser = getUser.get();
-                    Log.e("Got the username: ", newuser.getUsername());
-                    //Log.e("ITS ID",newuser.getId().toString());
-                } catch (Exception e) {
-                    Log.e("Error", "We arnt getting the user");
-                }
+        // FOR TESTING PURPOSE THAT THE USER WAS ADDED PROPERLY TO DATABASE AFTER BEING ADDED
+        User newuser;
+        try {
+            newuser = getUser.get();
+            Log.e("Got the username: ", newuser.getUsername());
+        } catch (Exception e) {
+            Log.e("Error", "We arnt getting the user");
+        }
                 // -------------------------------------------------------------------------
 
 
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-            }
-        }
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+}
     //}
 //}
 
