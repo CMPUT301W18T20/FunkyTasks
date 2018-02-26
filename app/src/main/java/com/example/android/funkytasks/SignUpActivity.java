@@ -76,7 +76,7 @@ public class SignUpActivity extends AppCompatActivity {
                 // Elastic search stuff starts here -------------
 
                 ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
-                allUsers.execute(""); // grab all current users in the system
+                allUsers.execute(); // grab all current users in the system
 
                 ArrayList<User> userList = new ArrayList<User>();
                 try {

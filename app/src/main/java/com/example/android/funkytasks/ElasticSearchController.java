@@ -27,8 +27,8 @@ public class ElasticSearchController {
     private static JestDroidClient client;
     private static String database = "http://cmput301.softwareprocess.es:8080";
     private static String indexType = "cmput301w18t20";
-    private static String userType = "user";
-    private static String taskType = "task";
+    private static String userType = "User";
+    private static String taskType = "Task";
 
     public static class PostUser extends AsyncTask<User, Void, Void> { // add new user to database
 
@@ -102,10 +102,13 @@ public class ElasticSearchController {
 
 
     public static class GetUser extends AsyncTask<String, Void, User> { // grabs user from database
+        //TODO fix THIS
 
         @Override
         protected User doInBackground(String... search_parameters) {
             verifySettings();
+
+            User returnUser = null;
 
             //https://www.elastic.co/guide/en/elasticsearch/reference/2.3/query-dsl-term-query.html
             // http://okfnlabs.org/blog/2013/07/01/elasticsearch-query-tutorial.html#basic-queries-using-only-the-query-string
@@ -125,9 +128,9 @@ public class ElasticSearchController {
             try {
                 SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if (result.isSucceeded()) {
-                    User user = result.getSourceAsObject(User.class);
-                    Log.e("USER gotten", user.getUsername());
-                    return user;
+                    returnUser = result.getSourceAsObject(User.class);
+                    Log.e("USER gotten", returnUser.getUsername());
+                    return returnUser;
                 } else {
                     Log.e("Nothing", "Theres no user in database");
                 }
@@ -135,27 +138,25 @@ public class ElasticSearchController {
                 Log.e("Error", "Something went wrong with getting user!");
             }
 
-            return null;
+            return returnUser;
         }
+
     }
 
     public static class GetAllUsers extends AsyncTask<String, Void, ArrayList<User>> { // grabs user from database
-    //TODO FIX THIS SO ALL THE USERS ARE RETURNED FROM THE LIST
-        //maybe the problem is with the getSourceasobjectlist
 
         @Override
         protected ArrayList<User> doInBackground(String... search_parameters) {
             verifySettings();
 
-            ArrayList<User> users = new ArrayList<User>();
+            ArrayList<User> foundUsers = new ArrayList<User>();
 
             Search search = new Search.Builder("").addIndex(indexType).addType(userType).build();
 
             try {
                 SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if (result.isSucceeded()) {
-                    List<User> foundUsers = result.getSourceAsObjectList(User.class);
-                    users.addAll(foundUsers);
+                    foundUsers = new ArrayList<>(result.getSourceAsObjectList(User.class));
                 } else {
                     Log.e("Nothing", "Theres no user in database");
                 }
@@ -163,7 +164,7 @@ public class ElasticSearchController {
                 Log.e("Error", "Something went wrong with getting user!");
             }
 
-            return users;
+            return foundUsers;
         }
     }
 
@@ -185,6 +186,7 @@ public class ElasticSearchController {
                     "         }\n" +
                     "    }\n" +
                     "}";
+
 
 
             ArrayList<Task> tasks = new ArrayList<Task>();
