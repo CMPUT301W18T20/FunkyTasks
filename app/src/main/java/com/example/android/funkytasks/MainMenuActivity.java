@@ -56,4 +56,9 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateTaskActivity.class);
         startActivity(intent);
     }
+
+    public void sendToEditProfileActivity(View view){
+        Intent intent = new Intent(this, EditProfileActivity.class);
+        startActivity(intent);
+    }
 }
