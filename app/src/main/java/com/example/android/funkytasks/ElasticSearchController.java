@@ -27,11 +27,10 @@ public class ElasticSearchController {
     private static JestDroidClient client;
     private static String database = "http://cmput301.softwareprocess.es:8080";
     private static String indexType = "cmput301w18t20";
-    private static String userType = "Usertest";
-    private static String taskType = "Tasktest";
+    private static String userType = "user";
+    private static String taskType = "task";
 
     public static class PostUser extends AsyncTask<User, Void, Void> { // add new user to database
-
         @Override
         protected Void doInBackground(User... newUser) {
             verifySettings();
@@ -42,7 +41,6 @@ public class ElasticSearchController {
 
                 try {
                     DocumentResult result = client.execute(index);
-
                     if (result.isSucceeded()) {
                         user.setId(result.getId());
                         Log.e("Looking","good to add");
@@ -58,48 +56,17 @@ public class ElasticSearchController {
         }
     }
 
-    public static class PostTask extends AsyncTask<Object, Void, Void> { // adds new task for the user
+    public static class PostTask extends AsyncTask<Task, Void, Void> { // adds new task for the user
 
         // https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
         @Override
-        protected Void doInBackground(Object... params) {
+        protected Void doInBackground(Task... params) {
             verifySettings();
 
-            User user = (User) params[0];
-            Task task = (Task) params[1];
+            Task task = (Task) params[0];
 
-            //https://www.elastic.co/guide/en/elasticsearch/reference/2.3/query-dsl-term-query.html
-            String query = "{\n" +
-                    "    \"query\" : {\n" +
-                    "       \"constant_score\" : {\n" +
-                    "           \"filter\" : {\n" +
-                    "               \"term\" : {\"username\": \"" + user.getUsername() + "\"}\n" +
-                    "             }\n" +
-                    "         }\n" +
-                    "    }\n" +
-                    "}";
-
-
-            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
-
-            try{
-                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
-                if(result.isSucceeded()){
-                    User userResult = result.getSourceAsObject(User.class);
-                    userResult.addRequestedTask(task); // add the new task to the user's list
-                    //TODO call update user method
-                }
-                else{
-                    Log.e("Nothing", "Theres no user in database");
-                }
-            }
-            catch(Exception e){
-                Log.e("Error", "Something went wrong with getting user!");
-            }
-
-
-            //
-            Index index = new Index.Builder(user).index(indexType).type(taskType).build();
+            // POSTING TASK TO ENTIRE TASK DATABASE
+            Index index = new Index.Builder(task).index(indexType).type(taskType).build();
 
             try {
                 DocumentResult result = client.execute(index);
@@ -107,7 +74,7 @@ public class ElasticSearchController {
                     task.setId(result.getId());
                     Log.e("Looking","good to add task to server");
                 } else {
-                    Log.e("Error", "Some error with adding tasl");
+                    Log.e("Error", "Some error with adding task");
                 }
             } catch (Exception e) {
                 Log.e("Error", "The application failed to build and add the task");
@@ -138,16 +105,14 @@ public class ElasticSearchController {
                     "         }\n" +
                     "    }\n" +
                     "}";
-            Log.e("username",search_parameters[0]);
 
-
-            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
+            Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try {
-                SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if (result.isSucceeded()) {
                     returnUser = result.getSourceAsObject(User.class);
-                    Log.e("USER gotten", returnUser.getUsername());
+                    Log.e("returnUSer worksss",returnUser.getUsername());
                     return returnUser;
                 } else {
                     Log.e("Nothing", "Theres no user in database");
@@ -155,10 +120,8 @@ public class ElasticSearchController {
             } catch (Exception e) {
                 Log.e("Error", "Something went wrong with getting user!");
             }
-
-            return returnUser;
+            return null;
         }
-
     }
 
     public static class GetAllUsers extends AsyncTask<String, Void, ArrayList<User>> { // grabs user from database
@@ -210,8 +173,9 @@ public class ElasticSearchController {
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
+
             try{
-                SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if(result.isSucceeded()){
                     User user = result.getSourceAsObject(User.class);
                     tasks.addAll(user.getRequestedTasks()); // grab the list of tasks for the user
@@ -231,31 +195,28 @@ public class ElasticSearchController {
         }
     }
 
-    public static class updateProfile extends AsyncTask<User,Void,Void>{ // update a user's contact info by passing in the user object
+    public static class updateUser extends AsyncTask<User,Void,Void>{ // update a user's contact info by passing in the user object
 
         @Override
         protected Void doInBackground (User... currentUser) {
             verifySettings();
 
-            User user = currentUser[0];
 
-            Index index = new Index.Builder(database).index(indexType).type(userType).id(user.getId()).build();
+            for (User user : currentUser) {
+                Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId()).build();
 
-            try{
-                DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
-                if(result.isSucceeded()){
-                    Log.e("successfull","is true");
-                    return null;
+                try {
+                    DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
+                    if (result.isSucceeded()) {
+                        Log.e("successfull", "update of user");
+                    } else {
+                        Log.e("Nothing", "Theres no user in database to grab tasks from");
+                    }
+                } catch (Exception e) {
+                    Log.e("Error", "Something went wrong with getting tasks from user!");
                 }
-                else{
-                    Log.e("Nothing", "Theres no user in database to grab tasks from");
-                }
-            }
-            catch(Exception e){
-                Log.e("Error", "Something went wrong with getting tasks from user!");
-            }
 
-
+            }
             return null;
         }
     }
@@ -270,7 +231,7 @@ public class ElasticSearchController {
 
             User user = currentUser[0];
 
-            Index index = new Index.Builder(database).index(indexType).type(userType).id(user.getId()).build();
+            Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId()).build();
 
             try{
                 DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list

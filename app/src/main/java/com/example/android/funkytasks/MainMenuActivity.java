@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class MainMenuActivity extends AppCompatActivity {
     public static ArrayList<Task> tasksArrayList = new ArrayList<Task>();
     ArrayList<User> userArrayList = new ArrayList<User>();
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainMenuActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setTitle("Main Menu");
+        Intent intent = getIntent();
 
         userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
         Task task1= new Task("Funky","make ken happy",userArrayList.get(0));
@@ -34,9 +36,8 @@ public class MainMenuActivity extends AppCompatActivity {
         task1.addBid(bid1);
         tasksArrayList.add(task1);
 
-
-
-        Intent intent = getIntent();
+        //********
+        username = intent.getExtras().getString("username");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +55,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
     public void sendToCreateTaskActivity(View view){
         Intent intent = new Intent(this, CreateTaskActivity.class);
+        intent.putExtra("username",username);
         startActivity(intent);
     }
 

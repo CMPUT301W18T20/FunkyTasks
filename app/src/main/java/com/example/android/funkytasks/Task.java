@@ -19,7 +19,7 @@ public class Task {
     private String description;
     private User requester;
     private String status;
-    private String[] statuses={"requested","bidded","asigned","done"};
+    private String[] statuses={"requested","bidded","assigned","done"};
     private ArrayList<Bid> bids;
     private double smallest;
 

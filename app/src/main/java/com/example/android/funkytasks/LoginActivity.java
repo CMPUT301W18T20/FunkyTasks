@@ -97,7 +97,8 @@ public class LoginActivity extends AppCompatActivity{
             if (postedUser.getUsername().equals(username)){
                 Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainMenuActivity.class);
-                //TODO send USER OBJECT OVER TO MAIN MENU
+
+                intent.putExtra("username", postedUser.getUsername());
                 startActivity(intent);
                 finish();
             }
