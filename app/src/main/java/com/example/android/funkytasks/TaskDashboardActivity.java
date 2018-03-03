@@ -22,9 +22,9 @@ public class TaskDashboardActivity extends AppCompatActivity {
         Bid bidz = new Bid(user1,1.00);
         task.addBid(bidz);
 
-        user1.addTask(task);
+        user1.addRequestedTask(task);
 
-        ArrayList<Task> tasks = user1.getTasks();
+        ArrayList<Task> tasks = user1.getRequestedTasks();
 
         ListView dashboardView = (ListView) findViewById(R.id.myTasks);
 

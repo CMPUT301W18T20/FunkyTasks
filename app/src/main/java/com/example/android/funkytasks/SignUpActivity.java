@@ -100,7 +100,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute(username);
+        getUser.execute(userToAdd.getUsername());
 
         // FOR TESTING PURPOSE THAT THE USER WAS ADDED PROPERLY TO DATABASE AFTER BEING ADDED
         User newuser;
