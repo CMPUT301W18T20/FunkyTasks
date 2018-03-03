@@ -15,7 +15,12 @@ public class User {
     private String email;
     private String phonenumber;
     private double rating;
-    private ArrayList<Task> tasks;
+    private ArrayList<Task> acceptedTasks;  // tasks the user has agreed to solve
+    private ArrayList<Task> requestedTasks; // tasks the user has put out
+    private ArrayList<Task> biddedTasks;    // tasks user has currently bidded on
+
+    //TODO delete method for requested tasks
+    //TODO
 
     @JestId
     private String id;
@@ -25,7 +30,9 @@ public class User {
         this.email = email;
         this.phonenumber = phonenumber;
         this.rating = 3;
-        this.tasks = new ArrayList<Task>();
+        this.acceptedTasks = new ArrayList<Task>();
+        this.requestedTasks = new ArrayList<Task>();
+        this.biddedTasks = new ArrayList<Task>();
     }
 
     public void setId(String newId){
@@ -36,23 +43,69 @@ public class User {
         return this.id;
     }
 
-    public void addTask(Task newTask){
-        tasks.add(newTask);
+    public void addRequestedTask(Task newTask){
+        requestedTasks.add(newTask);
     }
 
-
-    public ArrayList<Task> getTasks(){
-        return this.tasks;
+    public void addBiddedTask(Task newTask){
+        biddedTasks.add(newTask);
+    }
+    public void addAccepedTask(Task newTask){
+        acceptedTasks.add(newTask);
     }
 
-    public void deleteTask(){
-        Iterator itr = tasks.iterator();
+    public ArrayList<Task> getBiddedTasks(){
+        return this.biddedTasks;
+    }
+
+    public ArrayList<Task> getAcceptedTasks(){
+        return this.acceptedTasks;
+    }
+
+    public ArrayList<Task> getRequestedTasks(){
+        return this.requestedTasks;
+    }
+
+    public void deleteRequestedTask(Task toDelete){
+        // if task has bid on it, we also have to call delete bidded task
+        Iterator itr = requestedTasks.iterator();
+        while (itr.hasNext()) {
+            Task task = (Task) itr.next();
+            if (task == toDelete) {
+                itr.remove();
+            }
+        }
+    }
+
+    public int deleteBiddedTask(Task toDelete){
+        // Elastic search should first grab all users, return user array list.
+        // then we call this method for every user, if it returns 1 we also have to update it
+
+        boolean Task = biddedTasks.contains(toDelete);
+        int returnValue = 0;
+        if (Task){
+            Iterator itr = biddedTasks.iterator();
+            while (itr.hasNext()) {
+                Task task = (Task) itr.next();
+                if (task == toDelete) {
+                    itr.remove();
+                    returnValue = 1;
+                }
+            }
+        }
+        return returnValue;
+    }
+
+    public void deleteAcceptedTask(){
+        Iterator itr = acceptedTasks.iterator();
         while (itr.hasNext()) {
             Task task = (Task) itr.next();
             if (task.getStatus().equals("done")) {
                 itr.remove();
             }
         }
+
+
     }
 
     public String getUsername(){

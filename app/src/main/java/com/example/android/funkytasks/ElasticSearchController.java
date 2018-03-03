@@ -27,8 +27,8 @@ public class ElasticSearchController {
     private static JestDroidClient client;
     private static String database = "http://cmput301.softwareprocess.es:8080";
     private static String indexType = "cmput301w18t20";
-    private static String userType = "User";
-    private static String taskType = "Task";
+    private static String userType = "Usertest";
+    private static String taskType = "Tasktest";
 
     public static class PostUser extends AsyncTask<User, Void, Void> { // add new user to database
 
@@ -86,7 +86,8 @@ public class ElasticSearchController {
                 JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if(result.isSucceeded()){
                     User userResult = result.getSourceAsObject(User.class);
-                    userResult.addTask(task); // add the new task to the user's list
+                    userResult.addRequestedTask(task); // add the new task to the user's list
+                    //TODO call update user method
                 }
                 else{
                     Log.e("Nothing", "Theres no user in database");
@@ -94,6 +95,22 @@ public class ElasticSearchController {
             }
             catch(Exception e){
                 Log.e("Error", "Something went wrong with getting user!");
+            }
+
+
+            //
+            Index index = new Index.Builder(user).index(indexType).type(taskType).build();
+
+            try {
+                DocumentResult result = client.execute(index);
+                if (result.isSucceeded()) {
+                    task.setId(result.getId());
+                    Log.e("Looking","good to add task to server");
+                } else {
+                    Log.e("Error", "Some error with adding tasl");
+                }
+            } catch (Exception e) {
+                Log.e("Error", "The application failed to build and add the task");
             }
 
             return null;
@@ -197,7 +214,9 @@ public class ElasticSearchController {
                 SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
                 if(result.isSucceeded()){
                     User user = result.getSourceAsObject(User.class);
-                    tasks.addAll(user.getTasks()); // grab the list of tasks for the user
+                    tasks.addAll(user.getRequestedTasks()); // grab the list of tasks for the user
+                    tasks.addAll(user.getAcceptedTasks());
+                    tasks.addAll(user.getBiddedTasks());
                     return tasks;
                 }
                 else{
@@ -225,6 +244,7 @@ public class ElasticSearchController {
             try{
                 DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
                 if(result.isSucceeded()){
+                    Log.e("successfull","is true");
                     return null;
                 }
                 else{
