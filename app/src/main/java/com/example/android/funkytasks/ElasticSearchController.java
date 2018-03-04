@@ -11,6 +11,7 @@ import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 public class ElasticSearchController {
 
@@ -132,7 +134,17 @@ public class ElasticSearchController {
 
             ArrayList<User> foundUsers = new ArrayList<User>();
 
-            Search search = new Search.Builder("").addIndex(indexType).addType(userType).build();
+            int size = 50; // change this number to get back more results
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
+
+            String query = "{\n"+
+                            "\"size\":" + size + ",\n"+
+                            "\"query\": {\n" +
+                                    "\"match_all\": {}\n" +
+                                "}\n"+
+                            "}";
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try {
                 SearchResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
@@ -156,39 +168,32 @@ public class ElasticSearchController {
         protected ArrayList<Task> doInBackground (String... search_parameters) {
             verifySettings();
 
-            // TODO build the correct query that returns all tasks associated with the USER
+            int size = 5000; // change this number to get back more results
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
-            String query = "{\n" +
-                    "    \"query\" : {\n" +
-                    "       \"constant_score\" : {\n" +
-                    "           \"filter\" : {\n" +
-                    "               \"term\" : {\"username\": \"" + search_parameters[0] + "\"}\n" +
-                    "             }\n" +
-                    "         }\n" +
-                    "    }\n" +
+            String query = "{\n"+
+                    "\"size\":" + size + ",\n"+
+                    "\"query\": {\n" +
+                    "\"match_all\": {}\n" +
+                    "}\n"+
                     "}";
 
+            ArrayList<Task> tasks;
 
-            ArrayList<Task> tasks = new ArrayList<Task>();
-
-            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
-
+            Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
 
             try{
-                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                SearchResult result = client.execute(search);
                 if(result.isSucceeded()){
-                    User user = result.getSourceAsObject(User.class);
-                    tasks.addAll(user.getRequestedTasks()); // grab the list of tasks for the user
-                    tasks.addAll(user.getAcceptedTasks());
-                    tasks.addAll(user.getBiddedTasks());
+                    tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
                     return tasks;
                 }
                 else{
-                    Log.e("Nothing", "Theres no user in database to grab tasks from");
+                    Log.e("Nothing", "No tasks in database");
                 }
             }
             catch(Exception e){
-                Log.e("Error", "Something went wrong with getting tasks from user!");
+                Log.e("Error", "Something went wrong with getting all tasks");
             }
 
             return null;
@@ -201,24 +206,23 @@ public class ElasticSearchController {
         protected Void doInBackground (User... currentUser) {
             verifySettings();
 
+            User user = currentUser[0];
+            Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId().toString()).build();
 
-            for (User user : currentUser) {
-                Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId()).build();
-
-                try {
-                    DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
-                    if (result.isSucceeded()) {
-                        Log.e("successfull", "update of user");
-                    } else {
-                        Log.e("Nothing", "Theres no user in database to grab tasks from");
-                    }
-                } catch (Exception e) {
-                    Log.e("Error", "Something went wrong with getting tasks from user!");
+            try {
+                JestResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
+                if (result.isSucceeded()) {
+                    Log.e("successfull", "update of user");
+                } else {
+                    Log.e("Nothing", "No user in database");
                 }
-
+            } catch (Exception e) {
+                Log.e("Error", "Something went wrong with getting tasks from user!");
             }
             return null;
+
         }
+
     }
 
 

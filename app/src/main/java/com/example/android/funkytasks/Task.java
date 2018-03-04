@@ -1,5 +1,6 @@
 package com.example.android.funkytasks;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +13,8 @@ import static java.util.Collections.*;
  * Created by MonicaB on 2018-02-20.
  */
 
-public class Task {
+@SuppressWarnings("serial")
+public class Task implements Serializable{
     // title, description, status, lowest bid,
 
     private String title;

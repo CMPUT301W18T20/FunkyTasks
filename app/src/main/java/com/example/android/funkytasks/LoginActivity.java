@@ -93,8 +93,7 @@ public class LoginActivity extends AppCompatActivity{
 
         for (User postedUser: userList){
             Log.e("postedUser",postedUser.getUsername()); // print out all users in system
-            //Log.e("id posted",postedUser.getId().toString());
-            if (postedUser.getUsername().equals(username)){
+            if (postedUser.getUsername().equals(username)){ // if user is in th system, log them in
                 Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainMenuActivity.class);
 

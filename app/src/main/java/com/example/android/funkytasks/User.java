@@ -1,5 +1,6 @@
 package com.example.android.funkytasks;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -8,8 +9,8 @@ import io.searchbox.annotations.JestId;
 /**
  * Created by MonicaB on 2018-02-20.
  */
-
-public class User {
+@SuppressWarnings("serial")
+public class User implements Serializable{
     // unique username, email, phonenumber, rating
     private String username;
     private String email;
@@ -18,9 +19,6 @@ public class User {
     private ArrayList<Task> acceptedTasks;  // tasks the user has agreed to solve
     private ArrayList<Task> requestedTasks; // tasks the user has put out
     private ArrayList<Task> biddedTasks;    // tasks user has currently bidded on
-
-    //TODO delete method for requested tasks
-    //TODO
 
     @JestId
     private String id;
@@ -66,8 +64,11 @@ public class User {
         return this.requestedTasks;
     }
 
+
+    // DO NOT WRITE TESTS FOR DELETE METHODS YET
     public void deleteRequestedTask(Task toDelete){
-        // if task has bid on it, we also have to call delete bidded task
+        // if task has bid on it, we also have to call delete this task from other users accounts
+        // TODO return a list of bidders(users) on the task
         Iterator itr = requestedTasks.iterator();
         while (itr.hasNext()) {
             Task task = (Task) itr.next();
@@ -79,7 +80,7 @@ public class User {
 
     public int deleteBiddedTask(Task toDelete){
         // Elastic search should first grab all users, return user array list.
-        // then we call this method for every user, if it returns 1 we also have to update it
+        // then we call this method for every user, if it returns 1 we also have to update user
 
         boolean Task = biddedTasks.contains(toDelete);
         int returnValue = 0;
@@ -97,6 +98,7 @@ public class User {
     }
 
     public void deleteAcceptedTask(){
+        // if we are done the taskk, delete from our list, then delete it from the requester's list
         Iterator itr = acceptedTasks.iterator();
         while (itr.hasNext()) {
             Task task = (Task) itr.next();

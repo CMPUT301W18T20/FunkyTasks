@@ -92,9 +92,6 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
 
-        //TODO fix bug where if u add new user is dhould be in all the user list but ITS NOT UGh
-
-
         ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
         postUser.execute(userToAdd); // adding new user to elastic search
 
@@ -117,7 +114,6 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
-    //}
-//}
+
 
 
