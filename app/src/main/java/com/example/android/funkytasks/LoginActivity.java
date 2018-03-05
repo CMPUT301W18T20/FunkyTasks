@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity{
         setTitle("Welcome to FunkyTasks!");
 
         userArrayList.add(testuser1);
-        Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
+        //Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
     }
 
     @Override

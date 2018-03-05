@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import io.searchbox.client.JestResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -88,7 +89,6 @@ public class ElasticSearchController {
 
 
     public static class GetUser extends AsyncTask<String, Void, User> { // grabs user from database
-        //TODO fix THIS
 
         @Override
         protected User doInBackground(String... search_parameters) {
@@ -159,6 +159,40 @@ public class ElasticSearchController {
 
             return foundUsers;
         }
+    }
+
+    public static class GetTask extends AsyncTask<String,Void,Task>{
+        @Override
+        protected Task doInBackground(String... search_parameters){
+            verifySettings();
+            Task returnTask;
+            String query = "{\n" +
+                    "    \"query\" : {\n" +
+                    "       \"constant_score\" : {\n" +
+                    "           \"filter\" : {\n" +
+                    "               \"term\" : {\"title\": \"" + search_parameters[0] + "\"}\n" +
+                    "             }\n" +
+                    "         }\n" +
+                    "    }\n" +
+                    "}";
+
+            Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+
+            try {
+                JestResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    returnTask = result.getSourceAsObject(Task.class);
+                    Log.e("returntask works",returnTask.getTitle());
+                    return returnTask;
+                } else {
+                    Log.e("Nothing", "Theres no task in database");
+                }
+            } catch (Exception e) {
+                Log.e("Error", "Something went wrong with getting task!");
+            }
+            return null;
+        }
+
     }
 
 
@@ -254,6 +288,85 @@ public class ElasticSearchController {
             return null;
         }
     }
+
+    public static class deleteTask extends AsyncTask<Task,Void,Void>{
+        // Deletes task from global list
+        // For the user: user must first delete their requested task from their list then we call to update user
+        @Override
+        protected Void doInBackground(Task... givenTask){
+            verifySettings();
+
+            Delete delete = new Delete.Builder(givenTask[0].getId()).index(indexType).type(taskType).build();
+
+            try{
+                DocumentResult result = client.execute(delete);
+                if (result.isSucceeded()){
+                    Log.e("Successful","delete");
+                }
+                else{
+                    Log.e("Unable","to delete user");
+                }
+            }
+            catch(Exception e){
+                Log.e("error","something went wrong with deleting task");
+            }
+
+            return null;
+        }
+    }
+
+    public static class searchTask extends AsyncTask<String,Void,ArrayList<Task>>{
+
+        @Override
+        protected ArrayList<Task> doInBackground(String... searchParameters){
+            verifySettings();
+
+            int size = 5000;
+            String username = searchParameters[1];
+            // https://www.elastic.co/guide/en/elasticsearch/guide/current/phrase-matching.html
+            String query =
+                    "{"+ "\"size\":" + size + ",\n"+
+                        "\"query\":{\n" +
+                                "\"match_phrase\": {\n" +
+                                    "\"description\": {" + searchParameters[0] +
+                                "}\n" +
+                            "}\n"+
+                        "}\n"+
+                     "}";
+
+            ArrayList<Task> tasks;
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded()){
+                    tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
+                    for (int i = 0; i < tasks.size(); i++){
+                        Task task = tasks.get(i);
+                        if (task.getRequester().getUsername().equals(username)){
+                            tasks.remove(i);
+                        }
+                        else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")){
+                            tasks.remove(i);
+                        }
+                    }
+                    return tasks;
+                }
+                else{
+                    Log.e("Nothing", "No tasks in database");
+                }
+            }
+            catch(Exception e){
+                Log.e("Error", "Something went wrong with getting all tasks");
+            }
+
+            return null;
+        }
+    }
+
+
+
 
 
 
