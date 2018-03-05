@@ -44,7 +44,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         getUser.execute(username);
 
         User user;
-        ArrayList<Task> userRequests;
+        ArrayList<Task> userRequests; //TODO TAKE THIS ARRAY LIST AND DISPLAY IT IN ADAPTER
         try {
             user = getUser.get();
             Log.e("Got the username: ", user.getUsername());
@@ -56,6 +56,13 @@ public class TaskDashboardActivity extends AppCompatActivity {
         }
 
         //************************************************************************
+
+        Task example1;
+        for (Task i: userRequests){
+            example1 = i;
+            break;
+        }
+
 
         // ANOTHER TEST TO MAKE SURE WE HAVE GLOBAL LIST OF TASKS
         ElasticSearchController.GetAllTask alltasks = new ElasticSearchController.GetAllTask();
