@@ -21,6 +21,8 @@ public class MainMenuActivity extends AppCompatActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
     final int ADD_CODE = 1;
+    final int EDIT_CODE = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,16 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
+        Button profile = (Button) findViewById(R.id.profile);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
+                intent.putExtra("username", username);
+                startActivityForResult(intent, EDIT_CODE);
+            }
+        });
 
 
     }
@@ -81,11 +93,6 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateTaskActivity.class);
         intent.putExtra("username", username);
         startActivityForResult(intent, ADD_CODE);
-    }
-
-    public void sendToEditProfileActivity(View view) {
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        startActivity(intent);
     }
 
     @Override
