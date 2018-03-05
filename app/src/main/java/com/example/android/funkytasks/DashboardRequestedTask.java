@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,38 +19,41 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static com.example.android.funkytasks.MainMenuActivity.tasksArrayList;
-
 
 public class DashboardRequestedTask extends AppCompatActivity {
 
     private TextView titleValue;
     private TextView descriptionValue;
-    private Button edit;
-    private ListView bidListView;
+    private ListView bidLV;
+    private String Title;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
 
+        // set bids listview
+        bidLV=(ListView)findViewById(R.id.bidlistView);
+        /*ArrayList<Bid> bids = setTaskDetails();
+        final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,bids);
+        bidLV.setAdapter(bidAdapter);
 
-        Bundle extras = getIntent().getExtras();
-
-
-        //set task details
-        setTaskDetails();
-        //set bids
-        setBids();
-
-        //to edit task details
-        edit=(Button)findViewById(R.id.buttonEdit);
-        edit.setOnClickListener(new View.OnClickListener() {
+        //
+        bidLV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                sendToEditDashboardRequestedTask(view);
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO display bid details;
             }
-        });
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });*/
+        setTaskDetails();
+
+
 
 
     }
@@ -59,6 +63,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editmenu, menu);
         return super.onCreateOptionsMenu(menu);
+
+
+
     }
 
     // handle button activities
@@ -74,30 +81,50 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 }
             });
         }
+
         return super.onOptionsItemSelected(item);
     }
 
-    //set title and description
+    //set title,description and  get bid arraylist
     public void setTaskDetails() {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
-        titleValue.setText(tasksArrayList.get(0).getTitle());
-        descriptionValue.setText(tasksArrayList.get(0).getDescription());
-
-    }
-
-    public void setBids(){
-        bidListView=(ListView) findViewById(R.id.listView);
-
-        ArrayAdapter<Bid> adapter= new ArrayAdapter<Bid>(DashboardRequestedTask.this,android.R.layout.simple_list_item_multiple_choice,tasksArrayList.get(0).getBids());
-        bidListView.setAdapter(adapter);
 
 
+        final Intent intent= getIntent();
+        Title = intent.getExtras().getString("title");                       //for testing
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(Title);
+
+        Task task;
+        String taskTitle;
+        String taskDescription;
+        ArrayList<Bid> taskBids =  new ArrayList<Bid>();
+
+
+        //  get Title, description and bids;
+        try{
+            task = getTask.get();
+            Log.e("Got the Title ", task.getTitle());
+            Log.e("Got the Description ", task.getDescription());
+            taskTitle= task.getTitle();
+            taskDescription=task.getDescription();
+            taskBids = task.getBids();
+
+        }catch (Exception e) {
+            Log.e("Error", "We arnt getting the task");
+            return;
+
+        }
+        // display task Title and Description
+        titleValue.setText(taskTitle);
+        descriptionValue.setText(taskDescription);
     }
 
 
     public void sendToEditDashboardRequestedTask(View view){
         Intent intent = new Intent(this, EditDashboardRequestedTask.class);
+
         startActivityForResult(intent, 42);
     }
 }
