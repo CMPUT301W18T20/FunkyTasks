@@ -62,6 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
 //        for (User user : userArrayList) {
         if (username.length() < 8) {
             Toast.makeText(SignUpActivity.this, "Username needs to be at least 8 characters long", Toast.LENGTH_SHORT).show();
+            return;
         }
 //            } else if (phone.equals(user.getPhonenumber())) {
 //                Toast.makeText(SignUpActivity.this, "Phone number already in use", Toast.LENGTH_SHORT).show();

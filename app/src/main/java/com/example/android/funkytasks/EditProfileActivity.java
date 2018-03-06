@@ -50,9 +50,33 @@ public class EditProfileActivity extends AppCompatActivity {
         email.setText(user.getEmail(), TextView.BufferType.EDITABLE);
         phone.setText(user.getPhonenumber(), TextView.BufferType.EDITABLE);
 
+
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String newEmail = email.getText().toString();
+                String newPhone = phone.getText().toString();
+
+                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+                getUser.execute(username);
+
+                try {
+                    user = getUser.get();
+                    Log.e("Got the username: ", user.getUsername());
+
+
+                } catch (Exception e) {
+                    Log.e("Error", "We arnt getting the user");
+                    return;
+                }
+
+                user.setEmail(newEmail);
+                user.setPhonenumber(newPhone);
+
+                ElasticSearchController.updateUser updateUser= new ElasticSearchController.updateUser();
+                updateUser.execute(user);
+
+                setResult(RESULT_OK);
                 finish();
 
             }

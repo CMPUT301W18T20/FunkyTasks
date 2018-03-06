@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -124,6 +125,26 @@ public class MainMenuActivity extends AppCompatActivity {
             // add task to global list of all tasks
             ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
             postTask.execute(newTask);
+            Toast.makeText(MainMenuActivity.this, "Add requested task tp user successful", Toast.LENGTH_SHORT).show();
+        }
+        else if (requestCode == EDIT_CODE && resultCode == RESULT_OK){
+            User user;
+            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+            getUser.execute(username);
+            try {
+                user = getUser.get();
+                Log.e("Got the username: ", user.getUsername());
+                Log.e("Got the email: ", user.getEmail());
+                Log.e("Got the phone: ", user.getPhonenumber());
+
+            } catch (Exception e) {
+                Log.e("Error", "We arnt getting the user");
+                return;
+            }
+
+            Toast.makeText(MainMenuActivity.this, "Edit user profile sucessfull", Toast.LENGTH_SHORT).show();
+
+
         }
     }
 }
