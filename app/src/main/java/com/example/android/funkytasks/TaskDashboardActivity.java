@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         getUser.execute(username);
 
         User user;
-        ArrayList<Task> userRequests; //TODO TAKE THIS ARRAY LIST AND DISPLAY IT IN ADAPTER
+        final ArrayList<Task> userRequests; //TODO TAKE THIS ARRAY LIST AND DISPLAY IT IN ADAPTER
         try {
             user = getUser.get();
             Log.e("Got the username: ", user.getUsername());
@@ -57,14 +59,26 @@ public class TaskDashboardActivity extends AppCompatActivity {
 
         //************************************************************************
 
+
         Task example1;
         for (Task i: userRequests){
+
             example1 = i;
             break;
         }
 
+        dashboardView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(TaskDashboardActivity.this,DashboardRequestedTask.class);
+                String Id= userRequests.get(i).getTitle();
+                intent.putExtra("id",Id);
+                startActivity(intent);
+            }
+        });
 
-        // ANOTHER TEST TO MAKE SURE WE HAVE GLOBAL LIST OF TASKS
+
+                // ANOTHER TEST TO MAKE SURE WE HAVE GLOBAL LIST OF TASKS
         ElasticSearchController.GetAllTask alltasks = new ElasticSearchController.GetAllTask();
         alltasks.execute("");
         ArrayList<Task> everytask;

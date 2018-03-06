@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -25,7 +26,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView titleValue;
     private TextView descriptionValue;
     private ListView bidLV;
-    private String Title;
+    private String Id;
+    private Button deleteBT;
 
 
     @Override
@@ -33,8 +35,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
 
+        deleteBT=(Button)findViewById(R.id.deleteButton);
+
         // set bids listview
         bidLV=(ListView)findViewById(R.id.bidlistView);
+
         /*ArrayList<Bid> bids = setTaskDetails();
         final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,bids);
         bidLV.setAdapter(bidAdapter);
@@ -55,6 +60,16 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
 
 
+        // delete a task
+        deleteBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onDeleteTask();
+                Toast.makeText(getApplicationContext(), "deleted ", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
 
     }
 
@@ -63,8 +78,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editmenu, menu);
         return super.onCreateOptionsMenu(menu);
-
-
 
     }
 
@@ -86,15 +99,17 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     //set title,description and  get bid arraylist
+    //TODO E.S get a Task by id.
     public void setTaskDetails() {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
 
 
-        final Intent intent= getIntent();
-        Title = intent.getExtras().getString("title");                       //for testing
+        Intent intent= getIntent();
+        Id = intent.getExtras().getString("id");                       //for testing
+
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(Title);
+        getTask.execute(Id);
 
         Task task;
         String taskTitle;
@@ -122,9 +137,55 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
 
+    public void onDeleteTask(){
+
+        Task task;
+
+        Intent intent= getIntent();
+        Id = intent.getExtras().getString("id");
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(Id);
+
+        try{
+            task = getTask.get();
+            Log.e("Got the Title ", task.getTitle());
+        }catch (Exception e) {
+            Log.e("Error", "We arnt getting the task");
+            return;
+        }
+
+        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+        getUser.execute("testing123");
+
+        User user;
+        try {
+            user = getUser.get();
+            Log.e("Got the username: ", user.getUsername());
+
+        } catch (Exception e) {
+            Log.e("Error", "We arnt getting the user");
+            return;
+        }
+
+
+        user.deleteRequestedTask(task);
+
+        // delete task in global list of all tasks
+        ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
+        deleteTask.execute(task);
+
+        ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
+        updateUser.execute(user);
+
+    }
+
+    public void sendToTaskDashboard(View view){
+        Intent intent = new Intent(this, TaskDashboardActivity.class);
+        startActivity(intent);
+    }
+
     public void sendToEditDashboardRequestedTask(View view){
         Intent intent = new Intent(this, EditDashboardRequestedTask.class);
-
-        startActivityForResult(intent, 42);
+        startActivity(intent);
     }
 }

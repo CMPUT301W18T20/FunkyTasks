@@ -50,17 +50,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
-    <TextView
-        android:id="@+id/textFinishDate"
-        android:layout_width="137dp"
-        android:layout_height="23dp"
-        android:layout_marginBottom="17dp"
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        ></Button>
 
-        android:layout_marginTop="26dp"
-        android:text="Finish Date"
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 
 </android.support.constraint.ConstraintLayout>

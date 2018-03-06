@@ -161,6 +161,7 @@ public class ElasticSearchController {
         }
     }
 
+    //TODO: change title to ID
     public static class GetTask extends AsyncTask<String,Void,Task>{
         @Override
         protected Task doInBackground(String... search_parameters){
@@ -288,6 +289,7 @@ public class ElasticSearchController {
             return null;
         }
     }
+
 
     public static class deleteTask extends AsyncTask<Task,Void,Void>{
         // Deletes task from global list

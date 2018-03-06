@@ -36,6 +36,7 @@ public class Task implements Serializable{
         this.requester = requester;
         this.status = statuses[0];
         bids = new ArrayList<Bid>();
+
     }
 
 
