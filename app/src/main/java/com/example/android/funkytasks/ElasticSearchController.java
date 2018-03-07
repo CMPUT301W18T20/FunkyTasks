@@ -203,7 +203,7 @@ public class ElasticSearchController {
         protected ArrayList<Task> doInBackground (String... search_parameters) {
             verifySettings();
 
-            int size = 5000; // change this number to get back more results
+            int size = 50000; // change this number to get back more results
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n"+
@@ -323,7 +323,7 @@ public class ElasticSearchController {
         protected ArrayList<Task> doInBackground(String... searchParameters){
             verifySettings();
 
-            int size = 5000;
+            int size = 50000;
             String username = searchParameters[1];
             // https://www.elastic.co/guide/en/elasticsearch/guide/current/phrase-matching.html
             String query =

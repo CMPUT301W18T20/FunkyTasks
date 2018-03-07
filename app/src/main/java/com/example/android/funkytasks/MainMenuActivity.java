@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,8 @@ public class MainMenuActivity extends AppCompatActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
     final int ADD_CODE = 1;
+    final int EDIT_CODE = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,16 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
+        Button profile = (Button) findViewById(R.id.profile);
+
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
+                intent.putExtra("username", username);
+                startActivityForResult(intent, EDIT_CODE);
+            }
+        });
 
 
     }
@@ -83,11 +96,6 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_CODE);
     }
 
-    public void sendToEditProfileActivity(View view) {
-        Intent intent = new Intent(this, EditProfileActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -117,6 +125,26 @@ public class MainMenuActivity extends AppCompatActivity {
             // add task to global list of all tasks
             ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
             postTask.execute(newTask);
+            Toast.makeText(MainMenuActivity.this, "Add requested task tp user successful", Toast.LENGTH_SHORT).show();
+        }
+        else if (requestCode == EDIT_CODE && resultCode == RESULT_OK){
+            User user;
+            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+            getUser.execute(username);
+            try {
+                user = getUser.get();
+                Log.e("Got the username: ", user.getUsername());
+                Log.e("Got the email: ", user.getEmail());
+                Log.e("Got the phone: ", user.getPhonenumber());
+
+            } catch (Exception e) {
+                Log.e("Error", "We arnt getting the user");
+                return;
+            }
+
+            Toast.makeText(MainMenuActivity.this, "Edit user profile sucessfull", Toast.LENGTH_SHORT).show();
+
+
         }
     }
 }
