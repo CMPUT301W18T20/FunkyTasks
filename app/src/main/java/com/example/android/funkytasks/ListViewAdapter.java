@@ -41,12 +41,12 @@ public class ListViewAdapter extends ArrayAdapter<Task>{
         description.setText(task.getDescription());
         status.setText(task.getStatus());
 
-        //TODO call method that grabs lowest bid if its not ZERo
-        // for now we have temporary bid
-        ArrayList<Bid> x = task.getBids();
-        Bid y = x.get(0);
-        double z = y.getAmount();
-        bid.setText(String.valueOf(z));
+//        //TODO call method that grabs lowest bid if its not ZERo
+//        // for now we have temporary bid
+//        ArrayList<Bid> x = task.getBids();
+//        Bid y = x.get(0);
+//        double z = y.getAmount();
+//        bid.setText(String.valueOf(z));
 
 
         return view;

@@ -23,78 +23,81 @@ public class TaskDashboardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
 
-        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
-        User user1 = userArrayList.get(0);
-        Task task = new Task("TITLE task","description",user1);
-        Bid bidz = new Bid(user1,1.00);
-        task.addBid(bidz);
-        user1.addRequestedTask(task);
-        ArrayList<Task> tasks = user1.getRequestedTasks();
+        //userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+        //User user1 = userArrayList.get(0);
+        //Task task = new Task("TITLE task","description",user1);
+        //Bid bidz = new Bid(user1,1.00);
+        //task.addBid(bidz);
+        //user1.addRequestedTask(task);
+        //ArrayList<Task> tasks = user1.getRequestedTasks();
 
 
 
-        ListView dashboardView = (ListView) findViewById(R.id.myTasks);
-        // get data from the table by the ListAdapter
-        ListViewAdapter customAdapter = new ListViewAdapter(this, 1, tasks);
-        dashboardView .setAdapter(customAdapter);
-
-
-
-        // TODO USE RETURNED ARRAY LIST AND DISPLAY THE TASK CONTENTS IN ADAPTER
-        // ****** HERE IS AN ARRAY LIST OF REQUESTED TASK RETURNED FROM USER **************
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
-
-        User user;
-        final ArrayList<Task> userRequests; //TODO TAKE THIS ARRAY LIST AND DISPLAY IT IN ADAPTER
-        try {
+        final User user;
+        try{
             user = getUser.get();
             Log.e("Got the username: ", user.getUsername());
-            userRequests = user.getRequestedTasks(); // TODO display contents of array to listview
+            Log.e("asdsdas",user.getRequestedTasks().toString());
+
 
         } catch (Exception e) {
             Log.e("Error", "We arnt getting the user");
             return;
         }
 
-        //************************************************************************
+        ArrayList<Task> tasks = user.getRequestedTasks();
+
+        ListView dashboardView = (ListView) findViewById(R.id.myTasks);
+        // get data from the table by the ListAdapter
+        ListViewAdapter customAdapter = new ListViewAdapter(this, 1, user.getRequestedTasks());
+        dashboardView .setAdapter(customAdapter);
 
 
-        Task example1;
-        for (Task i: userRequests){
 
-            example1 = i;
-            break;
-        }
+
+
+//        // TODO USE RETURNED ARRAY LIST AND DISPLAY THE TASK CONTENTS IN ADAPTER
+//        // ****** HERE IS AN ARRAY LIST OF REQUESTED TASK RETURNED FROM USER **************
+//        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+//        getUser.execute(username);
+//
+//        User user;
+//        final ArrayList<Task> userRequests; //TODO TAKE THIS ARRAY LIST AND DISPLAY IT IN ADAPTER
+//        try {
+//            user = getUser.get();
+//            Log.e("Got the username: ", user.getUsername());
+//            userRequests = user.getRequestedTasks(); // TODO display contents of array to listview
+//
+//        } catch (Exception e) {
+//            Log.e("Error", "We arnt getting the user");
+//            return;
+//        }
+//
+//        //************************************************************************
+
+
+//        Task example1;
+//        for (Task i: userRequests){
+//
+//            example1 = i;
+//            break;
+//        }
 
         dashboardView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(TaskDashboardActivity.this,DashboardRequestedTask.class);
-                String Id= userRequests.get(i).getTitle();
+                intent.putExtra("username",username);
+                String Id= user.getRequestedTasks().get(i).getTitle();
                 intent.putExtra("id",Id);
                 startActivity(intent);
             }
         });
 
 
-                // ANOTHER TEST TO MAKE SURE WE HAVE GLOBAL LIST OF TASKS
-        ElasticSearchController.GetAllTask alltasks = new ElasticSearchController.GetAllTask();
-        alltasks.execute("");
-        ArrayList<Task> everytask;
 
-        try{
-            everytask = alltasks.get();
-            for (Task i: everytask){
-                Log.e("every task database",i.getTitle());
-                Log.e("associated user",i.getRequester().getUsername());
-            }
-        }
-        catch(Exception e){
-            Log.e("Unable to grab","all tasks");
-        }
-
-        // ************************************************
 
 
     }

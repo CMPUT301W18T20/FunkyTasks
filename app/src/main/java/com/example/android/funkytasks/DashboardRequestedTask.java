@@ -28,6 +28,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private ListView bidLV;
     private String Id;
     private Button deleteBT;
+    private String username;
 
 
     @Override
@@ -91,6 +92,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     sendToEditDashboardRequestedTask(view);
                 }
             });
@@ -105,6 +107,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
         Intent intent= getIntent();
+
         Id = intent.getExtras().getString("id");                       //for testing
 
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
@@ -114,7 +117,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
         String taskTitle;
         String taskDescription;
         ArrayList<Bid> taskBids =  new ArrayList<Bid>();
-
 
         //  get Title, description and bids;
         try{
