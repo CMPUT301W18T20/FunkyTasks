@@ -17,4 +17,12 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="FunkyTrial1" parent="Theme.AppCompat.Light.NoActionBar" >
+        <item name="android:colorForeground">#f4eade</item>
+        <item name="colorPrimary">#009688</item>
+        <item name="colorPrimaryDark">#00796B</item>
+        <item name="colorAccent">#9E9E9E</item>
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
+
 </resources>
