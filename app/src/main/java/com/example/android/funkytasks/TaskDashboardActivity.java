@@ -82,6 +82,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         ElasticSearchController.GetAllTask alltasks = new ElasticSearchController.GetAllTask();
         alltasks.execute("");
         ArrayList<Task> everytask;
+
         try{
             everytask = alltasks.get();
             for (Task i: everytask){

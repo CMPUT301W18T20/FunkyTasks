@@ -67,6 +67,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 onDeleteTask();
                 Toast.makeText(getApplicationContext(), "deleted ", Toast.LENGTH_SHORT)
                         .show();
+                sendToTaskDashboard(view);
             }
         });
 
@@ -103,8 +104,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
     public void setTaskDetails() {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
-
-
         Intent intent= getIntent();
         Id = intent.getExtras().getString("id");                       //for testing
 
@@ -155,7 +154,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         }
 
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute("testing123");
+        getUser.execute(task.getRequester().getUsername());
 
         User user;
         try {
