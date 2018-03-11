@@ -58,6 +58,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         ></Button>
 
+    <TextView
+        android:id="@+id/taskStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintLeft_toRightOf="@id/taskName"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"/>
 
 
 

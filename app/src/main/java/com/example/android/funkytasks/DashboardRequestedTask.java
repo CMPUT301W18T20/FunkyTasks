@@ -148,10 +148,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
         Task task;
 
         Intent intent= getIntent();
-        Id = intent.getExtras().getString("id");
-        username = intent.getExtras().getString("username");
+        task = (Task)intent.getSerializableExtra("task");
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(Id);
+        getTask.execute(task.getTitle());
 
         try{
             task = getTask.get();
