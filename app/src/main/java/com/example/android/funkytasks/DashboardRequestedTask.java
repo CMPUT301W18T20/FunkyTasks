@@ -86,26 +86,25 @@ public class DashboardRequestedTask extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.editmenu, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
 
     }
 
     // handle button activities
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
-        if (id == R.id.editButton) {
-            Button edit = (Button) findViewById(R.id.editButton);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        Intent intent= getIntent();
+        Id = intent.getExtras().getString("id");
+        username = intent.getExtras().getString("username");
+        switch (item.getItemId()){
+            case R.id.editButton:
+                Intent intent1= new Intent(this,EditDashboardRequestedTask.class);
+                intent1.putExtra("edittask",task);
+                startActivity(intent1);
+                return true;
+            default:return super.onOptionsItemSelected(item);
 
-                    sendToEditDashboardRequestedTask(view);
-                }
-            });
         }
-
-        return super.onOptionsItemSelected(item);
     }
 
     //set title,description and  get bid arraylist

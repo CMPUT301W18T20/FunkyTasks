@@ -16,6 +16,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     private EditText editTitle;
     private EditText editDescription;
     private Button saveBT;
+    private Task task;
 
 
 
@@ -24,7 +25,29 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard_requested_task);
+        editTitle=(EditText) findViewById(R.id.editTitle);
+        editDescription=(EditText) findViewById(R.id.editDescription);
 
+        Intent intent = getIntent();
+
+        task = (Task)intent.getSerializableExtra("edittask");
+        editTitle.setText(task.getTitle());
+        editDescription.setText(task.getDescription());
+
+//        saveBT.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+////                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
+////                task.setDescription( editDescription.getText().toString());
+////                task.setTitle(editTitle.getText().toString());
+////                updateTask.execute(task);
+//
+//
+//
+//
+//            }
+//        });
 
 
 
