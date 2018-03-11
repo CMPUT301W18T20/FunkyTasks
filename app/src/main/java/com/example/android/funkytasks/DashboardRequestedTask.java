@@ -29,6 +29,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private String Id;
     private Button deleteBT;
     private String username;
+    private Task task;
 
 
     @Override
@@ -40,9 +41,17 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
         // set bids listview
         bidLV=(ListView)findViewById(R.id.bidlistView);
+        descriptionValue=(TextView)findViewById(R.id.textDescription);
+        titleValue=(TextView) findViewById(R.id.taskName);
 
-        /*ArrayList<Bid> bids = setTaskDetails();
-        final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,bids);
+
+        Intent intent = getIntent();
+        task = (Task)intent.getSerializableExtra("task");
+        titleValue.setText(task.getTitle());
+        descriptionValue.setText(task.getDescription());
+
+        //setTaskDetails();
+        final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,task.getBids());
         bidLV.setAdapter(bidAdapter);
 
         //
@@ -56,9 +65,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
-        setTaskDetails();
-
+        });
 
 
         // delete a task
@@ -68,7 +75,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 onDeleteTask();
                 Toast.makeText(getApplicationContext(), "deleted ", Toast.LENGTH_SHORT)
                         .show();
-                sendToTaskDashboard(view);
+                //sendToTaskDashboard(view);
             }
         });
 
@@ -117,23 +124,23 @@ public class DashboardRequestedTask extends AppCompatActivity {
         String taskDescription;
         ArrayList<Bid> taskBids =  new ArrayList<Bid>();
 
-        //  get Title, description and bids;
-        try{
-            task = getTask.get();
-            Log.e("Got the Title ", task.getTitle());
-            Log.e("Got the Description ", task.getDescription());
-            taskTitle= task.getTitle();
-            taskDescription=task.getDescription();
-            taskBids = task.getBids();
-
-        }catch (Exception e) {
-            Log.e("Error", "We arnt getting the task");
-            return;
-
-        }
+//        //  get Title, description and bids;
+//        try{
+//            task = getTask.get();
+//            Log.e("Got the Title ", task.getTitle());
+//            Log.e("Got the Description ", task.getDescription());
+//            taskTitle= task.getTitle();
+//            taskDescription=task.getDescription();
+//            taskBids = task.getBids();
+//
+//        }catch (Exception e) {
+//            Log.e("Error", "We arnt getting the task");
+//            return;
+//
+//        }
         // display task Title and Description
-        titleValue.setText(taskTitle);
-        descriptionValue.setText(taskDescription);
+        //titleValue.setText(task.getTitle());
+        //descriptionValue.setText(task.getDescription());
     }
 
 

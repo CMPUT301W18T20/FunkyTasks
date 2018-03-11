@@ -167,17 +167,27 @@ public class ElasticSearchController {
         protected Task doInBackground(String... search_parameters){
             verifySettings();
             Task returnTask;
-            String query = "{\n" +
-                    "    \"query\" : {\n" +
-                    "       \"constant_score\" : {\n" +
-                    "           \"filter\" : {\n" +
-                    "               \"term\" : {\"title\": \"" + search_parameters[0] + "\"}\n" +
-                    "             }\n" +
-                    "         }\n" +
-                    "    }\n" +
-                    "}";
 
-            Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+            String query = "{\n"+
+                                "\"query\" : {\n"+
+                                     "\"match\":{\n"+
+                                            "\"_id\":"+ search_parameters[0] + "\n"+
+                                    "}\n"+
+                                "}\n"+
+                             "}";
+//            String query = "{\n" +
+//                    "    \"query\" : {\n" +
+//                    "       \"constant_score\" : {\n" +
+//                    "           \"filter\" : {\n" +
+//                    "               \"terms\" : {\"_id\":[ \"" + search_parameters[0] + "]\"}\n" +
+//                    "             }\n" +
+//                    "         }\n" +
+//                    "    }\n" +
+//                    "}";
+
+           Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+           Log.e("search",search.toString());
+            //Get get = new Get.Builder(indexType,search_parameters[0]).type(taskType).build();
 
             try {
                 JestResult result = client.execute(search);

@@ -90,8 +90,8 @@ public class TaskDashboardActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(TaskDashboardActivity.this,DashboardRequestedTask.class);
                 intent.putExtra("username",username);
-                String Id= user.getRequestedTasks().get(i).getTitle();
-                intent.putExtra("id",Id);
+                Task detailedTask = user.getRequestedTasks().get(i);
+                intent.putExtra("task",detailedTask);
                 startActivity(intent);
             }
         });
