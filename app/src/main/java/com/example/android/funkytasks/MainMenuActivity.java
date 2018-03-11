@@ -51,6 +51,7 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
+
         Button profile = (Button) findViewById(R.id.profile);
 
         profile.setOnClickListener(new View.OnClickListener() {

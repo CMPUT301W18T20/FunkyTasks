@@ -17,8 +17,6 @@ import java.util.List;
 
 public class ListViewAdapter extends ArrayAdapter<Task>{
 
-
-
     public ListViewAdapter(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);
     }
@@ -33,20 +31,13 @@ public class ListViewAdapter extends ArrayAdapter<Task>{
         }
         // Lookup view for data population
         TextView title = (TextView) view.findViewById(R.id.taskTitle);
-        TextView description = (TextView) view.findViewById(R.id.taskDescription);
+        //TextView description = (TextView) view.findViewById(R.id.taskDescription);
         TextView status = (TextView) view.findViewById(R.id.taskStatus);
-        TextView bid = (TextView) view.findViewById(R.id.taskBid);
+        //TextView bid = (TextView) view.findViewById(R.id.taskBid);
 
         title.setText(task.getTitle());
-        description.setText(task.getDescription());
+        //description.setText(task.getDescription());
         status.setText(task.getStatus());
-
-//        //TODO call method that grabs lowest bid if its not ZERo
-//        // for now we have temporary bid
-//        ArrayList<Bid> x = task.getBids();
-//        Bid y = x.get(0);
-//        double z = y.getAmount();
-//        bid.setText(String.valueOf(z));
 
 
         return view;
