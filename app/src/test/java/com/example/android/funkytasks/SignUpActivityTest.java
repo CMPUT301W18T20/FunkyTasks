@@ -23,8 +23,7 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
         Activity activity = getActivity();
     }
 
-    public void setUp() throws Exception{
-        super.setUp();
+    public void setSolo() throws Exception{
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
