@@ -107,7 +107,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
         Intent intent= getIntent();
-
         Id = intent.getExtras().getString("id");                       //for testing
 
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
@@ -144,6 +143,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
         Intent intent= getIntent();
         Id = intent.getExtras().getString("id");
+        username = intent.getExtras().getString("username");
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(Id);
 
@@ -156,7 +156,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         }
 
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute(task.getRequester().getUsername());
+        getUser.execute(username);
 
         User user;
         try {
@@ -180,6 +180,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
+
+
+
     public void sendToTaskDashboard(View view){
         Intent intent = new Intent(this, TaskDashboardActivity.class);
         startActivity(intent);
@@ -187,6 +190,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     public void sendToEditDashboardRequestedTask(View view){
         Intent intent = new Intent(this, EditDashboardRequestedTask.class);
+        //intent.putExtra("id";Id);
+        //intent.putExtra("username";)
         startActivity(intent);
     }
 }
