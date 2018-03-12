@@ -59,11 +59,11 @@ public class ElasticSearchController {
         }
     }
 
-    public static class PostTask extends AsyncTask<Task, Void, Void> { // adds new task for the user
+    public static class PostTask extends AsyncTask<Task, Void, Task> { // adds new task for the user
 
         // https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
         @Override
-        protected Void doInBackground(Task... params) {
+        protected Task doInBackground(Task... params) {
             verifySettings();
 
             Task task = (Task) params[0];
@@ -76,6 +76,7 @@ public class ElasticSearchController {
                 if (result.isSucceeded()) {
                     task.setId(result.getId());
                     Log.e("Looking","good to add task to server");
+                    return task;
                 } else {
                     Log.e("Error", "Some error with adding task");
                 }
@@ -168,30 +169,14 @@ public class ElasticSearchController {
             verifySettings();
             Task returnTask;
 
-//            String query = "{\n"+
-//                                "\"query\" : {\n"+
-//                                     "\"match\":{\n"+
-//                                            "\"_id\":"+ search_parameters[0] + "\n"+
-//                                    "}\n"+
-//                                "}\n"+
-//                             "}";
-//            String query = "{\n" +
-//                    "    \"query\" : {\n" +
-//                    "       \"constant_score\" : {\n" +
-//                    "           \"filter\" : {\n" +
-//                    "               \"terms\" : {\"_id\":[ \"" + search_parameters[0] + "]\"}\n" +
-//                    "             }\n" +
-//                    "         }\n" +
-//                    "    }\n" +
-//                    "}";
+            String query = "{\n" +
+                    "  \"query\": { \"term\": {\"_id\": \"" + search_parameters[0] + "\"} }\n" + "}";
 
-           //Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
-            Get get = new Get.Builder(indexType, search_parameters[0]).type(taskType).build();
-
-            //Get get = new Get.Builder(indexType,search_parameters[0]).type(taskType).build();
+            Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+            //Get get = new Get.Builder(indexType, search_parameters[0]).type(taskType).build();
 
             try {
-                JestResult result = client.execute(get);
+                JestResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     returnTask = result.getSourceAsObject(Task.class);
                     Log.e("returntask works",returnTask.getTitle());

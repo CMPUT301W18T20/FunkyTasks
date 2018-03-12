@@ -60,20 +60,20 @@ public class TaskDashboardActivity extends AppCompatActivity {
                 Intent intent = new Intent(TaskDashboardActivity.this,DashboardRequestedTask.class);
                 intent.putExtra("username",username);
                 Task detailedTask = user.getRequestedTasks().get(i);
-                String id = user.getRequestedTasks().get(i).getId();
 
                 ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-                getTask.execute(id);
+
+                getTask.execute(detailedTask.getId()); //TODO fix null id exception NO IDEA WHY IT DOESNT WORK
                 try{
                     Task x = getTask.get();
-                    Log.e("title, i",x.getTitle());
+                    Log.e("Return task title",x.getTitle());
                 }
                 catch(Exception e){
                     Log.e("Task get","not workng");
                 }
-//                intent.putExtra("task",detailedTask);
-//                intent.putExtra("position",i);
-//                startActivityForResult(intent, DELETECODE);
+                intent.putExtra("task",detailedTask);
+                intent.putExtra("position",i);
+                startActivityForResult(intent, DELETECODE);
             }
         });
 

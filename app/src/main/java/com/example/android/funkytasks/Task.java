@@ -1,5 +1,7 @@
 package com.example.android.funkytasks;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,13 +41,6 @@ public class Task implements Serializable{
 
     }
 
-//    public boolean equals(Object obj) {
-//        if (obj == null) return false;
-//        if (obj == this) return true;
-//        if (!(obj instanceof Task)) return false;
-//        Task o = (Task) obj;
-//        return o.id.equals(this.id);
-//    }
 
     public double getLowestBid() throws IllegalAccessException {
         if (bids.size() == 0){
@@ -62,11 +57,12 @@ public class Task implements Serializable{
         return smallest;
 
     }
-    public String getId() {
-        return id;
+    public void setId(String newId){
+        this.id = newId;
     }
-    public void setId(String id) {
-        this.id = id;
+
+    public String getId(){
+        return this.id;
     }
     public ArrayList<Bid> getBids() {
         return bids;

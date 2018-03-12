@@ -105,6 +105,28 @@ public class DashboardRequestedTask extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
+            task = (Task) intent.getSerializableExtra("updatedTask");
+            titleValue.setText(task.getTitle());
+            descriptionValue.setText(task.getDescription());
+
+            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+            getUser.execute(username);
+
+            User user;
+            try {
+                user = getUser.get();
+                Log.e("Got the username: ", user.getUsername());
+
+            } catch (Exception e) {
+                Log.e("Error", "We arnt getting the user");
+                return;
+            }
+
+            user.getRequestedTasks().set(index,task);
+
+            ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
+            updateUser.execute(user);
+
         }
     }
 

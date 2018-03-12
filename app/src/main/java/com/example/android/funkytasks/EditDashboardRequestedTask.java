@@ -30,6 +30,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         setContentView(R.layout.activity_edit_dashboard_requested_task);
         editTitle=(EditText) findViewById(R.id.editTitle);
         editDescription=(EditText) findViewById(R.id.editDescription);
+        saveBT = (Button)findViewById(R.id.buttonDone);
 
         final Intent intent = getIntent();
 
@@ -41,7 +42,6 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         saveBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 titleValue = editTitle.getText().toString();            // grab title from edit text input
                 if (titleValue.length() >= 30) {                    // validating name input length
                     Toast.makeText(getApplicationContext(), "Title must be at least 30 characters long ", Toast.LENGTH_SHORT)
@@ -55,76 +55,18 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
                             .show();
                     return;
                 }
-
-                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
                 task.setDescription(descriptionValue);
                 task.setTitle(titleValue);
+
+                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
                 updateTask.execute(task);
 
                 setResult(RESULT_OK,intent);
+                intent.putExtra("updatedTask",task);
                 finish();
 
             }
         });
 
-
-
     }
-
-//    public void setTaskDetails(){
-//        saveBT=(Button)findViewById(R.id.buttonDone) ;
-//        Intent intent= getIntent();
-//        Id = intent.getExtras().getString("id");
-//
-//        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-//        getTask.execute(Id);
-//
-//        final Task task;
-//        try{
-//            task = getTask.get();
-//            Log.e("Got the Title ", task.getTitle());
-//        }catch (Exception e) {
-//            Log.e("Error", "We arnt getting the task");
-//            return;
-//        }
-//
-//        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-//        getUser.execute(task.getRequester().getUsername());
-//
-//        User user;
-//        try {
-//            user = getUser.get();
-//            Log.e("Got the username: ", user.getUsername());
-//
-//        } catch (Exception e) {
-//            Log.e("Error", "We arnt getting the user");
-//            return;
-//        }
-//
-//
-//        editTitle=(EditText) findViewById(R.id.editTitle);
-//        editDescription=(EditText) findViewById(R.id.editDescription);
-//
-//        editTitle.setText(task.getTitle());
-//        editDescription.setText(task.getDescription());
-//
-//        saveBT.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
-//                task.setDescription( editDescription.getText().toString());
-//                task.setTitle(editTitle.getText().toString());
-//                updateTask.execute(task);
-//
-//
-//
-//
-//            }
-//        });
-
-
-
- //   }
-
 }

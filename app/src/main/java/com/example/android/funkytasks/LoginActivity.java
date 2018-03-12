@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity{
             Log.e("Error", "Failed to get list of users");
         }
 
+
         for (User postedUser: userList){
             Log.e("postedUser",postedUser.getUsername()); // print out all users in system
             if (postedUser.getUsername().equals(username)){ // if user is in th system, log them in

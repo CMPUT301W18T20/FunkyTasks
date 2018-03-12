@@ -67,25 +67,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void sendToDashboard(View view) {
-        // JUST TESTING TO SEE IF THERE ARE TASKS IN THE USER
-        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute(username);
-        ArrayList<Task> checking;
-        User user;
-        try {
-            user = getUser.get();
-            Log.e("username test ", user.getUsername());
-            checking = user.getRequestedTasks();
-            for (Task i: checking){
-                Log.e("print pls task",i.getTitle());
-            }
-
-        } catch (Exception e) {
-            Log.e("Error", "We arnt getting the user");
-            return;
-        }
-        //****************************************************
-
         Intent intent = new Intent(this, TaskDashboardActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
@@ -117,16 +98,34 @@ public class MainMenuActivity extends AppCompatActivity {
                 return;
             }
 
-            user.addRequestedTask(newTask);
+            // add task to global list of all tasks
+            ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+            postTask.execute(newTask);
+            try {
+                newTask = postTask.get();
+            }
+            catch(Exception e){
+                Log.e("asd","asd");
+            }
 
+            user.addRequestedTask(newTask);
             // update user since we added task to it
             ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
             updateUser.execute(user);
 
-            // add task to global list of all tasks
-            ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-            postTask.execute(newTask);
-            Toast.makeText(MainMenuActivity.this, "Add requested task tp user successful", Toast.LENGTH_SHORT).show();
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            getTask.execute(newTask.getId());
+            try{
+                Task x = getTask.get();
+                Log.e("GET TASK",x.getTitle());
+
+            }
+            catch (Exception e){
+                Log.e("bleh","not get task working");
+            }
+
+
+            Toast.makeText(MainMenuActivity.this, "Add requested task to user successful", Toast.LENGTH_SHORT).show();
         }
         else if (requestCode == EDIT_CODE && resultCode == RESULT_OK){
             User user;
