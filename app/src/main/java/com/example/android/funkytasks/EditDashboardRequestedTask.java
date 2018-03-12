@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class EditDashboardRequestedTask extends AppCompatActivity {
     private String username;
-    private String Id;
+    private String id;
     private EditText editTitle;
     private EditText editDescription;
     private Button saveBT;
@@ -34,8 +34,21 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
-        task = (Task)intent.getSerializableExtra("edittask");
+        //task = (Task)intent.getSerializableExtra("edittask");
         index = intent.getExtras().getInt("index");
+        id = intent.getExtras().getString("id");
+
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(id);
+        try {
+            task = getTask.get();
+            Log.e("Got the task",task.getTitle());
+
+        } catch (Exception e) {
+            Log.e("Error", "We arnt getting the task");
+            return;
+        }
+
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
 
@@ -62,6 +75,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
                 updateTask.execute(task);
 
                 setResult(RESULT_OK,intent);
+                intent.putExtra("id",id);
                 intent.putExtra("updatedTask",task);
                 finish();
 

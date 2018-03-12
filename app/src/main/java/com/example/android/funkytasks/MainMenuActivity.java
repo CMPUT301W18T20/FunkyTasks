@@ -113,17 +113,6 @@ public class MainMenuActivity extends AppCompatActivity {
             ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
             updateUser.execute(user);
 
-            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(newTask.getId());
-            try{
-                Task x = getTask.get();
-                Log.e("GET TASK",x.getTitle());
-
-            }
-            catch (Exception e){
-                Log.e("bleh","not get task working");
-            }
-
 
             Toast.makeText(MainMenuActivity.this, "Add requested task to user successful", Toast.LENGTH_SHORT).show();
         }

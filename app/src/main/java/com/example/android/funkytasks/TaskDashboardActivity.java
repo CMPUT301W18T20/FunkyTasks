@@ -43,16 +43,10 @@ public class TaskDashboardActivity extends AppCompatActivity {
         // Setting up adapter to listen for the respective list
 
         listView = (ListView) findViewById(R.id.myTasks);
-        requestedTasks = user.getRequestedTasks();
-        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, requestedTasks);
+        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, user.getRequestedTasks());
 
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
-
-//        ListView dashboardView = (ListView) findViewById(R.id.myTasks);
-//        // get data from the table by the ListAdapter
-//        ListViewAdapter customAdapter = new ListViewAdapter(this, 1, user.getRequestedTasks());
-//        dashboardView .setAdapter(customAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -63,7 +57,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
 
                 ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
 
-                getTask.execute(detailedTask.getId()); //TODO fix null id exception NO IDEA WHY IT DOESNT WORK
+                getTask.execute(detailedTask.getId());
                 try{
                     Task x = getTask.get();
                     Log.e("Return task title",x.getTitle());
@@ -73,6 +67,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
                 }
                 intent.putExtra("task",detailedTask);
                 intent.putExtra("position",i);
+                intent.putExtra("id",detailedTask.getId());
                 startActivityForResult(intent, DELETECODE);
             }
         });
