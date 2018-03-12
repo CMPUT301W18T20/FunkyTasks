@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.funkytasks.ViewRequestorTaskActivity">
+
+
+    <TextView
+        android:id="@+id/requestorTaskName"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Task Name"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/requestorTaskStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/requestorTaskStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Task Status"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/requestorTaskDescription"
+        android:layout_width="0dp"
+        android:layout_height="101dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Task Description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskUsernameTitle" />
+
+    <TextView
+        android:id="@+id/requestorTaskLowestBidTitle"
+        android:layout_width="82dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Lowest Bid:"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/requestorTaskLowestBid"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskDescription" />
+
+    <TextView
+        android:id="@+id/requestorTaskLowestBid"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Lowest Bid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/requestorTaskLowestBidTitle"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskDescription" />
+
+    <TextView
+        android:id="@+id/requestorTaskUsernameTitle"
+        android:layout_width="78dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="16dp"
+        android:text="Posted by:"
+        app:layout_constraintEnd_toStartOf="@+id/requestorTaskUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskName" />
+
+    <TextView
+        android:id="@+id/requestorTaskUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Task requestor username"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/requestorTaskUsernameTitle"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskName" />
+</android.support.constraint.ConstraintLayout>
