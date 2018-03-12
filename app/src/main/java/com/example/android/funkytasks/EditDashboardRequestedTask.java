@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditDashboardRequestedTask extends AppCompatActivity {
     private String username;
@@ -17,7 +18,9 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     private EditText editDescription;
     private Button saveBT;
     private Task task;
-
+    private int index;
+    private String titleValue;
+    private String descriptionValue;
 
 
 
@@ -28,26 +31,41 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         editTitle=(EditText) findViewById(R.id.editTitle);
         editDescription=(EditText) findViewById(R.id.editDescription);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
         task = (Task)intent.getSerializableExtra("edittask");
+        index = intent.getExtras().getInt("index");
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
 
-//        saveBT.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-////                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
-////                task.setDescription( editDescription.getText().toString());
-////                task.setTitle(editTitle.getText().toString());
-////                updateTask.execute(task);
-//
-//
-//
-//
-//            }
-//        });
+        saveBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                titleValue = editTitle.getText().toString();            // grab title from edit text input
+                if (titleValue.length() >= 30) {                    // validating name input length
+                    Toast.makeText(getApplicationContext(), "Title must be at least 30 characters long ", Toast.LENGTH_SHORT)
+                            .show();
+                    return;
+                }
+
+                descriptionValue = editDescription.getText().toString(); // grab description from edit text input
+                if (descriptionValue.length() >= 300) {               // validating name input length
+                    Toast.makeText(getApplicationContext(), "Description must be at least 300 characters long ", Toast.LENGTH_SHORT)
+                            .show();
+                    return;
+                }
+
+                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
+                task.setDescription(descriptionValue);
+                task.setTitle(titleValue);
+                updateTask.execute(task);
+
+                setResult(RESULT_OK,intent);
+                finish();
+
+            }
+        });
 
 
 

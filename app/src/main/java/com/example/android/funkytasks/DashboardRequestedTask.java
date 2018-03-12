@@ -25,11 +25,14 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     private TextView titleValue;
     private TextView descriptionValue;
+    private TextView statusValue;
     private ListView bidLV;
     private String Id;
     private Button deleteBT;
     private String username;
     private Task task;
+    private int index;
+    private int EDIT_CODE = 1;
 
 
     @Override
@@ -43,12 +46,18 @@ public class DashboardRequestedTask extends AppCompatActivity {
         bidLV=(ListView)findViewById(R.id.bidlistView);
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
+        statusValue = (TextView) findViewById(R.id.taskStatus);
 
 
-        Intent intent = getIntent();
+
+        final Intent intent = getIntent();
+        username = intent.getExtras().getString("username");
         task = (Task)intent.getSerializableExtra("task");
+        index = intent.getExtras().getInt("position");
+
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
+        statusValue.setText(task.getStatus());
 
         //setTaskDetails();
         final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,task.getBids());
@@ -75,6 +84,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 onDeleteTask();
                 Toast.makeText(getApplicationContext(), "deleted ", Toast.LENGTH_SHORT)
                         .show();
+                setResult(RESULT_OK,intent);
+                finish();
                 //sendToTaskDashboard(view);
             }
         });
@@ -90,76 +101,37 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
+        }
+    }
+
     // handle button activities
     public boolean onOptionsItemSelected(MenuItem item) {
 
         Intent intent= getIntent();
         Id = intent.getExtras().getString("id");
-        username = intent.getExtras().getString("username");
         switch (item.getItemId()){
             case R.id.editButton:
-                Intent intent1= new Intent(this,EditDashboardRequestedTask.class);
-                intent1.putExtra("edittask",task);
-                startActivity(intent1);
-                return true;
+                if (task.getStatus().equals("requested")){
+                    Intent intent1= new Intent(this,EditDashboardRequestedTask.class);
+                    intent1.putExtra("edittask",task);
+                    intent1.putExtra("index",index);
+                    startActivityForResult(intent1,EDIT_CODE);
+                    return true;
+                }
+                else{
+                    Toast.makeText(DashboardRequestedTask.this, "Cannot edit", Toast.LENGTH_SHORT).show();
+                }
             default:return super.onOptionsItemSelected(item);
 
         }
     }
 
-    //set title,description and  get bid arraylist
-    //TODO E.S get a Task by id.
-    public void setTaskDetails() {
-        descriptionValue=(TextView)findViewById(R.id.textDescription);
-        titleValue=(TextView) findViewById(R.id.taskName);
-        Intent intent= getIntent();
-        Id = intent.getExtras().getString("id");                       //for testing
-
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(Id);
-
-        Task task;
-        String taskTitle;
-        String taskDescription;
-        ArrayList<Bid> taskBids =  new ArrayList<Bid>();
-
-//        //  get Title, description and bids;
-//        try{
-//            task = getTask.get();
-//            Log.e("Got the Title ", task.getTitle());
-//            Log.e("Got the Description ", task.getDescription());
-//            taskTitle= task.getTitle();
-//            taskDescription=task.getDescription();
-//            taskBids = task.getBids();
-//
-//        }catch (Exception e) {
-//            Log.e("Error", "We arnt getting the task");
-//            return;
-//
-//        }
-        // display task Title and Description
-        //titleValue.setText(task.getTitle());
-        //descriptionValue.setText(task.getDescription());
-    }
-
 
     public void onDeleteTask(){
-
-        Task task;
-
-        Intent intent= getIntent();
-        task = (Task)intent.getSerializableExtra("task");
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(task.getTitle());
-
-        try{
-            task = getTask.get();
-            Log.e("Got the Title ", task.getTitle());
-        }catch (Exception e) {
-            Log.e("Error", "We arnt getting the task");
-            return;
-        }
-
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
 
@@ -173,19 +145,19 @@ public class DashboardRequestedTask extends AppCompatActivity {
             return;
         }
 
+        user.deleteRequestedTask(index);
 
-        user.deleteRequestedTask(task);
+        ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
+        updateUser.execute(user);
+
 
         // delete task in global list of all tasks
         ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
         deleteTask.execute(task);
 
-        ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
-        updateUser.execute(user);
+        return;
 
     }
-
-
 
 
     public void sendToTaskDashboard(View view){

@@ -1,5 +1,7 @@
 package com.example.android.funkytasks;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -66,16 +68,19 @@ public class User implements Serializable{
 
 
     // DO NOT WRITE TESTS FOR DELETE METHODS YET
-    public void deleteRequestedTask(Task toDelete){
+    public void deleteRequestedTask(int index){
         // if task has bid on it, we also have to call delete this task from other users accounts
         // TODO return a list of bidders(users) on the task
-        Iterator itr = requestedTasks.iterator();
-        while (itr.hasNext()) {
-            Task task = (Task) itr.next();
-            if (task == toDelete) {
-                itr.remove();
-            }
-        }
+       requestedTasks.remove(index);
+
+//        Iterator itr = requestedTasks.iterator();
+//        while (itr.hasNext()) {
+//            Task task = (Task) itr.next();
+//            Log.e("task",task.getTitle());
+//            if (toDelete != null && task.getId().equals(toDelete.getId())) {
+//                itr.remove();
+//            }
+//        }
     }
 
     public int deleteBiddedTask(Task toDelete){

@@ -39,6 +39,13 @@ public class Task implements Serializable{
 
     }
 
+//    public boolean equals(Object obj) {
+//        if (obj == null) return false;
+//        if (obj == this) return true;
+//        if (!(obj instanceof Task)) return false;
+//        Task o = (Task) obj;
+//        return o.id.equals(this.id);
+//    }
 
     public double getLowestBid() throws IllegalAccessException {
         if (bids.size() == 0){

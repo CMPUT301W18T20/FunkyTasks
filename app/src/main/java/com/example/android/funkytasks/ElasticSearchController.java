@@ -168,13 +168,13 @@ public class ElasticSearchController {
             verifySettings();
             Task returnTask;
 
-            String query = "{\n"+
-                                "\"query\" : {\n"+
-                                     "\"match\":{\n"+
-                                            "\"_id\":"+ search_parameters[0] + "\n"+
-                                    "}\n"+
-                                "}\n"+
-                             "}";
+//            String query = "{\n"+
+//                                "\"query\" : {\n"+
+//                                     "\"match\":{\n"+
+//                                            "\"_id\":"+ search_parameters[0] + "\n"+
+//                                    "}\n"+
+//                                "}\n"+
+//                             "}";
 //            String query = "{\n" +
 //                    "    \"query\" : {\n" +
 //                    "       \"constant_score\" : {\n" +
@@ -185,12 +185,13 @@ public class ElasticSearchController {
 //                    "    }\n" +
 //                    "}";
 
-           Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
-           Log.e("search",search.toString());
+           //Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+            Get get = new Get.Builder(indexType, search_parameters[0]).type(taskType).build();
+
             //Get get = new Get.Builder(indexType,search_parameters[0]).type(taskType).build();
 
             try {
-                JestResult result = client.execute(search);
+                JestResult result = client.execute(get);
                 if (result.isSucceeded()) {
                     returnTask = result.getSourceAsObject(Task.class);
                     Log.e("returntask works",returnTask.getTitle());
@@ -271,20 +272,20 @@ public class ElasticSearchController {
     }
 
 
-    public static class updateTask extends AsyncTask<User,Void,Void>{ // update a user's task by passing in the user object
-        // TODO IN THE front end (activity), make sure that the task is added to the user and then pass the user object in
+    public static class updateTask extends AsyncTask<Task,Void,Void>{ // update a user's task by passing in the user object
 
         @Override
-        protected Void doInBackground (User... currentUser) {
+        protected Void doInBackground (Task... currentTask) {
             verifySettings();
 
-            User user = currentUser[0];
 
-            Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId()).build();
+            Index index = new Index.Builder(currentTask[0]).index(indexType).type(taskType).id(currentTask[0].getId())
+                    .build();
 
             try{
                 DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
                 if(result.isSucceeded()){
+                    Log.e("Update","successful for task");
                     return null;
                 }
                 else{
@@ -316,7 +317,7 @@ public class ElasticSearchController {
                     Log.e("Successful","delete");
                 }
                 else{
-                    Log.e("Unable","to delete user");
+                    Log.e("Unable","to delete task");
                 }
             }
             catch(Exception e){
