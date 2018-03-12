@@ -78,6 +78,12 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivityForResult(intent, ADD_CODE);
     }
 
+    public void sendToSolveTaskActivity(View view) {
+        Intent intent = new Intent(this, SolveTaskActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

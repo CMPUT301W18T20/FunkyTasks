@@ -23,6 +23,7 @@
         android:id="@+id/button3"
         android:layout_width="0dp"
         android:layout_height="72dp"
+        android:onClick="sendToSolveTaskActivity"
         android:text="solve a funky task "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.502"

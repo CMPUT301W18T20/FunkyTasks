@@ -322,15 +322,16 @@ public class ElasticSearchController {
             int size = 50000;
             String username = searchParameters[1];
             // https://www.elastic.co/guide/en/elasticsearch/guide/current/phrase-matching.html
-            String query =
-                    "{"+ "\"size\":" + size + ",\n"+
-                        "\"query\":{\n" +
-                                "\"match_phrase\": {\n" +
-                                    "\"description\": {" + searchParameters[0] +
-                                "}\n" +
-                            "}\n"+
-                        "}\n"+
-                     "}";
+            String query = "{\n" +
+                    "\"size\":" + size + ",\n" +
+                    "\"query\": {\n" +
+                    "\"match\": {\n" +
+                    "\"description\": {\n" +
+                    "\"query\": \"" + searchParameters[0] +
+                    "\" }\n" +
+                    "}\n" +
+                    "}\n" +
+                    "}";
 
             ArrayList<Task> tasks;
 
