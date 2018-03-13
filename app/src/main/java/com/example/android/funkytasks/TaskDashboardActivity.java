@@ -42,8 +42,9 @@ public class TaskDashboardActivity extends AppCompatActivity {
         }
         // Setting up adapter to listen for the respective list
 
+        requestedTasks = user.getRequestedTasks();
         listView = (ListView) findViewById(R.id.myTasks);
-        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, user.getRequestedTasks());
+        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, requestedTasks);
 
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
@@ -72,6 +73,13 @@ public class TaskDashboardActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this,MainMenuActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
     }
 
     @Override

@@ -98,8 +98,13 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 finish();
             }
         });
+    }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this,TaskDashboardActivity.class);
+        intent.putExtra("username",username);
+        startActivity(intent);
     }
 
     // create an action bar button

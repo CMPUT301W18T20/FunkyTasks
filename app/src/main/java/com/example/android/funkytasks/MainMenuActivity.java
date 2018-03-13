@@ -66,6 +66,12 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this,LoginActivity.class);
+        startActivity(intent);
+    }
+
     public void sendToDashboard(View view) {
         Intent intent = new Intent(this, TaskDashboardActivity.class);
         intent.putExtra("username", username);
