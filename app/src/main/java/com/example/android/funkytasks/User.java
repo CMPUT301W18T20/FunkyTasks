@@ -30,9 +30,9 @@ public class User implements Serializable{
         this.email = email;
         this.phonenumber = phonenumber;
         this.rating = 3;
-        this.acceptedTasks = new ArrayList<Task>();
-        this.requestedTasks = new ArrayList<Task>();
-        this.biddedTasks = new ArrayList<Task>();
+//        this.acceptedTasks = new ArrayList<Task>();
+//        this.requestedTasks = new ArrayList<Task>();
+//        this.biddedTasks = new ArrayList<Task>();
     }
 
     public void setId(String newId){
@@ -43,45 +43,45 @@ public class User implements Serializable{
         return this.id;
     }
 
-    public void addRequestedTask(Task newTask){
-        requestedTasks.add(newTask);
-    }
+//    public void addRequestedTask(Task newTask){
+//        requestedTasks.add(newTask);
+//    }
+//
+//    public void addBiddedTask(Task newTask){
+//        biddedTasks.add(newTask);
+//    }
+//    public void addAccepedTask(Task newTask){
+//        acceptedTasks.add(newTask);
+//    }
+//
+//    public ArrayList<Task> getBiddedTasks(){
+//        return this.biddedTasks;
+//    }
+//
+//    public ArrayList<Task> getAcceptedTasks(){
+//        return this.acceptedTasks;
+//    }
+//
+//    public ArrayList<Task> getRequestedTasks(){
+//        return this.requestedTasks;
+//    }
 
-    public void addBiddedTask(Task newTask){
-        biddedTasks.add(newTask);
-    }
-    public void addAccepedTask(Task newTask){
-        acceptedTasks.add(newTask);
-    }
 
-    public ArrayList<Task> getBiddedTasks(){
-        return this.biddedTasks;
-    }
-
-    public ArrayList<Task> getAcceptedTasks(){
-        return this.acceptedTasks;
-    }
-
-    public ArrayList<Task> getRequestedTasks(){
-        return this.requestedTasks;
-    }
-
-
-    // DO NOT WRITE TESTS FOR DELETE METHODS YET
-    public void deleteRequestedTask(int index){
-        // if task has bid on it, we also have to call delete this task from other users accounts
-        // TODO return a list of bidders(users) on the task
-       requestedTasks.remove(index);
-
-//        Iterator itr = requestedTasks.iterator();
-//        while (itr.hasNext()) {
-//            Task task = (Task) itr.next();
-//            Log.e("task",task.getTitle());
-//            if (toDelete != null && task.getId().equals(toDelete.getId())) {
-//                itr.remove();
-//            }
-//        }
-    }
+//    // DO NOT WRITE TESTS FOR DELETE METHODS YET
+//    public void deleteRequestedTask(int index){
+//        // if task has bid on it, we also have to call delete this task from other users accounts
+//        // TODO return a list of bidders(users) on the task
+//       requestedTasks.remove(index);
+//
+////        Iterator itr = requestedTasks.iterator();
+////        while (itr.hasNext()) {
+////            Task task = (Task) itr.next();
+////            Log.e("task",task.getTitle());
+////            if (toDelete != null && task.getId().equals(toDelete.getId())) {
+////                itr.remove();
+////            }
+////        }
+//    }
 
     public int deleteBiddedTask(Task toDelete){
         // Elastic search should first grab all users, return user array list.

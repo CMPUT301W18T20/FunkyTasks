@@ -50,6 +50,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
        // task = (Task)intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
@@ -69,22 +70,23 @@ public class DashboardRequestedTask extends AppCompatActivity {
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
 
-        //setTaskDetails();
-        final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,task.getBids());
-        bidLV.setAdapter(bidAdapter);
 
-        //
-        bidLV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO display bid details;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        //TODO later when we start working with bids on screen
+//        final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,task.getBids());
+//        bidLV.setAdapter(bidAdapter);
+//
+//        //
+//        bidLV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                //TODO display bid details;
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
 
 
         // delete a task
@@ -94,7 +96,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 onDeleteTask();
                 Toast.makeText(getApplicationContext(), "deleted ", Toast.LENGTH_SHORT)
                         .show();
-                setResult(RESULT_OK,intent);
+                Intent intent = new Intent(DashboardRequestedTask.this,TaskDashboardActivity.class);
+                intent.putExtra("username",username);
+                startActivity(intent);
                 finish();
             }
         });
@@ -124,24 +128,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
 
-            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-            getUser.execute(username);
-
-            User user;
-            try {
-                user = getUser.get();
-                Log.e("Got the username: ", user.getUsername());
-
-            } catch (Exception e) {
-                Log.e("Error", "We arnt getting the user");
-                return;
-            }
-
-            user.getRequestedTasks().set(index,task);
-
-            ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
-            updateUser.execute(user);
-
         }
     }
 
@@ -168,40 +154,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
 
     public void onDeleteTask(){
-        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute(username);
-
-        User user;
-        try {
-            user = getUser.get();
-            Log.e("Got the username: ", user.getUsername());
-
-        } catch (Exception e) {
-            Log.e("Error", "We arnt getting the user");
-            return;
-        }
-
-        user.deleteRequestedTask(index);
-
-        ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
-        updateUser.execute(user);
-
-
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        Task task;
-        try {
-            task = getTask.get();
-            Log.e("Got the task",task.getTitle());
-
-        } catch (Exception e) {
-            Log.e("Error", "We arnt getting the task");
-            return;
-        }
-
         // delete task in global list of all tasks
         ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
-        deleteTask.execute(task);
+        deleteTask.execute(id);
+        Log.e("deleted","task");
 
         return;
 

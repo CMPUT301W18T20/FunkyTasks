@@ -32,6 +32,7 @@ public class ElasticSearchController {
     private static String indexType = "cmput301w18t20";
     private static String userType = "user";
     private static String taskType = "task";
+    private static String bidType = "bid";
 
     public static class PostUser extends AsyncTask<User, Void, Void> { // add new user to database
         @Override
@@ -162,8 +163,9 @@ public class ElasticSearchController {
         }
     }
 
-    //TODO: change title to ID
+
     public static class GetTask extends AsyncTask<String,Void,Task>{
+        // grabs details of one specific task
         @Override
         protected Task doInBackground(String... search_parameters){
             verifySettings();
@@ -202,11 +204,15 @@ public class ElasticSearchController {
             int size = 50000; // change this number to get back more results
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
-            String query = "{\n"+
-                    "\"size\":" + size + ",\n"+
+            String query = "{\n" +
+                    "\"size\":" + size + ",\n" +
                     "\"query\": {\n" +
-                    "\"match_all\": {}\n" +
-                    "}\n"+
+                    "\"match\": {\n" +
+                    "\"requester\": {\n" +
+                    "\"query\": \"" + search_parameters[0] +
+                    "\" }\n" +
+                    "}\n" +
+                    "}\n" +
                     "}";
 
             ArrayList<Task> tasks;
@@ -238,7 +244,7 @@ public class ElasticSearchController {
             verifySettings();
 
             User user = currentUser[0];
-            Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId().toString()).build();
+            Index index = new Index.Builder(user).index(indexType).type(userType).id(user.getId()).build();
 
             try {
                 JestResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
@@ -287,14 +293,14 @@ public class ElasticSearchController {
     }
 
 
-    public static class deleteTask extends AsyncTask<Task,Void,Void>{
+    public static class deleteTask extends AsyncTask<String,Void,Void>{
         // Deletes task from global list
         // For the user: user must first delete their requested task from their list then we call to update user
         @Override
-        protected Void doInBackground(Task... givenTask){
+        protected Void doInBackground(String... givenTask){
             verifySettings();
 
-            Delete delete = new Delete.Builder(givenTask[0].getId()).index(indexType).type(taskType).build();
+            Delete delete = new Delete.Builder(givenTask[0]).index(indexType).type(taskType).build();
 
             try{
                 DocumentResult result = client.execute(delete);
@@ -343,7 +349,7 @@ public class ElasticSearchController {
                     tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
                     for (int i = 0; i < tasks.size(); i++){
                         Task task = tasks.get(i);
-                        if (task.getRequester().getUsername().equals(username)){
+                        if (task.getRequester().equals(username)){
                             tasks.remove(i);
                         }
                         else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")){

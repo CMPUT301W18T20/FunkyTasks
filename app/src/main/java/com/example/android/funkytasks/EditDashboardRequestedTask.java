@@ -74,7 +74,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
                 ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
                 updateTask.execute(task);
 
-                Log.e("tasktitle",task.getTitle());
+                Log.e("tasktitle edited",task.getTitle());
 
                 setResult(RESULT_OK,intent);
                 intent.putExtra("id",id);
@@ -91,6 +91,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(this,DashboardRequestedTask.class);
         intent.putExtra("username",username);
+        intent.putExtra("id",id);
         startActivity(intent);
     }
 }

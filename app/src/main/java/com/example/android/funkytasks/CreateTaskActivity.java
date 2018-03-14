@@ -32,6 +32,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         final Intent intent = getIntent();
 
         username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
 
         final EditText title = (EditText)findViewById(R.id.AddTitle);
         final EditText description = (EditText)findViewById(R.id.AddDescription);
@@ -42,19 +43,6 @@ public class CreateTaskActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-                getUser.execute(username);
-
-                User user;
-                try {
-                    user = getUser.get();
-                    Log.e("Got the username: ", user.getUsername());
-
-                } catch (Exception e) {
-                    Log.e("Error", "We arnt getting the user");
-                    return;
-                }
 
                 titleValue = title.getText().toString();            // grab title from edit text input
                 if (titleValue.length() >= 30) {                    // validating name input length
@@ -70,7 +58,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                     return;
                 }
 
-                Task task = new Task(titleValue,descriptionValue,user);
+                Task task = new Task(titleValue,descriptionValue,username);
 
                 intent.putExtra("username",username);
                 intent.putExtra("task",task);

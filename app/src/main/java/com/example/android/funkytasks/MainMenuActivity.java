@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class MainMenuActivity extends AppCompatActivity {
     public static ArrayList<Task> tasksArrayList = new ArrayList<Task>();
     ArrayList<User> userArrayList = new ArrayList<User>();
-    private String username;
+    public static String username;
     final int ADD_CODE = 1;
     final int EDIT_CODE = 2;
 
@@ -35,13 +35,14 @@ public class MainMenuActivity extends AppCompatActivity {
         setTitle("Main Menu");
         Intent intent = getIntent();
 
-        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
-        Task task1 = new Task("Funky", "make ken happy", userArrayList.get(0));
-        Bid bid1 = new Bid(userArrayList.get(0), 10.0);
-        task1.addBid(bid1);
-        tasksArrayList.add(task1);
+//        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
+//        Task task1 = new Task("Funky", "make ken happy", userArrayList.get(0));
+//        Bid bid1 = new Bid(userArrayList.get(0), 10.0);
+//        task1.addBid(bid1);
+//        tasksArrayList.add(task1);
 
-        username = intent.getExtras().getString("username");
+        //username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +70,7 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this,LoginActivity.class);
+        LoginActivity.username = null;
         startActivity(intent);
     }
 
@@ -97,34 +99,16 @@ public class MainMenuActivity extends AppCompatActivity {
 
             Task newTask = (Task) intent.getSerializableExtra("task");
 
-            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-            getUser.execute(username);
-
-            User user;
-            try {
-                user = getUser.get();
-                Log.e("Got the username: ", user.getUsername());
-
-            } catch (Exception e) {
-                Log.e("Error", "We arnt getting the user");
-                return;
-            }
-
             // add task to global list of all tasks
             ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
             postTask.execute(newTask);
             try {
                 newTask = postTask.get();
+                Log.e("newtask titel",newTask.getTitle());
             }
             catch(Exception e){
                 Log.e("asd","asd");
             }
-
-            user.addRequestedTask(newTask);
-            // update user since we added task to it
-            ElasticSearchController.updateUser updateUser = new ElasticSearchController.updateUser();
-            updateUser.execute(user);
-
 
             Toast.makeText(MainMenuActivity.this, "Add requested task to user successful", Toast.LENGTH_SHORT).show();
         }

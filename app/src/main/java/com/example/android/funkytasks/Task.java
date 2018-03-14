@@ -21,7 +21,7 @@ public class Task implements Serializable{
 
     private String title;
     private String description;
-    private User requester;
+    private String requester;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
     private ArrayList<Bid> bids;
@@ -31,32 +31,31 @@ public class Task implements Serializable{
     private String id;
 
 
-    Task(String title, String description,User requester){
+    Task(String title, String description,String requester){
         // constructor for task object
         this.title = title;
         this.description = description;
-        this.requester = requester;
+        this.requester = requester; // username of the user who requests the task
         this.status = statuses[0];
-        bids = new ArrayList<Bid>();
-
+        //bids = new ArrayList<Bid>();
     }
 
 
-    public double getLowestBid() throws IllegalAccessException {
-        if (bids.size() == 0){
-            throw new IllegalAccessException();
-        }
-        smallest = bids.get(0).getAmount();
-        for (int i = 0; i < bids.size(); i++){
-             Bid bid = bids.get(i);
-             if (smallest > bid.getAmount()){
-                 smallest = bid.getAmount();
-             }
-
-        }
-        return smallest;
-
-    }
+//    public double getLowestBid() throws IllegalAccessException {
+//        if (bids.size() == 0){
+//            throw new IllegalAccessException();
+//        }
+//        smallest = bids.get(0).getAmount();
+//        for (int i = 0; i < bids.size(); i++){
+//             Bid bid = bids.get(i);
+//             if (smallest > bid.getAmount()){
+//                 smallest = bid.getAmount();
+//             }
+//
+//        }
+//        return smallest;
+//
+//    }
     public void setId(String newId){
         this.id = newId;
     }
@@ -95,10 +94,8 @@ public class Task implements Serializable{
     public String getStatus(){
         return this.status;
     }
-    public void setRequester(User newRequester){
-        this.requester=newRequester;
-    }
-    public User getRequester(){
+
+    public String getRequester(){
         return this.requester;
     }
 

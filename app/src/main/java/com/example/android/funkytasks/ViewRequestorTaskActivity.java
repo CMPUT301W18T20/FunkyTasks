@@ -39,6 +39,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
 
         id = intent.getExtras().getString("id");
 
@@ -52,10 +53,12 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             Log.e("Task get", "not workng");
         }
 
+        //TODO SET REQUESTER'S CONTACT INFO TO BE SHOWN ON SCREEN WITH PHONE AND EMAIL (use case 3.3)
+
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
-        usernameValue.setText(username);
+        usernameValue.setText(task.getRequester());
 
     }
 

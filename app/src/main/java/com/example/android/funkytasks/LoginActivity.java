@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity{
 
     ArrayList<User> userArrayList = new ArrayList<User>();
+    public static String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,6 @@ public class LoginActivity extends AppCompatActivity{
 
     public void sendToMainMenu(View view){
 
-        String username;
         EditText inputUsername = (EditText) findViewById(R.id.editLoginName);
         username = inputUsername.getText().toString();
 
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
-    public void checkUserName(String username){
+    public void checkUserName(String checkusername){
 
         // ****** uncomment this to use temporary list of username (must uncomment elastic search then)
 //        for (User user: userArrayList){
@@ -94,10 +94,10 @@ public class LoginActivity extends AppCompatActivity{
 
         for (User postedUser: userList){
             Log.e("postedUser",postedUser.getUsername()); // print out all users in system
-            if (postedUser.getUsername().equals(username)){ // if user is in th system, log them in
+            if (postedUser.getUsername().equals(checkusername)){ // if user is in th system, log them in
                 Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainMenuActivity.class);
-
+                username = checkusername;
                 intent.putExtra("username", postedUser.getUsername());
                 startActivity(intent);
                 finish();

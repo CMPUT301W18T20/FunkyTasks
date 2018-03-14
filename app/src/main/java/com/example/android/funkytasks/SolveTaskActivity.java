@@ -28,9 +28,11 @@ public class SolveTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_solve_task);
 
         setTitle("Solve a Task");
+        Log.e("PUBLIC",MainMenuActivity.username);
 
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
 
         final EditText search = (EditText) findViewById(R.id.search);
 
@@ -46,7 +48,6 @@ public class SolveTaskActivity extends AppCompatActivity {
 
                 ElasticSearchController.searchTask searchTask = new ElasticSearchController.searchTask();
                 searchTask.execute(searchText, username);
-
 
                 try{
                     taskList = searchTask.get();
@@ -90,5 +91,13 @@ public class SolveTaskActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+
 }
 

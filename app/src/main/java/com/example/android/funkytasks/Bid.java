@@ -7,13 +7,25 @@ package com.example.android.funkytasks;
 public class Bid {
 
     //title,bid amount,bidder
-    private User bidder;
+    private String bidder; // username of the bidder
     private double amount;
+    private String taskID;
+
+
 
     //constracutor for bid
-    public Bid(User bidder,Double amount){
+    public Bid(String bidder,Double amount, String taskID){
         this.bidder=bidder;
         this.amount=amount;
+        this.taskID = taskID;
+    }
+
+    public String getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
 
 
@@ -25,11 +37,11 @@ public class Bid {
     public void setAmount(double amount) {
         this.amount = amount;
     }
-    public User getBidder() {
+    public String getBidder() {
         return bidder;
     }
 
-    public void setBidder(User bidder) {
+    public void setBidder(String bidder) {
         this.bidder = bidder;
     }
 

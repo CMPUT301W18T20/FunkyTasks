@@ -24,6 +24,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
 
         Log.e("USERNAME", username);
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();

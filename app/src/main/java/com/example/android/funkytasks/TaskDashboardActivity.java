@@ -17,7 +17,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
 
     ListView listView;
     ListViewAdapter listViewAdapter;
-    ArrayList <Task> taskList = new ArrayList<Task>();
+    ArrayList<Task> taskList = new ArrayList<Task>();
 
     final int DELETECODE = 1;
     ArrayList<Task> requestedTasks;
@@ -29,10 +29,11 @@ public class TaskDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_dashboard);
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
+        username = LoginActivity.username;
 
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
-        try{
+        try {
             user = getUser.get();
             Log.e("Got the username: ", user.getUsername());
 
@@ -40,36 +41,47 @@ public class TaskDashboardActivity extends AppCompatActivity {
             Log.e("Error", "We arnt getting the user");
             return;
         }
-        // Setting up adapter to listen for the respective list
 
-        requestedTasks = user.getRequestedTasks();
+        // Getting the all the tasks associated with the user
+        ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
+        getAllTask.execute(username);
+        try {
+            taskList = getAllTask.get();
+            Log.e("Got the tasks ", taskList.toString());
+
+        } catch (Exception e) {
+            Log.e("Error", "We arnt getting the list of tasks");
+            return;
+        }
+
+
         listView = (ListView) findViewById(R.id.myTasks);
-        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, requestedTasks);
+        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, taskList);
 
         listView.setAdapter(listViewAdapter);
-        listViewAdapter.notifyDataSetChanged();
+        listViewAdapter.notifyDataSetChanged(); //TODO fix the delete functionality (works backend wise) but is not reflected in front end after
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(TaskDashboardActivity.this,DashboardRequestedTask.class);
-                intent.putExtra("username",username);
-                Task detailedTask = user.getRequestedTasks().get(i);
+                Intent intent = new Intent(TaskDashboardActivity.this, DashboardRequestedTask.class);
+                intent.putExtra("username", username);
+                Task detailedTask = taskList.get(i);
 
                 ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
 
                 getTask.execute(detailedTask.getId());
-                try{
+                try {
                     Task x = getTask.get();
-                    Log.e("Return task title",x.getTitle());
+                    Log.e("Return task title", x.getTitle());
+                } catch (Exception e) {
+                    Log.e("Error", "Task get not working");
                 }
-                catch(Exception e){
-                    Log.e("Task get","not workng");
-                }
-                intent.putExtra("task",detailedTask);
-                intent.putExtra("position",i);
-                intent.putExtra("id",detailedTask.getId());
-                startActivityForResult(intent, DELETECODE);
+
+                intent.putExtra("task", detailedTask);
+                intent.putExtra("position", i);
+                intent.putExtra("id", detailedTask.getId());
+                startActivity(intent);
             }
         });
 
@@ -77,32 +89,9 @@ public class TaskDashboardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this,MainMenuActivity.class);
-        intent.putExtra("username",username);
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        intent.putExtra("username", username);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == DELETECODE && resultCode == RESULT_OK) {
-            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-            getUser.execute(username);
-            try{
-                user = getUser.get();
-                Log.e("Got the username: ", user.getUsername());
-
-            } catch (Exception e) {
-                Log.e("Error", "We arnt getting the user");
-                return;
-            }
-            //TODO fix adapter to reflect the delete changes, (delete itself works but task shud be gone from listview)
-            requestedTasks = user.getRequestedTasks();
-            listViewAdapter.notifyDataSetChanged();
-        }
-
-
-
     }
 
 
