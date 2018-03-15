@@ -95,42 +95,43 @@ public class DashboardRequestedTask extends AppCompatActivity {
 //        listViewAdapter.notifyDataSetChanged();
 
         //view bids
-        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
-                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
-                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-                TextView contactTextView =(TextView) View.findViewById(R.id.contactTextView);
-                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
-                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
-                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
 
-                //TODO get contact info and rating for user
-                bidderTextView.setText(bidList.get(i).getBidder());
-                Double bidAmount = bidList.get(i).getAmount();
-                amountTextView.setText(bidAmount.toString());
-
-                //accept or decline bids
-                acceptBTN.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        acceptBid();
-                    }
-                });
-                declineBTN.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        declineBids();
-                    }
-                });
-                Builder.setView(View);
-                AlertDialog dialog=Builder.create();
-                dialog.show();
-
-            }
-
-        });
+//        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
+//                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
+//                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
+//                TextView contactTextView =(TextView) View.findViewById(R.id.contactTextView);
+//                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
+//                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
+//                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
+//
+//                //TODO get contact info and rating for user
+//                bidderTextView.setText(bidList.get(i).getBidder());
+//                Double bidAmount = bidList.get(i).getAmount();
+//                amountTextView.setText(bidAmount.toString());
+//
+//                //accept or decline bids
+//                acceptBTN.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        acceptBid();
+//                    }
+//                });
+//                declineBTN.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        declineBids();
+//                    }
+//                });
+//                Builder.setView(View);
+//                AlertDialog dialog=Builder.create();
+//                dialog.show();
+//
+//            }
+//
+//        });
 
 
 

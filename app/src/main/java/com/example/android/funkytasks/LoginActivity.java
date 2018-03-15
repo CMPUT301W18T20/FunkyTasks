@@ -2,6 +2,7 @@ package com.example.android.funkytasks;
 
 import android.app.Application;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity{
         User testuser1 = new User("Jim", "jim@ualberta.ca", "6666969642");
 
         setTitle("Welcome to FunkyTasks!");
+        EditText inputUsername = (EditText) findViewById(R.id.editLoginName);
+        inputUsername.setHintTextColor(Color.WHITE);
 
         userArrayList.add(testuser1);
         //Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity{
 
         EditText inputUsername = (EditText) findViewById(R.id.editLoginName);
         username = inputUsername.getText().toString();
+
 
         if(username == null || username.isEmpty()){
             Toast.makeText(LoginActivity.this, "You can't login as no one. Valar Morghulis.", Toast.LENGTH_SHORT).show();
