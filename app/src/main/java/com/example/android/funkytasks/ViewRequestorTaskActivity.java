@@ -60,6 +60,10 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         statusValue.setText(task.getStatus());
         usernameValue.setText(task.getRequester());
 
+        Integer numBids = task.getNumberOfBids();
+        numBids += 1;
+        task.setNumberOfBids(numBids);
+
     }
 
     //public void sendToSolveTaskActivity(View view){

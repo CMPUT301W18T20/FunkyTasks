@@ -18,6 +18,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private String titleValue;
     private String descriptionValue;
     private String username;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +63,33 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                 Task task = new Task(titleValue,descriptionValue,username);
 
+                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+
+                try{
+                    user = getUser.get();
+                    user.addRequestedTask(task);
+                    Log.e("Return user title", user.getUsername());
+                }
+                catch(Exception e){
+                    Log.e("User get in create task","not working");
+                }
+
+
+
                 intent.putExtra("username",username);
                 intent.putExtra("task",task);
                 setResult(RESULT_OK,intent);
+                goHome();
                 finish();
 //
             }
         });
 
+    }
+
+    public void goHome() {
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        startActivity(intent);
     }
 
 }

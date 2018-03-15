@@ -19,7 +19,7 @@ public class User implements Serializable{
     private String phonenumber;
     private double rating;
 //    private ArrayList<Task> acceptedTasks;  // tasks the user has agreed to solve
-//    private ArrayList<Task> requestedTasks; // tasks the user has put out
+    private ArrayList<Task> requestedTasks; // tasks the user has put out
 //    private ArrayList<Task> biddedTasks;    // tasks user has currently bidded on
 
     @JestId
@@ -43,9 +43,9 @@ public class User implements Serializable{
         return this.id;
     }
 
-//    public void addRequestedTask(Task newTask){
-//        requestedTasks.add(newTask);
-//    }
+    public void addRequestedTask(Task newTask){
+        requestedTasks.add(newTask);
+    }
 //
 //    public void addBiddedTask(Task newTask){
 //        biddedTasks.add(newTask);
@@ -62,9 +62,9 @@ public class User implements Serializable{
 //        return this.acceptedTasks;
 //    }
 //
-//    public ArrayList<Task> getRequestedTasks(){
-//        return this.requestedTasks;
-//    }
+    public ArrayList<Task> getRequestedTasks(){
+        return this.requestedTasks;
+    }
 
 
 //    // DO NOT WRITE TESTS FOR DELETE METHODS YET

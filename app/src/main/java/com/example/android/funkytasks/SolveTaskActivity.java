@@ -28,11 +28,12 @@ public class SolveTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_solve_task);
 
         setTitle("Solve a Task");
-        Log.e("PUBLIC",MainMenuActivity.username);
+
 
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
+        Log.e("PUBLIC",MainMenuActivity.username);
 
         final EditText search = (EditText) findViewById(R.id.search);
 

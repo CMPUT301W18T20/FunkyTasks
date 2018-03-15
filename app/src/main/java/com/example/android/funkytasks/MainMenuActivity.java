@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MainMenuActivity extends AppCompatActivity {
     public static ArrayList<Task> tasksArrayList = new ArrayList<Task>();
@@ -63,6 +64,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivityForResult(intent, EDIT_CODE);
             }
         });
+
+//        notifyBidsChanged();
 
 
     }
@@ -131,5 +134,33 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    public void notifyBidsChanged() {
+        User user;
+        ArrayList<Task> userTasks = null;
+        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+
+        try{
+            user = getUser.get();
+            userTasks = user.getRequestedTasks();
+            Log.e("Return user title", user.getUsername());
+        }
+        catch(Exception e){
+            Log.e("User get in main","not working");
+        }
+
+        if (userTasks != null) {
+            Iterator itr = userTasks.iterator();
+            while (itr.hasNext()) {
+                Task x = (Task) itr.next();
+                if (x.getNumberOfBids() > 0) {
+                    Toast.makeText(this, "You have" + x.getNumberOfBids() + "new bids on task"
+                    + x.getTitle(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+        }
+
     }
 }

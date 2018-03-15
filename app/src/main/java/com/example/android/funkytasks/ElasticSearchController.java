@@ -124,7 +124,7 @@ public class ElasticSearchController {
             } catch (Exception e) {
                 Log.e("Error", "Something went wrong with getting user!");
             }
-            return null;
+            return returnUser;
         }
     }
 

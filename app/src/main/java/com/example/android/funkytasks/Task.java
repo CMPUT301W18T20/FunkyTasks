@@ -25,6 +25,7 @@ public class Task implements Serializable{
     private String provider;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
+    private Integer numberOfBids = 0;
 //    private ArrayList<Bid> bids;
 //    private double smallest;
 
@@ -99,5 +100,9 @@ public class Task implements Serializable{
     public String getRequester(){
         return this.requester;
     }
+
+    public void setNumberOfBids(Integer numberOfBids) { this.numberOfBids = numberOfBids; }
+
+    public Integer getNumberOfBids() { return this.numberOfBids; }
 
 }
