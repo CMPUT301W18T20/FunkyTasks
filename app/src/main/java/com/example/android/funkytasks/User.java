@@ -18,9 +18,9 @@ public class User implements Serializable{
     private String email;
     private String phonenumber;
     private double rating;
-    private ArrayList<Task> acceptedTasks;  // tasks the user has agreed to solve
-    private ArrayList<Task> requestedTasks; // tasks the user has put out
-    private ArrayList<Task> biddedTasks;    // tasks user has currently bidded on
+//    private ArrayList<Task> acceptedTasks;  // tasks the user has agreed to solve
+//    private ArrayList<Task> requestedTasks; // tasks the user has put out
+//    private ArrayList<Task> biddedTasks;    // tasks user has currently bidded on
 
     @JestId
     private String id;
@@ -83,7 +83,7 @@ public class User implements Serializable{
 ////        }
 //    }
 
-    public int deleteBiddedTask(Task toDelete){
+/*    public int deleteBiddedTask(Task toDelete){
         // Elastic search should first grab all users, return user array list.
         // then we call this method for every user, if it returns 1 we also have to update user
 
@@ -114,7 +114,7 @@ public class User implements Serializable{
 
 
     }
-
+*/
     public String getUsername(){
         return this.username;
     }

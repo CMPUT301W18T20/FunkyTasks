@@ -24,8 +24,8 @@ public class Task implements Serializable{
     private String requester;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
-    private ArrayList<Bid> bids;
-    private double smallest;
+//    private ArrayList<Bid> bids;
+//    private double smallest;
 
     @JestId
     private String id;
@@ -63,13 +63,13 @@ public class Task implements Serializable{
     public String getId(){
         return this.id;
     }
-    public ArrayList<Bid> getBids() {
+/*    public ArrayList<Bid> getBids() {
         return bids;
     }
     public void addBid(Bid newBidder){
-
         bids.add(newBidder);
     }
+*/
     public String getTitle(){
         return this.title;
     }

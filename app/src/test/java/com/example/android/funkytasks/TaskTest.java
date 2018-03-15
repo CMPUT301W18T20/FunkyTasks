@@ -16,10 +16,10 @@ public class TaskTest extends TestCase{
     private String inputTitle = "FunkyClass";
     private String inputDescription = "make Ken happy";
     private String inputStatus = "requested";
-    private User inputRequester =new User("Ken", "ken@ualberta.ca", "7806668888");
-    private User bidder1 =new User("Jimi", "jimi@ualberta.ca", "7806668889");
-    private User bidder2 = new User ("Jim", "jim@ualberta.ca", "1112220000");
-    private ArrayList<Bid> bids = new ArrayList<Bid>();
+    private String inputRequester ="Ken";
+//    private User bidder1 =new User("Jimi", "jimi@ualberta.ca", "7806668889");
+//    private User bidder2 = new User ("Jim", "jim@ualberta.ca", "1112220000");
+//    private ArrayList<Bid> bids = new ArrayList<Bid>();
     private Task test=new Task(inputTitle,inputDescription,inputRequester);
 
 
@@ -68,7 +68,7 @@ public class TaskTest extends TestCase{
     public void testSetAsigned() throws Exception {
 
         int input= 1;
-        String expected = "asigned";
+        String expected = "assigned";
         test.setAsigned();
         String output = test.getStatus();
         assertEquals(output,expected);
@@ -89,22 +89,40 @@ public class TaskTest extends TestCase{
         String output = test.getStatus();
         assertEquals(output,inputStatus);
     }
-
+/*
     @Test
     public void testSetRequester() throws Exception {
-        User newUser= new User("Jimi","jimi@gmail.com","00000000");
+        String newUser = "Jimi";
+        //User newUser= new User("Jimi","jimi@gmail.com","00000000");
         test.setRequester(newUser);
         User output = test.getRequester();
         assertEquals(newUser,output);
     }
-
+*/
     @Test
     public void testGetRequester() throws Exception {
-        User output = test.getRequester();
+        String output = test.getRequester();
         assertEquals(output,inputRequester);
 
     }
 
+    @Test
+    public void testSetID() throws Exception{
+        String newID = "123";
+        test.setId(newID);
+        assertEquals(newID,test.getId());
+    }
+
+    @Test
+    public void testGetID(){
+        String ID = "123";
+        assertEquals(null, test.getId());
+        test.setId(ID);
+        assertEquals(ID, test.getId());
+    }
+
+    //not needed anymore
+/*
     @Test
     public void testGetBids() throws Exception{
         Bid newBid=new Bid(bidder1,10.0);
@@ -134,6 +152,6 @@ public class TaskTest extends TestCase{
         test.addBid(bid2);
         assertEquals(bid2.getAmount(),test.getLowestBid());
     }
-
+*/
 
 }
