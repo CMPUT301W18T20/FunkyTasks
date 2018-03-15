@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
     CheckBox statusCheckbox;
+    private int position ;
 
     ListView listView;
     ListViewAdapter listViewAdapter;
@@ -25,7 +27,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
 
 
-    final int DELETECODE = 1;
+    final int DELETECODE = 0;
     ArrayList<Task> requestedTasks;
     User user;
 
@@ -37,7 +39,43 @@ public class TaskDashboardActivity extends AppCompatActivity {
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
         statusCheckbox=(CheckBox) findViewById(R.id.checkBox);
+        listView = (ListView) findViewById(R.id.myTasks);
 
+        getTask();
+
+        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, taskList);
+        listViewAdapter1 = new ListViewAdapter(this, R.layout.listviewitem, biddedTaskList);
+        listView.setAdapter(listViewAdapter);
+
+       //show bided task
+        statusCheckbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBided();
+            }
+        });
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                position=i;
+                taskOnClick(i);
+
+            }
+        });
+
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+    public void getTask(){
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
         try {
@@ -68,69 +106,61 @@ public class TaskDashboardActivity extends AppCompatActivity {
             }
         }
 
+    }
+    public void showBided(){
+        if(statusCheckbox.isChecked()){
+            listView.setAdapter(listViewAdapter1);
+        }
+        else{
+            listView.setAdapter(listViewAdapter);
+        }
+    }
 
+    public void taskOnClick(int i){
+        Intent intent = new Intent(TaskDashboardActivity.this, DashboardRequestedTask.class);
+        intent.putExtra("username", username);
+        Task detailedTask;
 
+        if(statusCheckbox.isChecked()){
+            detailedTask = biddedTaskList.get(i);
+        }
+        else{
+            detailedTask = taskList.get(i);
+        }
 
-        listView = (ListView) findViewById(R.id.myTasks);
-        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, taskList);
-        listViewAdapter1 = new ListViewAdapter(this, R.layout.listviewitem, biddedTaskList);
-        listView.setAdapter(listViewAdapter);
-        listViewAdapter.notifyDataSetChanged(); //TODO fix the delete functionality (works backend wise) but is not reflected in front end after
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
 
-       //show bided task
-        statusCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(statusCheckbox.isChecked()){
-                    listView.setAdapter(listViewAdapter1);
-                }
-                else{
-                    listView.setAdapter(listViewAdapter);
-                }
-            }
-        });
+        getTask.execute(detailedTask.getId());
+        try {
+            Task x = getTask.get();
+            Log.e("Return task title", x.getTitle());
+        } catch (Exception e) {
+            Log.e("Error", "Task get not working");
+        }
 
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(TaskDashboardActivity.this, DashboardRequestedTask.class);
-                intent.putExtra("username", username);
-                Task detailedTask;
-
-                if(statusCheckbox.isChecked()){
-                    detailedTask = biddedTaskList.get(i);
-                }
-                else{
-                    detailedTask = taskList.get(i);
-                }
-
-                ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-
-                getTask.execute(detailedTask.getId());
-                try {
-                    Task x = getTask.get();
-                    Log.e("Return task title", x.getTitle());
-                } catch (Exception e) {
-                    Log.e("Error", "Task get not working");
-                }
-
-                intent.putExtra("task", detailedTask);
-                intent.putExtra("position", i);
-                intent.putExtra("id", detailedTask.getId());
-                startActivity(intent);
-            }
-        });
-
+        intent.putExtra("task", detailedTask);
+        intent.putExtra("position", i);
+        intent.putExtra("id", detailedTask.getId());
+        startActivityForResult(intent,DELETECODE);
 
 
     }
-
     @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainMenuActivity.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == DELETECODE) {
+            if (resultCode == RESULT_OK) {
+                taskList.remove(position);
+                listViewAdapter.notifyDataSetChanged();
+                listView.setAdapter(listViewAdapter);
+                if(taskList.size()==0){
+
+                    Toast.makeText(TaskDashboardActivity.this, "0", Toast.LENGTH_SHORT).show();}
+
+
+                //TODO fix the delete functionality (works backend wise) but is not reflected in front end after
+
+            }
+        }
     }
 
 

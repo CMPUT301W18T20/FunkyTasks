@@ -139,11 +139,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onDeleteTask();
-                Toast.makeText(getApplicationContext(), "deleted ", Toast.LENGTH_SHORT)
-                        .show();
-                Intent intent = new Intent(DashboardRequestedTask.this,TaskDashboardActivity.class);
+                //Intent intent = new Intent(DashboardRequestedTask.this,TaskDashboardActivity.class);
                 intent.putExtra("username",username);
-                startActivity(intent);
+                setResult(RESULT_OK,intent);
                 finish();
             }
         });
