@@ -33,14 +33,14 @@
 
     <TextView
         android:id="@+id/LoginText"
-        android:layout_width="273dp"
-        android:layout_height="74dp"
+        android:layout_width="283dp"
+        android:layout_height="120dp"
         android:layout_marginTop="52dp"
         android:fontFamily="cursive"
         android:text="Funky Tasks"
         android:textAlignment="center"
         android:textColor="#ffffff"
-        android:textSize="50sp"
+        android:textSize="60sp"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintLeft_toLeftOf="parent"
