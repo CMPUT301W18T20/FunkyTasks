@@ -1,5 +1,6 @@
 package com.example.android.funkytasks;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -26,13 +27,16 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView titleValue;
     private TextView descriptionValue;
     private TextView statusValue;
-    private ListView bidLV;
+    private ListView bidListView;
     private String id;
     private Button deleteBT;
     private String username;
     private Task task;
     private int index;
     private int EDIT_CODE = 1;
+
+    ListViewAdapter listViewAdapter;
+    ArrayList<Bid> bidList = new ArrayList<Bid>();
 
 
     @Override
@@ -43,7 +47,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         deleteBT=(Button)findViewById(R.id.deleteButton);
 
         // set bids listview
-        bidLV=(ListView)findViewById(R.id.bidlistView);
+        bidListView=(ListView)findViewById(R.id.bidlistView);
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
         statusValue = (TextView) findViewById(R.id.taskStatus);
@@ -61,6 +65,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         try{
             task = getTask.get();
             Log.e("Return task title",task.getTitle());
+
         }
         catch(Exception e){
             Log.e("Task get","not workng");
@@ -71,22 +76,62 @@ public class DashboardRequestedTask extends AppCompatActivity {
         statusValue.setText(task.getStatus());
 
 
-        //TODO later when we start working with bids on screen
-//        final ArrayAdapter bidAdapter = new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1,task.getBids());
-//        bidLV.setAdapter(bidAdapter);
+//TODO waiting for  E.S
+//        ElasticSearchController.GetBids getBids = new ElasticSearchController.GetBids();
 //
-//        //
-//        bidLV.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                //TODO display bid details;
-//            }
+//        getBids.execute(id);
+//        try{
+//            bidList=getBids.get();
+//            Log.e("Got bids",bidList.toString());
 //
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
+//        }
+//        catch(Exception e){
+//            Log.e("Bid get","not workng");
+//        }
 //
-//            }
-//        });
+//
+//        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, bidList);
+//        bidListView.setAdapter(listViewAdapter);
+//        listViewAdapter.notifyDataSetChanged();
+
+        //view bids
+        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
+                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
+                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
+                TextView contactTextView =(TextView) View.findViewById(R.id.contactTextView);
+                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
+                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
+                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
+
+                //TODO get contact info and rating for user
+                bidderTextView.setText(bidList.get(i).getBidder());
+                Double bidAmount = bidList.get(i).getAmount();
+                amountTextView.setText(bidAmount.toString());
+
+                //accept or decline bids
+                acceptBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        acceptBid();
+                    }
+                });
+                declineBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        declineBids();
+                    }
+                });
+                Builder.setView(View);
+                AlertDialog dialog=Builder.create();
+                dialog.show();
+
+            }
+
+        });
+
 
 
         // delete a task
@@ -162,6 +207,13 @@ public class DashboardRequestedTask extends AppCompatActivity {
         return;
 
     }
+    public void acceptBid(){
+
+    }
+    public void declineBids(){
+
+    }
+
 
 
     public void sendToTaskDashboard(View view){
