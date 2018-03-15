@@ -29,6 +29,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setTitle("Create a Task");
+
         final Intent intent = getIntent();
 
         username = intent.getExtras().getString("username");
