@@ -43,6 +43,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,31 +62,39 @@ public class CreateTaskActivity extends AppCompatActivity {
                     return;
                 }
 
-                Task task = new Task(titleValue,descriptionValue,username);
-
-                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-
-                try{
-                    user = getUser.get();
-                    user.addRequestedTask(task);
-                    Log.e("Return user title", user.getUsername());
-                }
-                catch(Exception e){
-                    Log.e("User get in create task","not working");
-                }
-
+                final Task task = new Task(titleValue,descriptionValue,username);
+                Thread t = new Thread(){ // https://stackoverflow.com/questions/3467205/android-key-dispatching-timed-out
+                    public void run(){
+                        postTask(task);
+                    }
+                };
+                t.start();
 
 
                 intent.putExtra("username",username);
                 intent.putExtra("task",task);
                 setResult(RESULT_OK,intent);
-                goHome();
                 finish();
-//
+
             }
         });
 
     }
+
+
+    public void postTask(Task newTask){
+        // add task to global list of all tasks
+        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+        postTask.execute(newTask);
+        try {
+            newTask = postTask.get();
+            Log.e("newtask title",newTask.getTitle());
+        }
+        catch(Exception e){
+            Log.e("Error","Task not posted");
+        }
+    }
+
 
     public void goHome() {
         Intent intent = new Intent(this, MainMenuActivity.class);

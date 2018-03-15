@@ -99,20 +99,6 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == ADD_CODE && resultCode == RESULT_OK) {
-
-            Task newTask = (Task) intent.getSerializableExtra("task");
-
-            // add task to global list of all tasks
-            ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-            postTask.execute(newTask);
-            try {
-                newTask = postTask.get();
-                Log.e("newtask titel",newTask.getTitle());
-            }
-            catch(Exception e){
-                Log.e("asd","asd");
-            }
-
             Toast.makeText(MainMenuActivity.this, "Add requested task to user successful", Toast.LENGTH_SHORT).show();
         }
         else if (requestCode == EDIT_CODE && resultCode == RESULT_OK){
