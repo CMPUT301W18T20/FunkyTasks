@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/taskTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Task Title"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/taskUsernameTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/taskUsernameTitle"
+        android:layout_width="91dp"
+        android:layout_height="26dp"
+        android:text="Posted by: "
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/taskStatus"
+        app:layout_constraintEnd_toStartOf="@+id/taskUsername"
+        app:layout_constraintStart_toStartOf="@+id/taskTitle"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle" />
+
+    <TextView
+        android:id="@+id/taskStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textSize="18sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/taskLowestBid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskUsernameTitle" />
+
+    <TextView
+        android:id="@+id/taskLowestBid"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:text="Lowest Bid"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/taskLowestBidTitle"
+        app:layout_constraintTop_toBottomOf="@+id/taskStatus" />
+
+    <TextView
+        android:id="@+id/taskUsername"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
+        android:text="Username"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/taskStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/taskUsernameTitle"
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle" />
+
+    <TextView
+        android:id="@+id/taskLowestBidTitle"
+        android:layout_width="103dp"
+        android:layout_height="32dp"
+        android:text="Lowest Bid: "
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/taskLowestBid"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskStatus" />
+
+</android.support.constraint.ConstraintLayout>
