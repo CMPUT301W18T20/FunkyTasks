@@ -55,25 +55,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-       // task = (Task)intent.getSerializableExtra("task");
+        task = (Task)intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-
-        getTask.execute(id);
-        try{
-            task = getTask.get();
-            Log.e("Return task title",task.getTitle());
-
-        }
-        catch(Exception e){
-            Log.e("Task get","not workng");
-        }
-
-        titleValue.setText(task.getTitle());
-        descriptionValue.setText(task.getDescription());
-        statusValue.setText(task.getStatus());
+        setTaskdetails();
 
 
 //TODO waiting for  E.S
@@ -141,7 +127,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
             public void onClick(View view) {
                 onDeleteTask();
                 //Intent intent = new Intent(DashboardRequestedTask.this,TaskDashboardActivity.class);
-                intent.putExtra("username",username);
+                intent.putExtra("id",id);
                 setResult(RESULT_OK,intent);
                 finish();
             }
@@ -196,6 +182,25 @@ public class DashboardRequestedTask extends AppCompatActivity {
         }
     }
 
+    public void setTaskdetails(){
+
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+
+        getTask.execute(id);
+        try{
+            task = getTask.get();
+            Log.e("Return task title",task.getTitle());
+
+        }
+        catch(Exception e){
+            Log.e("Task get","not workng");
+        }
+
+        titleValue.setText(task.getTitle());
+        descriptionValue.setText(task.getDescription());
+        statusValue.setText(task.getStatus());
+
+    }
 
     public void onDeleteTask(){
         // delete task in global list of all tasks
@@ -203,9 +208,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
         deleteTask.execute(id);
         Log.e("deleted","task");
 
-        return;
-
     }
+
     public void acceptBid(){
 
     }

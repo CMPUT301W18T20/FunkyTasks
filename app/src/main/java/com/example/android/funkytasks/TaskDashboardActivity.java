@@ -19,10 +19,8 @@ public class TaskDashboardActivity extends AppCompatActivity {
     private String username;
     CheckBox statusCheckbox;
     private int position ;
-
     ListView listView;
     ListViewAdapter listViewAdapter;
-    ListViewAdapter listViewAdapter1;
     ArrayList<Task> taskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
 
@@ -42,10 +40,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.myTasks);
 
         getTask();
-
-        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, taskList);
-        listViewAdapter1 = new ListViewAdapter(this, R.layout.listviewitem, biddedTaskList);
-        listView.setAdapter(listViewAdapter);
+        setListViewAdapter(taskList);
 
        //show bided task
         statusCheckbox.setOnClickListener(new View.OnClickListener() {
@@ -65,8 +60,6 @@ public class TaskDashboardActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     @Override
@@ -75,6 +68,14 @@ public class TaskDashboardActivity extends AppCompatActivity {
         intent.putExtra("username", username);
         startActivity(intent);
     }
+
+    public void setListViewAdapter(ArrayList<Task> task){
+        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, task);
+        listViewAdapter.notifyDataSetChanged();
+        listView.setAdapter(listViewAdapter);
+
+    }
+
     public void getTask(){
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
@@ -85,6 +86,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Error", "We arnt getting the user");
             return;
+
         }
 
         // Getting the all the tasks associated with the user
@@ -97,6 +99,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Error", "We arnt getting the list of tasks");
             return;
+
         }
 
         int size=taskList.size();
@@ -106,13 +109,14 @@ public class TaskDashboardActivity extends AppCompatActivity {
             }
         }
 
+
     }
     public void showBided(){
         if(statusCheckbox.isChecked()){
-            listView.setAdapter(listViewAdapter1);
+            setListViewAdapter(biddedTaskList);
         }
         else{
-            listView.setAdapter(listViewAdapter);
+            setListViewAdapter(taskList);
         }
     }
 
@@ -142,22 +146,15 @@ public class TaskDashboardActivity extends AppCompatActivity {
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
         startActivityForResult(intent,DELETECODE);
-
-
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == DELETECODE) {
             if (resultCode == RESULT_OK) {
+                biddedTaskList.remove(taskList.get(position));
                 taskList.remove(position);
-                listViewAdapter.notifyDataSetChanged();
-                listView.setAdapter(listViewAdapter);
-                if(taskList.size()==0){
-
-                    Toast.makeText(TaskDashboardActivity.this, "0", Toast.LENGTH_SHORT).show();}
-
-
-                //TODO fix the delete functionality (works backend wise) but is not reflected in front end after
+                setListViewAdapter(taskList);
 
             }
         }
