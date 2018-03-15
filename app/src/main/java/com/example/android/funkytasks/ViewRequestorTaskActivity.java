@@ -60,9 +60,23 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         statusValue.setText(task.getStatus());
         usernameValue.setText(task.getRequester());
 
-        Integer numBids = task.getNumberOfBids();
-        numBids += 1;
-        task.setNumberOfBids(numBids);
+
+        Button bidButton = (Button) findViewById(R.id.bidButton);
+
+        bidButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer numBids = task.getNumberOfBids();
+                numBids += 1;
+                task.setNumberOfBids(numBids);
+
+                Log.e("Current number of bids ", numBids.toString());
+
+                Intent intent = new Intent(ViewRequestorTaskActivity.this, MainMenuActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
     }
 

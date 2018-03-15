@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class CreateTaskActivity extends AppCompatActivity {
 
 //    EditText title = (EditText)findViewById(R.id.AddTitle);
@@ -63,6 +65,19 @@ public class CreateTaskActivity extends AppCompatActivity {
                 }
 
                 final Task task = new Task(titleValue,descriptionValue,username);
+
+                User user;
+                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+
+                try{
+                    user = getUser.get();
+                    user.addRequestedTask(task);
+                    Log.e("Return user title", user.getUsername());
+                }
+                catch(Exception e){
+                    Log.e("User get in create task","not working");
+                }
+
                 Thread t = new Thread(){ // https://stackoverflow.com/questions/3467205/android-key-dispatching-timed-out
                     public void run(){
                         postTask(task);

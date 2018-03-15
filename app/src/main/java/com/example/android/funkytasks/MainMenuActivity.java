@@ -65,9 +65,15 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-//        notifyBidsChanged();
+        notifyBidsChanged();
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        notifyBidsChanged();
     }
 
     @Override
@@ -116,37 +122,45 @@ public class MainMenuActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(MainMenuActivity.this, "Edit user profile sucessfull", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainMenuActivity.this, "Edit user profile successful", Toast.LENGTH_SHORT).show();
 
 
         }
     }
 
     public void notifyBidsChanged() {
+        Log.e("notifyBidsChanged", "did start executing");
         User user;
-        ArrayList<Task> userTasks = null;
+        ArrayList<Task> userTasks;
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
 
+        getUser.execute(username);
         try{
+            Log.e("Made it to the try", "we did");
             user = getUser.get();
+            Log.e("Return user title", user.getUsername() + "we did");
             userTasks = user.getRequestedTasks();
-            Log.e("Return user title", user.getUsername());
+            Log.e("Get the user tasks", "we did");
+
+            if (userTasks.size() > 0) {
+                Log.e("In the for loop", "we are");
+                Iterator itr = userTasks.iterator();
+                while (itr.hasNext()) {
+                    Task x = (Task) itr.next();
+                    if (x.getNumberOfBids() > 0) {
+                        Toast.makeText(this, "You have " + x.getNumberOfBids() + " new bids on task"
+                                + x.getTitle(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
         }
         catch(Exception e){
             Log.e("User get in main","not working");
         }
 
-        if (userTasks != null) {
-            Iterator itr = userTasks.iterator();
-            while (itr.hasNext()) {
-                Task x = (Task) itr.next();
-                if (x.getNumberOfBids() > 0) {
-                    Toast.makeText(this, "You have" + x.getNumberOfBids() + "new bids on task"
-                    + x.getTitle(), Toast.LENGTH_LONG).show();
-                }
-            }
 
-        }
+
+
 
     }
 }

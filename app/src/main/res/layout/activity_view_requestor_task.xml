@@ -85,4 +85,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/requestorTaskUsernameTitle"
         app:layout_constraintTop_toBottomOf="@+id/requestorTaskName" />
+
+    <Button
+        android:id="@+id/bidButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bid"
+        tools:layout_editor_absoluteX="121dp"
+        tools:layout_editor_absoluteY="354dp" />
 </android.support.constraint.ConstraintLayout>
