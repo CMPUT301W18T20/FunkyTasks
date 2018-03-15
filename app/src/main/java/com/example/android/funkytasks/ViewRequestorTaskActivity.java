@@ -1,18 +1,17 @@
 package com.example.android.funkytasks;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ViewRequestorTaskActivity extends AppCompatActivity {
 
@@ -66,22 +65,95 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         bidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Integer numBids = task.getNumberOfBids();
-                numBids += 1;
-                task.setNumberOfBids(numBids);
 
-                Log.e("Current number of bids ", numBids.toString());
+                // If user has never placed a bid on the task yet:
 
-                Intent intent = new Intent(ViewRequestorTaskActivity.this, MainMenuActivity.class);
-                startActivity(intent);
+                // DialogFragment placeBidFragment = new PlaceBidDialogFragment();
+                //placeBidFragment.show(getSupportFragmentManager(), "Bids");
+
+                // Else if the user has placed a bid and wants to update it:
+
+                DialogFragment updateBidFragment = new UpdateBidDialogFragment();
+                updateBidFragment.show(getSupportFragmentManager(), "Bids");
+
+
+
+                //Integer numBids = task.getNumberOfBids();
+                //numBids += 1;
+                //task.setNumberOfBids(numBids);
+
+                //Log.e("Current number of bids ", numBids.toString());
+
+                //Intent intent = new Intent(ViewRequestorTaskActivity.this, MainMenuActivity.class);
+                //startActivity(intent);
 
             }
         });
 
     }
 
-    //public void sendToSolveTaskActivity(View view){
-    //Intent intent = new Intent(this, SolveTaskActivity.class);
-    //startActivity(intent);
-    //}
+    public static class PlaceBidDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // Get the layout inflater
+
+            builder.setTitle("Place Bid");
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            builder.setView(inflater.inflate(R.layout.dialog_placebid, null))
+                    // Add action buttons
+                    .setPositiveButton("Place Bid", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            // Place Bid (Elastic Search)
+                            // set Task status to bidded
+                            // Go back to Search Results
+
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            PlaceBidDialogFragment.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
+        }
+
+    }
+
+    public static class UpdateBidDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            // Get the layout inflater
+
+            builder.setTitle("Update Bid");
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            builder.setView(inflater.inflate(R.layout.dialog_updatebid, null))
+                    // Add action buttons
+                    .setPositiveButton("Update Bid", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            // Update Bid (Elastic Search)
+                            // Go back to Search Results
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            UpdateBidDialogFragment.this.getDialog().cancel();
+                        }
+                    });
+            return builder.create();
+        }
+
+    }
 }
