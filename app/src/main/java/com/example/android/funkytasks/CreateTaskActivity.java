@@ -66,26 +66,6 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                 final Task task = new Task(titleValue,descriptionValue,username);
 
-                User user;
-                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-
-                try{
-                    user = getUser.get();
-                    user.addRequestedTask(task);
-                    Log.e("Return user title", user.getUsername());
-                }
-                catch(Exception e){
-                    Log.e("User get in create task","not working");
-                }
-
-                Thread t = new Thread(){ // https://stackoverflow.com/questions/3467205/android-key-dispatching-timed-out
-                    public void run(){
-                        postTask(task);
-                    }
-                };
-                t.start();
-
-
                 intent.putExtra("username",username);
                 intent.putExtra("task",task);
                 setResult(RESULT_OK,intent);
