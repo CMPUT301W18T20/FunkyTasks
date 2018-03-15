@@ -333,12 +333,12 @@ public class ElasticSearchController {
                     "\"query\": {\n" +
                     "\"match\": {\n" +
                     "\"description\": {\n" +
-                    "\"query\": \"" + searchParameters[0] +
-                    "\" }\n" +
+                    "\"query\": \"" + searchParameters[0] + "\",\n" +
+                    "\"minimum_should_match\": \"100%\" \n" +
+                    "}\n" +
                     "}\n" +
                     "}\n" +
                     "}";
-
             ArrayList<Task> tasks;
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();

@@ -16,7 +16,7 @@ public class SolveTaskActivity extends AppCompatActivity {
     private String searchText;
     private String username;
 
-    ListViewAdapter listViewAdapter;
+    SearchListViewAdapter searchListViewAdapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
 
     User user;
@@ -59,10 +59,10 @@ public class SolveTaskActivity extends AppCompatActivity {
                 }
 
                 ListView taskView = (ListView) findViewById(R.id.taskView);
-                listViewAdapter = new ListViewAdapter(SolveTaskActivity.this, R.layout.listviewitem, taskList);
+                searchListViewAdapter = new SearchListViewAdapter(SolveTaskActivity.this, R.layout.search_listviewitem, taskList);
 
-                taskView.setAdapter(listViewAdapter);
-                listViewAdapter.notifyDataSetChanged();
+                taskView.setAdapter(searchListViewAdapter);
+                searchListViewAdapter.notifyDataSetChanged();
 
                 taskView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
