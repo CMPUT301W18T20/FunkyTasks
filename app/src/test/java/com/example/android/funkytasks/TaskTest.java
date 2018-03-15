@@ -69,7 +69,7 @@ public class TaskTest extends TestCase{
 
         int input= 1;
         String expected = "assigned";
-        test.setAsigned();
+        test.setAssigned();
         String output = test.getStatus();
         assertEquals(output,expected);
     }
