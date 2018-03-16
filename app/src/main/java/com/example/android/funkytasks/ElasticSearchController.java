@@ -163,6 +163,32 @@ public class ElasticSearchController {
         }
     }
 
+    public static class deleteUser extends AsyncTask<String,Void,Void>{
+        // Input a user's id to delete
+        // Will output a log message if it is successful
+        @Override
+        protected Void doInBackground(String... givenUser){
+            verifySettings();
+
+            Delete delete = new Delete.Builder(givenUser[0]).index(indexType).type(userType).build();
+
+            try{
+                DocumentResult result = client.execute(delete);
+                if (result.isSucceeded()){
+                    Log.e("Successful","delete of user");
+                }
+                else{
+                    Log.e("Unable","to delete user");
+                }
+            }
+            catch(Exception e){
+                Log.e("error","something went wrong with deleting user");
+            }
+
+            return null;
+        }
+    }
+
 
     public static class GetTask extends AsyncTask<String,Void,Task>{
         // grabs details of one specific task
@@ -294,8 +320,7 @@ public class ElasticSearchController {
 
 
     public static class deleteTask extends AsyncTask<String,Void,Void>{
-        // Deletes task from global list
-        // For the user: user must first delete their requested task from their list then we call to update user
+        // Deletes task from global list by inputting the task id
         @Override
         protected Void doInBackground(String... givenTask){
             verifySettings();
@@ -511,6 +536,33 @@ public class ElasticSearchController {
             }
             catch(Exception e){
                 Log.e("Error", "Something went wrong with getting all bids by taskID");
+            }
+
+            return null;
+        }
+    }
+
+
+    public static class deleteBid extends AsyncTask<String,Void,Void>{
+        // Deletes one Bid (to delete more than one bid run this function on a array list)
+        // Input the bid id
+        @Override
+        protected Void doInBackground(String... givenBid){
+            verifySettings();
+
+            Delete delete = new Delete.Builder(givenBid[0]).index(indexType).type(bidType).build();
+
+            try{
+                DocumentResult result = client.execute(delete);
+                if (result.isSucceeded()){
+                    Log.e("Successful","delete of bid");
+                }
+                else{
+                    Log.e("Unable","to delete bid");
+                }
+            }
+            catch(Exception e){
+                Log.e("error","something went wrong with deleting bid");
             }
 
             return null;

@@ -126,7 +126,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onDeleteTask();
-                //Intent intent = new Intent(DashboardRequestedTask.this,TaskDashboardActivity.class);
                 intent.putExtra("id",id);
                 setResult(RESULT_OK,intent);
                 finish();
@@ -217,17 +216,4 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
-
-
-    public void sendToTaskDashboard(View view){
-        Intent intent = new Intent(this, TaskDashboardActivity.class);
-        startActivity(intent);
-    }
-
-    public void sendToEditDashboardRequestedTask(View view){
-        Intent intent = new Intent(this, EditDashboardRequestedTask.class);
-        //intent.putExtra("id";Id);
-        //intent.putExtra("username";)
-        startActivity(intent);
-    }
 }
