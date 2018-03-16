@@ -1,5 +1,7 @@
 package com.example.android.funkytasks;
 
+import io.searchbox.annotations.JestId;
+
 /**
  * Created by jimi on 2018-02-21.
  */
@@ -12,12 +14,22 @@ public class Bid {
     private String taskID;
 
 
+    @JestId
+    private String id;
 
     //constracutor for bid
     public Bid(String bidder,Double amount, String taskID){
         this.bidder=bidder;
         this.amount=amount;
         this.taskID = taskID;
+    }
+
+    public void setId(String newId){
+        this.id = newId;
+    }
+
+    public String getId(){
+        return this.id;
     }
 
     public String getTaskID() {

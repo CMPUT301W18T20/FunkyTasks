@@ -11,7 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class ViewRequestorTaskActivity extends AppCompatActivity {
 
@@ -19,6 +22,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private TextView descriptionValue;
     private TextView statusValue;
     private TextView usernameValue;
+    private Double bidAmount;
     private String id;
     private String username;
     private Task task;
@@ -26,7 +30,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate (Bundle savedInstanceState){
+    protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_requestor_task);
 
@@ -67,14 +71,43 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // If user has never placed a bid on the task yet:
+                ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+                idBids.execute(id); // grab all current users in the system
 
-                // DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                //placeBidFragment.show(getSupportFragmentManager(), "Bids");
+                ArrayList<Bid> bidsList = new ArrayList<Bid>();
+                try {
+                    bidsList = idBids.get();
+                } catch (Exception e) {
+                    Log.e("Error", "Failed to get list of bidders");
+                }
 
-                // Else if the user has placed a bid and wants to update it:
+                int i = 0;
+                int sizeBidsList = bidsList.size();
 
-                DialogFragment updateBidFragment = new UpdateBidDialogFragment();
-                updateBidFragment.show(getSupportFragmentManager(), "Bids");
+                if (bidsList.isEmpty()) {
+                    DialogFragment placeBidFragment = new PlaceBidDialogFragment();
+                    placeBidFragment = newInstance(placeBidFragment, username, id);
+                    placeBidFragment.show(getSupportFragmentManager(), "Bids");
+
+                } else {
+
+                    for (Bid eachBid : bidsList) {
+                        if (eachBid.getBidder().equals(username)) {
+                            DialogFragment updateBidFragment = new UpdateBidDialogFragment();
+                            updateBidFragment = newInstance(updateBidFragment, username, id);
+                            updateBidFragment.show(getSupportFragmentManager(), "Bids");
+                            break;
+                        }
+                        if (i == sizeBidsList - 1) {
+                            DialogFragment placeBidFragment = new PlaceBidDialogFragment();
+                            placeBidFragment = newInstance(placeBidFragment, username, id);
+                            placeBidFragment.show(getSupportFragmentManager(), "Bids");
+                        }
+                        i++;
+
+                    }
+                }
+
 
 
 
@@ -89,71 +122,21 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
-    public static class PlaceBidDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // Get the layout inflater
+    public DialogFragment newInstance(DialogFragment bidFragment, String username, String id) {
 
-            builder.setTitle("Place Bid");
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+        // Supply num input as an argument.
+        Bundle bundle = new Bundle();
+        bundle.putString("username", username);
+        bundle.putString("id", id);
 
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.dialog_placebid, null))
-                    // Add action buttons
-                    .setPositiveButton("Place Bid", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            // Place Bid (Elastic Search)
-                            // set Task status to bidded
-                            // Go back to Search Results
+        Log.e("username in newInstance", username);
+        Log.e("id in new instance", id);
+        bidFragment.setArguments(bundle);
 
-
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            PlaceBidDialogFragment.this.getDialog().cancel();
-                        }
-                    });
-            return builder.create();
-        }
-
+        return bidFragment;
     }
 
-    public static class UpdateBidDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            // Get the layout inflater
 
-            builder.setTitle("Update Bid");
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-
-            // Inflate and set the layout for the dialog
-            // Pass null as the parent view because its going in the dialog layout
-            builder.setView(inflater.inflate(R.layout.dialog_updatebid, null))
-                    // Add action buttons
-                    .setPositiveButton("Update Bid", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-
-                            // Update Bid (Elastic Search)
-                            // Go back to Search Results
-
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            UpdateBidDialogFragment.this.getDialog().cancel();
-                        }
-                    });
-            return builder.create();
-        }
-
-    }
 }

@@ -370,6 +370,151 @@ public class ElasticSearchController {
         }
     }
 
+    public static class PlaceBid extends AsyncTask<Bid, Void, Bid> { // adds new bid for the user
+
+        // https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
+        @Override
+        protected Bid doInBackground(Bid... params) {
+            verifySettings();
+
+            Bid bid = (Bid) params[0];
+
+            // POSTING TASK TO ENTIRE BID DATABASE
+            Index index = new Index.Builder(bid).index(indexType).type(bidType).build();
+
+            try {
+                DocumentResult result = client.execute(index);
+                if (result.isSucceeded()) {
+                    bid.setId(result.getId());
+                    Log.e("Bid ID / es",bid.getId());
+                    Log.e("Task ID for bid/ es",bid.getTaskID());
+                    Log.e("Username for bid/ es",bid.getBidder());
+                    Log.e("Looking","good to add bid to server");
+                    return bid;
+                } else {
+                    Log.e("Error", "Some error with adding bid");
+                }
+            } catch (Exception e) {
+                Log.e("Error", "The application failed to build and add the bid");
+            }
+
+            return null;
+        }
+    }
+
+    public static class updateBid extends AsyncTask<Bid,Void,Void>{
+
+        @Override
+        protected Void doInBackground (Bid... currentBid) {
+            verifySettings();
+
+
+            Index index = new Index.Builder(currentBid[0]).index(indexType).type(bidType).id(currentBid[0].getId())
+                    .build();
+
+            try{
+                DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
+                if(result.isSucceeded()){
+                    Log.e("Update","successful for bid");
+                    return null;
+                }
+                else{
+                    Log.e("Nothing", "Theres no user in database to update their bid");
+                }
+            }
+            catch(Exception e){
+                Log.e("Error", "Something went wrong with getting bid from user!");
+            }
+
+
+            return null;
+        }
+    }
+
+    public static class GetBidsByBidder extends AsyncTask<String, Void, ArrayList<Bid>> {
+
+        @Override
+        protected ArrayList<Bid> doInBackground (String... search_parameters) {
+            verifySettings();
+
+            int size = 50000; // change this number to get back more results
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
+
+            String query = "{\n" +
+                    "\"size\":" + size + ",\n" +
+                    "\"query\": {\n" +
+                    "\"match\": {\n" +
+                    "\"bidder\": {\n" +
+                    "\"query\": \"" + search_parameters[0] +
+                    "\" }\n" +
+                    "}\n" +
+                    "}\n" +
+                    "}";
+
+            ArrayList<Bid> bids;
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(bidType).build();
+
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded()){
+                    bids = new ArrayList<>(result.getSourceAsObjectList(Bid.class));
+                    return bids;
+                }
+                else{
+                    Log.e("Nothing", "No bids in database");
+                }
+            }
+            catch(Exception e){
+                Log.e("Error", "Something went wrong with getting all bids by bidder");
+            }
+
+            return null;
+        }
+    }
+
+    public static class GetBidsByTaskID extends AsyncTask<String, Void, ArrayList<Bid>> {
+
+        @Override
+        protected ArrayList<Bid> doInBackground (String... search_parameters) {
+            verifySettings();
+
+            int size = 50000; // change this number to get back more results
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
+
+            String query = "{\n" +
+                    "\"size\":" + size + ",\n" +
+                    "\"query\": {\n" +
+                    "\"match\": {\n" +
+                    "\"taskID\": {\n" +
+                    "\"query\": \"" + search_parameters[0] +
+                    "\" }\n" +
+                    "}\n" +
+                    "}\n" +
+                    "}";
+
+            ArrayList<Bid> bids;
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(bidType).build();
+
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded()){
+                    bids = new ArrayList<>(result.getSourceAsObjectList(Bid.class));
+                    return bids;
+                }
+                else{
+                    Log.e("Nothing", "No bids in database");
+                }
+            }
+            catch(Exception e){
+                Log.e("Error", "Something went wrong with getting all bids by taskID");
+            }
+
+            return null;
+        }
+    }
+
 
 
 
