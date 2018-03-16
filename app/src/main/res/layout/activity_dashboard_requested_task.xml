@@ -7,6 +7,15 @@
     tools:context="com.example.android.funkytasks.DashboardRequestedTask"
     android:padding="5dp">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
@@ -88,7 +97,6 @@
         app:layout_constraintLeft_toRightOf="@id/taskName"
         app:layout_constraintTop_toTopOf="@id/taskName"
         android:textSize="15sp"/>
-
 
 
 </android.support.constraint.ConstraintLayout>

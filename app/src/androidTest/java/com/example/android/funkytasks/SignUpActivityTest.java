@@ -15,6 +15,8 @@ import com.robotium.solo.Solo;
 
 public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpActivity> {
     private Solo solo;
+    private User user;
+
     private User testingUser = new User("IntentTesting", "1234567890", "IT@ualbertac.ca");
 
     public SignUpActivityTest(){
@@ -27,26 +29,17 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
     }
 
     public void setUp() throws Exception{
-        //Logcat says unable to delete user
-        ElasticSearchController.deleteUser DeUser = new ElasticSearchController.deleteUser();
-
-        try {
-            DeUser.execute(testingUser.getUsername());
-            Log.e("Successful","delete of user");
-        }
-        catch(Exception e){
-            Log.e("error","something went wrong with deleting user");
-        }
-
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
     //signing up an existing user
     public void testFailedSignUp(){
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
+        //existing user "qwerty123"
+        Log.e("Hellooooo", "why you failling");
         solo.enterText((EditText) solo.getView(R.id.editAddUsername), "qwerty123");
-        solo.enterText((EditText) solo.getView(R.id.editAddPhone), "1112221111");
-        solo.enterText((EditText) solo.getView(R.id.editAddEmail), "123@email.ca");
+        solo.enterText((EditText) solo.getView(R.id.editAddPhone), "2221112222");
+        solo.enterText((EditText) solo.getView(R.id.editAddEmail), "321@email.com");
         View fab = getActivity().findViewById(R.id.fabSignUp);
         solo.clickOnView(fab);
         solo.waitForText("Username Taken");
@@ -69,7 +62,8 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
     @Override
     public void tearDown() throws Exception{
         ElasticSearchController.deleteUser DeUser = new ElasticSearchController.deleteUser();
-        DeUser.execute(testingUser.getUsername());
+        DeUser.execute(testingUser.getId());
         solo.finishOpenedActivities();
+
     }
 }

@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItemView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
@@ -43,6 +44,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         deleteBT=(Button)findViewById(R.id.deleteButton);
 
