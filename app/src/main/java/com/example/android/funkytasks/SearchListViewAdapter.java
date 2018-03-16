@@ -38,6 +38,7 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
         TextView username = (TextView) view.findViewById(R.id.taskUsername);
         TextView lowestbid = (TextView) view.findViewById(R.id.taskLowestBid);
 
+
         ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
         idBids.execute(task.getId()); // grab all current users in the system
 
@@ -48,13 +49,19 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
             Log.e("Error", "Failed to get list of bidders");
         }
 
-        String lowestBidString = Double.toString(getLowestBid(bidsList));
-
-
+        String lowestBidString = "";
 
         title.setText(task.getTitle());
         status.setText(task.getStatus());
         username.setText(task.getRequester());
+
+
+        if (task.getStatus().equals("requested")) {
+            lowestBidString = "N/A";
+        } else if (task.getStatus().equals("bidded")) {
+            lowestBidString = Double.toString(getLowestBid(bidsList));
+        }
+
         lowestbid.setText(lowestBidString);
 
 
