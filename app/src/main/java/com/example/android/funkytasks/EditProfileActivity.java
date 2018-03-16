@@ -80,11 +80,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 setResult(RESULT_OK);
                 finish();
-
             }
         });
 
-
-
     }
+
 }

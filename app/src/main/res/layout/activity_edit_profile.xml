@@ -44,7 +44,7 @@
         android:layout_alignStart="@+id/textView5"
         android:layout_below="@+id/textView5"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textEmailAddress"
         android:text="Email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
