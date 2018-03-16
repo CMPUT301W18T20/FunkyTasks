@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 
@@ -23,8 +22,6 @@ public class TaskDashboardActivity extends AppCompatActivity {
     ListViewAdapter listViewAdapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
-
-
     final int DELETECODE = 0;
     ArrayList<Task> requestedTasks;
     User user;
@@ -39,6 +36,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         statusCheckbox=(CheckBox) findViewById(R.id.checkBox);
         listView = (ListView) findViewById(R.id.myTasks);
 
+        //Get tasks using E.S and display tassks
         getTask();
         setListViewAdapter(taskList);
 
@@ -51,12 +49,12 @@ public class TaskDashboardActivity extends AppCompatActivity {
         });
 
 
+        //ListView item on click
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 position=i;
                 taskOnClick(i);
-
             }
         });
 
@@ -69,8 +67,8 @@ public class TaskDashboardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void setListViewAdapter(ArrayList<Task> task){
-        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, task);
+    public void setListViewAdapter(ArrayList<Task> tasklist){
+        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, tasklist);
         listViewAdapter.notifyDataSetChanged();
         listView.setAdapter(listViewAdapter);
 

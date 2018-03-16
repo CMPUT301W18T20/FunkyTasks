@@ -40,7 +40,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
 
@@ -59,65 +59,67 @@ public class DashboardRequestedTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
+        //for testing
+//        ElasticSearchController.PlaceBid placeabid=new ElasticSearchController.PlaceBid();
+//        Bid bid=new Bid("testing12",1.0,id);
+//        placeabid.execute(bid);
+//        bidList.add(bid);
+        //for testing
+
         setTaskdetails();
+        setBids();
+        setAdapter();
 
 
 //TODO waiting for  E.S
-//        ElasticSearchController.GetBids getBids = new ElasticSearchController.GetBids();
-//
-//        getBids.execute(id);
-//        try{
-//            bidList=getBids.get();
-//            Log.e("Got bids",bidList.toString());
-//
-//        }
-//        catch(Exception e){
-//            Log.e("Bid get","not workng");
-//        }
-//
-//
-//        listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, bidList);
-//        bidListView.setAdapter(listViewAdapter);
-//        listViewAdapter.notifyDataSetChanged();
+
 
         //view bids
 
-//        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
-//                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
-//                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-//                TextView contactTextView =(TextView) View.findViewById(R.id.contactTextView);
-//                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
-//                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
-//                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
-//
-//                //TODO get contact info and rating for user
-//                bidderTextView.setText(bidList.get(i).getBidder());
-//                Double bidAmount = bidList.get(i).getAmount();
-//                amountTextView.setText(bidAmount.toString());
-//
-//                //accept or decline bids
-//                acceptBTN.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        acceptBid();
-//                    }
-//                });
-//                declineBTN.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        declineBids();
-//                    }
-//                });
-//                Builder.setView(View);
-//                AlertDialog dialog=Builder.create();
-//                dialog.show();
-//
-//            }
-//
-//        });
+        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
+                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
+                Builder.setView(View);
+                final AlertDialog dialog=Builder.create();
+                dialog.show();
+
+                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
+                TextView contactTextView =(TextView) View.findViewById(R.id.contactTextView);
+                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
+                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
+                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
+
+                //TODO get contact info and rating for user
+                bidderTextView.setText(bidList.get(i).getBidder());
+                Double bidAmount = bidList.get(i).getAmount();
+                amountTextView.setText(bidAmount.toString());
+                final int target=i;
+
+                //accept or decline bids
+                acceptBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        acceptBid(target);
+                        dialog.dismiss();
+                        statusValue.setText("assigned");
+                        setAdapter();
+                    }
+                });
+                declineBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        declineBids(target);
+                        dialog.dismiss();
+                        setAdapter();
+                    }
+                });
+
+
+            }
+
+        });
 
 
 
@@ -180,6 +182,26 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    public void setAdapter(){
+        ArrayAdapter<Bid> adpater=new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1, bidList) ;
+        adpater.notifyDataSetChanged();
+        bidListView.setAdapter(adpater);
+    }
+    public void setBids(){
+        ElasticSearchController.GetBidsByTaskID getBids = new ElasticSearchController.GetBidsByTaskID();
+        getBids.execute(id);
+        try{
+            bidList=getBids.get();
+            Log.e("Got bids",bidList.toString());
+
+        }
+        catch(Exception e){
+            Log.e("Bid get","not workng");
+        }
+
+
+
+    }
 
     public void setTaskdetails(){
 
@@ -209,10 +231,30 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
-    public void acceptBid(){
+    public void acceptBid(int target){
+        //deleting all tasks excpet acceptted one;
+        Bid accepetBid=bidList.get(target);
+        for (int i = 0; i < bidList.size(); i++) {
+            if(!accepetBid.getId().equals(bidList.get(i).getId())){
+                ElasticSearchController.deleteBid deleteAllBids=new ElasticSearchController.deleteBid();
+                deleteAllBids.execute(bidList.get(i).getId());
+            }
+        }
+        //update local bidList
+        bidList.clear();
+        bidList.add(accepetBid);
+        //change task status to done
+        task.setAssigned();
+        ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
+        assigned.execute(task);
+        Toast.makeText(DashboardRequestedTask.this, "acceptted", Toast.LENGTH_SHORT).show();
+
 
     }
-    public void declineBids(){
+    public void declineBids(int target){
+        ElasticSearchController.deleteBid deleteABid=new ElasticSearchController.deleteBid();
+        deleteABid.execute(bidList.get(target).getId());
+        bidList.remove(bidList.get(target));
 
     }
 
