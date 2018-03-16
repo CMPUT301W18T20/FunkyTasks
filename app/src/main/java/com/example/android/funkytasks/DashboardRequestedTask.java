@@ -45,8 +45,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
 
         deleteBT=(Button)findViewById(R.id.deleteButton);
 
