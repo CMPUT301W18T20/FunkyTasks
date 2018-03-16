@@ -577,7 +577,7 @@ public class ElasticSearchController {
                 }
             }
             catch(Exception e){
-                Log.e("Error", "Something went wrong with getting all bids by bidder");
+                Log.e("Error", "Something went wrong with getting all bids by requester");
             }
 
             return null;
