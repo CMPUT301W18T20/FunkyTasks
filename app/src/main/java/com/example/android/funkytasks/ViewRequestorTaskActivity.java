@@ -71,9 +71,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             Log.e("Error", "Failed to get list of bidders");
         }
 
-        String lowestBidString = Double.toString(getLowestBid(bidsList));
-        Log.e("Lowest bid", lowestBidString);
-
+        String lowestBidString = "";
 
         //TODO SET REQUESTER'S CONTACT INFO TO BE SHOWN ON SCREEN WITH PHONE AND EMAIL (use case 3.3)
 
@@ -81,6 +79,15 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
         usernameValue.setText(requester);
+
+
+
+        if (task.getStatus().equals("requested")) {
+            lowestBidString = "N/A";
+        } else if (task.getStatus().equals("bidded")) {
+            lowestBidString = Double.toString(getLowestBid(bidsList));
+        }
+
         lowestBidValue.setText(lowestBidString);
 
 
