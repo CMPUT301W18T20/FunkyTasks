@@ -21,7 +21,8 @@ import java.util.ArrayList;
 public class PlaceBidDialogFragment extends DialogFragment {
 
     private Double bidAmount;
-    private String username;
+    private String requester;
+    private String bidder;
     private String taskID;
 
     Task task;
@@ -34,7 +35,8 @@ public class PlaceBidDialogFragment extends DialogFragment {
         builder.setTitle("Place Bid");
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        username = getArguments().getString("username");
+        requester = getArguments().getString("requester");
+        bidder = getArguments().getString("bidder");
         taskID = getArguments().getString("id");
 
         // Inflate and set the layout for the dialog
@@ -49,7 +51,8 @@ public class PlaceBidDialogFragment extends DialogFragment {
                         EditText moneyPlaced = (EditText) view.findViewById(R.id.bidMoney);
                         bidAmount = Double.valueOf(moneyPlaced.getText().toString());
 
-                        Log.e("username in fragment", username);
+                        Log.e("requester in fragment", requester);
+                        Log.e("bidder in fragment", bidder);
                         Log.e("id in fragment", taskID);
                         Log.e("amount in fragment", moneyPlaced.getText().toString());
 
@@ -69,12 +72,12 @@ public class PlaceBidDialogFragment extends DialogFragment {
                         }
 
                         ElasticSearchController.PlaceBid placeBid = new ElasticSearchController.PlaceBid();
-                        Bid bidToAdd = new Bid(username, bidAmount, taskID);
+                        Bid bidToAdd = new Bid(bidder, requester, bidAmount, taskID);
                         placeBid.execute(bidToAdd);
 
                         Toast.makeText(getActivity(), "Successfully placed a bid", Toast.LENGTH_SHORT).show();
 
-                        sendToSolveTaskActivity(username);
+                        sendToSolveTaskActivity(bidder);
 
                     }
                 })

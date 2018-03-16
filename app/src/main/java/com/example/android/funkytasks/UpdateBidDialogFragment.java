@@ -22,7 +22,8 @@ import java.util.ArrayList;
 public class UpdateBidDialogFragment extends DialogFragment {
 
     private Double bidAmount;
-    private String username;
+    private String requester;
+    private String bidder;
     private String taskID;
     private TextView providerBidValue;
 
@@ -40,13 +41,14 @@ public class UpdateBidDialogFragment extends DialogFragment {
         // Pass null as the parent view because its going in the dialog layout
         final View view = inflater.inflate(R.layout.dialog_updatebid, null);
 
-        username = getArguments().getString("username");
+        requester = getArguments().getString("requester");
+        bidder = getArguments().getString("bidder");
         taskID = getArguments().getString("id");
 
 
 
         ElasticSearchController.GetBidsByBidder bidderBids = new ElasticSearchController.GetBidsByBidder();
-        bidderBids.execute(username); // grab all current users in the system
+        bidderBids.execute(bidder); // grab all current users in the system
 
         ArrayList<Bid> bidList = new ArrayList<Bid>();
         try {
@@ -85,7 +87,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
                         EditText moneyPlaced = (EditText) view.findViewById(R.id.bidMoney);
                         bidAmount = Double.valueOf(moneyPlaced.getText().toString());
 
-                        Log.e("username in fragment", username);
+                        Log.e("bidder in fragment", bidder);
                         Log.e("id in fragment", taskID);
                         Log.e("amount in fragment", moneyPlaced.getText().toString());
 
@@ -100,7 +102,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
 
                         Toast.makeText(getActivity(), "Successfully updated a bid", Toast.LENGTH_SHORT).show();
 
-                        sendToSolveTaskActivity(username);
+                        sendToSolveTaskActivity(bidder);
 
                     }
                 })

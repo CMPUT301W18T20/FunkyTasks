@@ -25,7 +25,8 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private TextView lowestBidValue;
     private Double bidAmount;
     private String id;
-    private String username;
+    private String bidder;
+    private String requester;
     private Task task;
     private int index;
 
@@ -43,8 +44,8 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         lowestBidValue = (TextView) findViewById(R.id.requestorTaskLowestBid);
 
         final Intent intent = getIntent();
-        username = intent.getExtras().getString("username");
-        username = LoginActivity.username;
+        bidder = intent.getExtras().getString("username");
+        bidder = LoginActivity.username;
 
         id = intent.getExtras().getString("id");
 
@@ -58,7 +59,9 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             Log.e("Task get", "not workng");
         }
 
-        ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+        requester = task.getRequester();
+
+                ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
         idBids.execute(task.getId()); // grab all current users in the system
 
         ArrayList<Bid> bidsList = new ArrayList<Bid>();
@@ -77,7 +80,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
-        usernameValue.setText(task.getRequester());
+        usernameValue.setText(requester);
         lowestBidValue.setText(lowestBidString);
 
 
@@ -103,21 +106,21 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
                 if (bidsList.isEmpty()) {
                     DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                    placeBidFragment = newInstance(placeBidFragment, username, id);
+                    placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
                     placeBidFragment.show(getSupportFragmentManager(), "Bids");
 
                 } else {
 
                     for (Bid eachBid : bidsList) {
-                        if (eachBid.getBidder().equals(username)) {
+                        if (eachBid.getBidder().equals(bidder)) {
                             DialogFragment updateBidFragment = new UpdateBidDialogFragment();
-                            updateBidFragment = newInstance(updateBidFragment, username, id);
+                            updateBidFragment = newInstance(updateBidFragment, requester, bidder, id);
                             updateBidFragment.show(getSupportFragmentManager(), "Bids");
                             break;
                         }
                         if (i == sizeBidsList - 1) {
                             DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                            placeBidFragment = newInstance(placeBidFragment, username, id);
+                            placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
                             placeBidFragment.show(getSupportFragmentManager(), "Bids");
                         }
                         i++;
@@ -141,14 +144,17 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         });
     }
 
-    public DialogFragment newInstance(DialogFragment bidFragment, String username, String id) {
+    public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
 
         // Supply num input as an argument.
         Bundle bundle = new Bundle();
-        bundle.putString("username", username);
+        bundle.putString("requester", requester);
+        bundle.putString("bidder", bidder);
         bundle.putString("id", id);
 
-        Log.e("username in newInstance", username);
+
+        Log.e("requester / newInstance", requester);
+        Log.e("bidder in newInstance", bidder);
         Log.e("id in new instance", id);
         bidFragment.setArguments(bundle);
 
