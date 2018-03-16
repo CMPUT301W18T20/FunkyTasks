@@ -36,6 +36,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         } catch (Exception e) {
+            Log.e("Error", user.getUsername());
             Log.e("Error", "We arnt getting the user");
             return;
         }

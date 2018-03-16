@@ -29,7 +29,7 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    public void testClickAdd(){
+    public void testFailedSignUp(){
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
         User testingUser = new User("IntentTesting", "1234567890", "IT@ualbertac.ca");
         solo.enterText((EditText) solo.getView(R.id.editAddUsername), "IntentTesting");

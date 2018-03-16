@@ -2,9 +2,7 @@ package com.example.android.funkytasks;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,8 +51,8 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-
-        Button profile = (Button) findViewById(R.id.profile);
+/*
+        Button profile = (Button) findViewById(R.id.profileActionBar);
 
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,11 +62,33 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivityForResult(intent, EDIT_CODE);
             }
         });
-
+*/
         notifyBidsChanged();
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.profileActionBar:
+                Intent intent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
+                intent.putExtra("username", username);
+                startActivityForResult(intent, EDIT_CODE);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -88,6 +108,7 @@ public class MainMenuActivity extends AppCompatActivity {
         intent.putExtra("username", username);
         startActivity(intent);
     }
+
 
     public void sendToCreateTaskActivity(View view) {
         Intent intent = new Intent(this, CreateTaskActivity.class);

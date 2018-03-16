@@ -83,7 +83,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
-        android:id="@+id/profile"
+        android:id="@+id/profileActionBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView4"
@@ -97,11 +97,11 @@
         android:id="@+id/EditUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/profile"
+        android:layout_alignBottom="@+id/profileActionBar"
         android:layout_marginLeft="14dp"
         android:layout_marginStart="14dp"
-        android:layout_toEndOf="@+id/profile"
-        android:layout_toRightOf="@+id/profile"
+        android:layout_toEndOf="@+id/profileActionBar"
+        android:layout_toRightOf="@+id/profileActionBar"
         android:text="TextView"
         android:textSize="18sp" />
 
