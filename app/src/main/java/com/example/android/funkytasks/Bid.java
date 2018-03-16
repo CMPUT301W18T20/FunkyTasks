@@ -10,6 +10,7 @@ public class Bid {
 
     //title,bid amount,bidder
     private String bidder; // username of the bidder
+    private String requester;
     private double amount;
     private String taskID;
 
@@ -18,17 +19,18 @@ public class Bid {
     private String id;
 
     //constracutor for bid
-    public Bid(String bidder,Double amount, String taskID){
-        this.bidder=bidder;
-        this.amount=amount;
+    public Bid(String bidder, String requester, Double amount, String taskID) {
+        this.bidder = bidder;
+        this.requester = requester;
+        this.amount = amount;
         this.taskID = taskID;
     }
 
-    public void setId(String newId){
+    public void setId(String newId) {
         this.id = newId;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -49,11 +51,20 @@ public class Bid {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
     public String getBidder() {
         return bidder;
     }
 
     public void setBidder(String bidder) {
+        this.bidder = bidder;
+    }
+
+    public String getRequester() {
+        return bidder;
+    }
+
+    public void setRequester(String requester) {
         this.bidder = bidder;
     }
 

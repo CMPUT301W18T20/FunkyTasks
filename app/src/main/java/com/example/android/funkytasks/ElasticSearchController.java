@@ -542,6 +542,48 @@ public class ElasticSearchController {
         }
     }
 
+    public static class GetBidsByRequester extends AsyncTask<String, Void, ArrayList<Bid>> {
+
+        @Override
+        protected ArrayList<Bid> doInBackground (String... search_parameters) {
+            verifySettings();
+
+            int size = 50000; // change this number to get back more results
+            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
+
+            String query = "{\n" +
+                    "\"size\":" + size + ",\n" +
+                    "\"query\": {\n" +
+                    "\"match\": {\n" +
+                    "\"requester\": {\n" +
+                    "\"query\": \"" + search_parameters[0] +
+                    "\" }\n" +
+                    "}\n" +
+                    "}\n" +
+                    "}";
+
+            ArrayList<Bid> bids;
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(bidType).build();
+
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded()){
+                    bids = new ArrayList<>(result.getSourceAsObjectList(Bid.class));
+                    return bids;
+                }
+                else{
+                    Log.e("Nothing", "No bids in database");
+                }
+            }
+            catch(Exception e){
+                Log.e("Error", "Something went wrong with getting all bids by bidder");
+            }
+
+            return null;
+        }
+    }
+
 
     public static class deleteBid extends AsyncTask<String,Void,Void>{
         // Deletes one Bid (to delete more than one bid run this function on a array list)
