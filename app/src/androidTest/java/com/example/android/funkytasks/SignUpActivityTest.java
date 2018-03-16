@@ -35,7 +35,7 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
         solo.enterText((EditText) solo.getView(R.id.editAddUsername), "IntentTesting");
         solo.enterText((EditText) solo.getView(R.id.editAddPhone), "1234567890");
         solo.enterText((EditText) solo.getView(R.id.editAddEmail), "IT@ualberta.ca");
-        View fab = getActivity().findViewById(R.id.fab);
+        View fab = getActivity().findViewById(R.id.fabSignUp);
         solo.clickOnView(fab);
 
         //Get user from the E.S
@@ -56,5 +56,9 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
         solo.waitForActivity(LoginActivity.class, 2000);
         solo.assertCurrentActivity("Wrong Activity", LoginActivity.class);
 
+    }
+    @Override
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
     }
 }

@@ -56,5 +56,9 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo.assertCurrentActivity("Wrong activity", SignUpActivity.class);
     }
 
+    @Override
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
+    }
 
 }
