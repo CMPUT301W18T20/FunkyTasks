@@ -140,11 +140,11 @@ public class ElasticSearchController {
             // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n"+
-                            "\"size\":" + size + ",\n"+
-                            "\"query\": {\n" +
-                                    "\"match_all\": {}\n" +
-                                "}\n"+
-                            "}";
+                    "\"size\":" + size + ",\n"+
+                    "\"query\": {\n" +
+                    "\"match_all\": {}\n" +
+                    "}\n"+
+                    "}";
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
