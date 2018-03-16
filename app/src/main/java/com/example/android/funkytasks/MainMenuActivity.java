@@ -103,7 +103,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void sendToDashboard(View view) {
-        Intent intent = new Intent(this, TaskDashboardActivity.class);
+        Intent intent = new Intent(this, MyTasksActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
     }

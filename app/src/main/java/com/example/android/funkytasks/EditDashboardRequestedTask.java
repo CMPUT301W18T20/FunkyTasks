@@ -38,6 +38,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         index = intent.getExtras().getInt("index");
         id = intent.getExtras().getString("id");
 
+
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(id);
         try {
