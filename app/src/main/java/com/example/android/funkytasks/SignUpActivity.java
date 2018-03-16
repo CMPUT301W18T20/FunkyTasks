@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         setTitle("");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabSignUp);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

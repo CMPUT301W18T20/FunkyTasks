@@ -51,6 +51,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
     public void testSignUp() throws Exception{
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
+        assertTrue(solo.searchText("Don't have an account?"));
         solo.clickOnText("Don't have an account?");
         solo.waitForActivity("SignUpActivity.class");
         solo.assertCurrentActivity("Wrong activity", SignUpActivity.class);
