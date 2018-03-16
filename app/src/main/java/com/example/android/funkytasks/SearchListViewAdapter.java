@@ -2,12 +2,14 @@ package com.example.android.funkytasks;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,14 +38,38 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
         TextView username = (TextView) view.findViewById(R.id.taskUsername);
         TextView lowestbid = (TextView) view.findViewById(R.id.taskLowestBid);
 
+        ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+        idBids.execute(task.getId()); // grab all current users in the system
+
+        ArrayList<Bid> bidsList = new ArrayList<Bid>();
+        try {
+            bidsList = idBids.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of bidders");
+        }
+
+        String lowestBidString = Double.toString(getLowestBid(bidsList));
+
+
+
         title.setText(task.getTitle());
-        //description.setText(task.getDescription());
         status.setText(task.getStatus());
         username.setText(task.getRequester());
+        lowestbid.setText(lowestBidString);
 
 
         return view;
 
+    }
+
+    public static Double getLowestBid(ArrayList<Bid> bidsList){
+        Double lowestBid = bidsList.get(0).getAmount();
+        for(int i = 1;i <bidsList.size(); i++){
+            if(lowestBid > bidsList.get(i).getAmount()){
+                lowestBid = bidsList.get(i).getAmount();
+            }
+        }
+        return lowestBid;
     }
 
 }

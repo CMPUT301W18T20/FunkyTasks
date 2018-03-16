@@ -22,6 +22,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private TextView descriptionValue;
     private TextView statusValue;
     private TextView usernameValue;
+    private TextView lowestBidValue;
     private Double bidAmount;
     private String id;
     private String username;
@@ -39,6 +40,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         titleValue = (TextView) findViewById(R.id.requestorTaskName);
         statusValue = (TextView) findViewById(R.id.requestorTaskStatus);
         usernameValue = (TextView) findViewById(R.id.requestorTaskUsername);
+        lowestBidValue = (TextView) findViewById(R.id.requestorTaskLowestBid);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
@@ -56,12 +58,27 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             Log.e("Task get", "not workng");
         }
 
+        ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+        idBids.execute(task.getId()); // grab all current users in the system
+
+        ArrayList<Bid> bidsList = new ArrayList<Bid>();
+        try {
+            bidsList = idBids.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of bidders");
+        }
+
+        String lowestBidString = Double.toString(getLowestBid(bidsList));
+        Log.e("Lowest bid", lowestBidString);
+
+
         //TODO SET REQUESTER'S CONTACT INFO TO BE SHOWN ON SCREEN WITH PHONE AND EMAIL (use case 3.3)
 
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
         usernameValue.setText(task.getRequester());
+        lowestBidValue.setText(lowestBidString);
 
 
         Button bidButton = (Button) findViewById(R.id.bidButton);
@@ -136,6 +153,16 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         bidFragment.setArguments(bundle);
 
         return bidFragment;
+    }
+
+    public static Double getLowestBid(ArrayList<Bid> bidsList){
+        Double lowestBid = bidsList.get(0).getAmount();
+        for(int i = 1;i <bidsList.size(); i++){
+            if(lowestBid > bidsList.get(i).getAmount()){
+                lowestBid = bidsList.get(i).getAmount();
+            }
+        }
+        return lowestBid;
     }
 
 

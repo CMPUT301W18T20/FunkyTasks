@@ -431,6 +431,8 @@ public class ElasticSearchController {
         }
     }
 
+
+
     public static class GetBidsByBidder extends AsyncTask<String, Void, ArrayList<Bid>> {
 
         @Override
@@ -514,25 +516,6 @@ public class ElasticSearchController {
             return null;
         }
     }
-
-
-
-
-
-
-
-
-    // Later
-
-    //TODO update a task's status in database
-
-
-    //TODO get all BIDDED tasks for task requester (US 05.04.01, I want to view list of MY tasks that have status bidded)
-
-    //TODO get all BIDDED tasks for task provider (UC 05.02.01, I want to view a list of all tasks I HAVE bidded on)
-
-    //TODO delete a specific task (status=done)
-
 
     public static void verifySettings() {
         if (client == null) {
