@@ -3,9 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/item_notification"
+        android:icon="@drawable/not_bell"
+        android:title="Notification"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/profileActionBar"
         android:icon="@drawable/ic_person_white"
         android:title="Profile"
         app:showAsAction="always" />
+
+
 
 </menu>

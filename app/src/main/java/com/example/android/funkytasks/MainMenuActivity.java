@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -64,6 +66,14 @@ public class MainMenuActivity extends AppCompatActivity {
                 intent.putExtra("username", username);
                 startActivityForResult(intent, EDIT_CODE);
                 return true;
+
+            case R.id.item_notification:
+                Button notis = findViewById(R.id.notis);
+                PopupMenu popup = new PopupMenu(MainMenuActivity.this, notis);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                        .inflate(R.menu.pop_up_notis, popup.getMenu());
+                popup.show();
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -131,7 +141,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Log.e("Got the phone: ", user.getPhonenumber());
 
             } catch (Exception e) {
-                Log.e("Error", "We arnt getting the user");
+                Log.e("Error", "We aren't getting the user");
                 return;
             }
 
@@ -148,28 +158,6 @@ public class MainMenuActivity extends AppCompatActivity {
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
 
         getUser.execute(username);
-        try{
-            Log.e("Made it to the try", "we did");
-            user = getUser.get();
-            Log.e("Return user title", user.getUsername() + "we did");
-            userTasks = user.getRequestedTasks();
-            Log.e("Get the user tasks", "we did");
-
-            if (userTasks.size() > 0) {
-                Log.e("In the for loop", "we are");
-                Iterator itr = userTasks.iterator();
-                while (itr.hasNext()) {
-                    Task x = (Task) itr.next();
-                    if (x.getNumberOfBids() > 0) {
-                        Toast.makeText(this, "You have " + x.getNumberOfBids() + " new bids on task"
-                                + x.getTitle(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
-        catch(Exception e){
-            Log.e("User get in main","not working");
-        }
 
     }
 }
