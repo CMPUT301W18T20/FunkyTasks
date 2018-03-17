@@ -46,8 +46,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
 
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardRequestedTasktoolbar);
         setSupportActionBar(myToolbar);
+
 
 
         // set bids listview
