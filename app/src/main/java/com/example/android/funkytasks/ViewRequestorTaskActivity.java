@@ -109,7 +109,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
         if (task.getStatus().equals("requested")) {
             lowestBidString = "N/A";
-        } else if (task.getStatus().equals("bidded")) {
+        } else {
             lowestBidString = Double.toString(getLowestBid(bidsList).getAmount()) + "  by  " + getLowestBid(bidsList).getBidder();
         }
 
@@ -195,18 +195,18 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
     public static Bid getLowestBid(ArrayList<Bid> bidsList){
         int i = 0;
-        Bid lowestBid;
-        Double lowestBidAmount = bidsList.get(0).getAmount();
+        Bid lowestBid = bidsList.get(i);
+        Double lowestBidAmount = lowestBid.getAmount();
 
         if (bidsList.size() > 1) {
             for (i = 1; i < bidsList.size(); i++) {
                 if (lowestBidAmount > bidsList.get(i).getAmount()) {
-                    continue;
+                    Log.e("Lowest bid", Double.toString(bidsList.get(i).getAmount()));
+                    lowestBid = bidsList.get(i);
                 }
             }
         }
-
-        lowestBid = bidsList.get(i);
+        Log.e("Index", Integer.toString(i));
 
         return lowestBid;
     }

@@ -338,10 +338,10 @@ public class ElasticSearchController {
         }
     }
 
-    public static class searchTask extends AsyncTask<String,Void,ArrayList<Task>>{
+    public static class searchTask extends AsyncTask<String,Void,ArrayList<Task>> {
 
         @Override
-        protected ArrayList<Task> doInBackground(String... searchParameters){
+        protected ArrayList<Task> doInBackground(String... searchParameters) {
             verifySettings();
 
             int size = 50000;
@@ -358,6 +358,57 @@ public class ElasticSearchController {
                     "}\n" +
                     "}\n" +
                     "}";
+
+            ArrayList<Task> tasks;
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
+                    for (int i = 0; i < tasks.size(); i++) {
+                        Task task = tasks.get(i);
+                        Log.e("Task title ", task.getTitle());
+                        Log.e("Requester and username ", task.getRequester() + "-" + username);
+                        if (task.getRequester().equals(username)) {
+                            Log.e("Deleting ", task.getRequester() + username);
+                            tasks.remove(i);
+                            i -= 1;
+                        } else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")) {
+                            tasks.remove(i);
+                            i -= 1;
+                        }
+                    }
+                    return tasks;
+                } else {
+                    Log.e("Nothing", "No tasks in database");
+                }
+            } catch (Exception e) {
+                Log.e("Error", "Something went wrong with getting all tasks");
+            }
+
+            return null;
+        }
+    }
+
+
+    public static class GetDefaultSearchTaskList extends AsyncTask<String,Void,ArrayList<Task>>{
+
+        @Override
+        protected ArrayList<Task> doInBackground(String... searchParameters){
+            verifySettings();
+
+            int size = 50000;
+            String username = searchParameters[0];
+
+            String query = "{\n"+
+                    "\"size\":" + size + ",\n"+
+                    "\"query\": {\n" +
+                    "\"match_all\": {}\n" +
+                    "}\n"+
+                    "}";
+
             ArrayList<Task> tasks;
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
@@ -370,9 +421,11 @@ public class ElasticSearchController {
                         Task task = tasks.get(i);
                         if (task.getRequester().equals(username)){
                             tasks.remove(i);
+                            i -= 1;
                         }
                         else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")){
                             tasks.remove(i);
+                            i -= 1;
                         }
                     }
                     return tasks;
