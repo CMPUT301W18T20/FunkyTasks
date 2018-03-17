@@ -6,49 +6,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/TextView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Provider Username"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="5dp" />
+
+    <!--<TextView-->
+        <!--android:id="@+id/TextView1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Provider Username"-->
+        <!--android:textColor="@android:color/background_dark"-->
+        <!--android:textSize="20sp"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--tools:layout_editor_absoluteY="5dp" />-->
+
 
     <TextView
         android:id="@+id/bidderTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="jimi"
-        app:layout_constraintTop_toBottomOf="@+id/TextView1"
+        android:textStyle="bold"
+        android:textSize="20dp"
         android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/TextView2"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
     <TextView
         android:id="@+id/TextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contact Info"
-        app:layout_constraintTop_toBottomOf="@+id/bidderTextView"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:text="By"
+        android:textSize="15sp"
+        app:layout_constraintTop_toBottomOf="@+id/amountTextView"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
     <TextView
         android:id="@+id/contactTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1356678"
-        app:layout_constraintTop_toBottomOf="@+id/TextView2"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/bidderTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
@@ -56,59 +59,49 @@
         android:id="@+id/contactTextViewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="5dp"
         android:text="XXX@YYY.com"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TextView2" />
-
-    <TextView
-        android:id="@+id/TextView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Amount"
-        android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contactTextView" />
+
+
 
     <TextView
         android:id="@+id/amountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="$100"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="0dp"
+        android:text="100"
         android:textColor="@android:color/background_dark"
-        android:textSize="20sp"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="25sp"
+        android:textStyle="bold"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TextView3" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
     <Button
         android:id="@+id/acceptButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Accept"
+        android:layout_marginTop="10dp"
+        android:text="ACCEPT"
+        android:background="@drawable/buttonshape"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/declineButton"
-        app:layout_constraintTop_toBottomOf="@+id/amountTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail" />
 
     <Button
         android:id="@+id/declineButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Decline"
+        android:layout_marginTop="10dp"
+        android:text="DECLINE"
+        android:background="@drawable/buttonshape"
         app:layout_constraintLeft_toRightOf="@id/acceptButton"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail" />
 
 
 </android.support.constraint.ConstraintLayout>

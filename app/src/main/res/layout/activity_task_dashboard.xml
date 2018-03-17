@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.funkytasks.TaskDashboardActivity"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/rsz_bg">
 
 
-    <ListView
-        android:id="@+id/myTasks"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/yourPostMenu"
 
-        >
+<ListView
+    android:id="@+id/myTasks"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/yourPostMenu"
+    >
 
     </ListView>
 
@@ -23,6 +24,7 @@
         android:id="@+id/yourPostMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="#ffffff"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginBottom="8dp"
         />

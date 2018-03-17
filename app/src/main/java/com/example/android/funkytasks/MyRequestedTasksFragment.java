@@ -1,6 +1,7 @@
 package com.example.android.funkytasks;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -49,6 +50,8 @@ public class MyRequestedTasksFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_task_dashboard, container, false);
 
         Intent intent = getActivity().getIntent();
+
+
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
 
@@ -58,7 +61,9 @@ public class MyRequestedTasksFragment extends Fragment {
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
+
         //Get tasks using E.S and display tasks
+
         getTask();
         setListViewAdapter(taskList);
 
@@ -94,6 +99,7 @@ public class MyRequestedTasksFragment extends Fragment {
         return rootView;
 
     }
+
 
     public void setListViewAdapter(ArrayList<Task> tasklist){
         listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listviewitem, tasklist);

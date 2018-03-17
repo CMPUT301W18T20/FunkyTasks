@@ -89,8 +89,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 try{
                     bidder = getUser.get();
                     Log.e("Success",bidder.getUsername());
-                    contactTextViewPhone.setText(bidder.getPhonenumber());
-                    contactTextViewEmail.setText(bidder.getEmail());
+                    contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
+                    contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
                 }
                 catch (Exception e){
                     Log.e("Error","Unable to get the bidder's username");
@@ -98,7 +98,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
                 bidderTextView.setText(biddername);
                 Double bidAmount = bidList.get(i).getAmount();
-                amountTextView.setText(bidAmount.toString());
+                amountTextView.setText("$"+bidAmount.toString());
 
 
                 final int target=i;
@@ -163,7 +163,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
 
     public void setAdapter(){
-        ArrayAdapter<Bid> adpater=new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1, bidList) ;
+        BidListViewAdapter adpater=new BidListViewAdapter(DashboardRequestedTask.this, android.R.layout.simple_list_item_1, bidList) ;
         adpater.notifyDataSetChanged();
         bidListView.setAdapter(adpater);
     }
