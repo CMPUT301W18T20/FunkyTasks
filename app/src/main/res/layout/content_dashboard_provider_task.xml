@@ -31,8 +31,8 @@
         android:text="Status:  "
         android:textColor="#ffffff"
         android:textSize="17sp"
-        app:layout_constraintLeft_toLeftOf="@id/taskName"
-        app:layout_constraintTop_toBottomOf="@id/taskName" />
+        app:layout_constraintLeft_toLeftOf="@+id/taskNamerequester"
+        app:layout_constraintTop_toBottomOf="@+id/taskNamerequester" />
 
     <TextView
         android:id="@+id/textView2"
@@ -42,8 +42,8 @@
         android:text="Description:  "
         android:textColor="#ffffff"
         android:textSize="17sp"
-        app:layout_constraintLeft_toLeftOf="@id/textView3"
-        app:layout_constraintTop_toBottomOf="@id/textView3" />
+        app:layout_constraintLeft_toLeftOf="@+id/textView3status"
+        app:layout_constraintTop_toBottomOf="@+id/textView3status" />
 
     <TextView
         android:id="@+id/textDescriptionprovider"
@@ -57,14 +57,14 @@
         app:layout_constraintLeft_toRightOf="@id/textView2" />
 
     <TextView
-        android:id="@+id/textBidrprovider"
+        android:id="@+id/textBidprovider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Bid:  "
         android:textColor="#ffffff"
         android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="@id/taskName"
+        app:layout_constraintLeft_toLeftOf="@+id/taskNamerequester"
         app:layout_constraintTop_toBottomOf="@id/textView2" />
 
     <ListView
@@ -73,7 +73,7 @@
         android:layout_height="60dp"
         android:textColor="#ffffff"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textBid" />
+        app:layout_constraintTop_toBottomOf="@+id/textBidprovider" />
 
 
     <TextView
@@ -84,7 +84,7 @@
         android:textColor="#ffffff"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/textView3"
-        app:layout_constraintLeft_toRightOf="@id/textView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView3status"
+        app:layout_constraintLeft_toRightOf="@+id/textView3status" />
 
 </android.support.constraint.ConstraintLayout>
