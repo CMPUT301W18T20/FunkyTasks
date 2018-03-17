@@ -4,10 +4,9 @@
 
 
     <item
-        android:icon="@android:drawable/ic_menu_delete"
         android:id="@+id/deleteActionBar"
+        android:icon="@android:drawable/ic_menu_delete"
         android:title=""
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
 
 </menu>

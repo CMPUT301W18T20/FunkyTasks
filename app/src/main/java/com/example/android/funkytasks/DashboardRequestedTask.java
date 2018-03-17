@@ -31,7 +31,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView statusValue;
     private ListView bidListView;
     private String id;
-    private Button editBtn;
+   // private Button editBtn;
 
     private String username;
     private Task task;
@@ -54,7 +54,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
         statusValue = (TextView) findViewById(R.id.taskStatus);
-        editBtn = (Button) findViewById(R.id.editTaskButton);
+       // editBtn = (Button) findViewById(R.id.editTaskButton);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
@@ -67,7 +67,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         setBids();
         setAdapter();
 
-        editBtn.setOnClickListener(new View.OnClickListener(){
+        /*editBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 if (task.getStatus().equals("requested")) {
@@ -81,6 +81,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 }
             }
         });
+        */
 
         bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -147,7 +148,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_task, menu);
+        inflater.inflate(R.menu.dashboard_requested, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -161,7 +162,16 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 setResult(RESULT_OK,intent);
                 finish();
 
-
+            case R.id.editRequestedTask:
+                if (task.getStatus().equals("requested")) {
+                    Intent editIntent = new Intent(DashboardRequestedTask.this, EditDashboardRequestedTask.class);
+                    editIntent.putExtra("username", username);
+                    editIntent.putExtra("id", id);
+                    startActivityForResult(editIntent, EDIT_CODE);
+                }
+                else{
+                    Toast.makeText(DashboardRequestedTask.this, "Task cannot be edited", Toast.LENGTH_SHORT).show();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
