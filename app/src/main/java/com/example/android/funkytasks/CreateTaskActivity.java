@@ -72,25 +72,4 @@ public class CreateTaskActivity extends AppCompatActivity {
         });
 
     }
-
-
-    public void postTask(Task newTask){
-        // add task to global list of all tasks
-        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-        postTask.execute(newTask);
-        try {
-            newTask = postTask.get();
-            Log.e("newtask title",newTask.getTitle());
-        }
-        catch(Exception e){
-            Log.e("Error","Task not posted");
-        }
-    }
-
-
-    public void goHome() {
-        Intent intent = new Intent(this, MainMenuActivity.class);
-        startActivity(intent);
-    }
-
 }

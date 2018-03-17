@@ -10,13 +10,13 @@
         android:id="@+id/TextView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="N"
-        android:layout_marginTop="5sp"
+        android:text="Provider Username"
         android:textColor="@android:color/background_dark"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="5dp" />
 
     <TextView
         android:id="@+id/bidderTextView"
@@ -53,44 +53,62 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
+        android:id="@+id/contactTextViewEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="XXX@YYY.com"
+        android:textColor="@android:color/background_dark"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextView2" />
+
+    <TextView
         android:id="@+id/TextView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Amount"
-        app:layout_constraintTop_toBottomOf="@+id/contactTextView"
         android:textColor="@android:color/background_dark"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contactTextView" />
+
     <TextView
         android:id="@+id/amountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="$100"
-        app:layout_constraintTop_toBottomOf="@+id/TextView3"
         android:textColor="@android:color/background_dark"
         android:textSize="20sp"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TextView3" />
 
     <Button
         android:id="@+id/acceptButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Accept"
-        app:layout_constraintTop_toBottomOf="@+id/amountTextView"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/declineButton" />
+        app:layout_constraintRight_toLeftOf="@id/declineButton"
+        app:layout_constraintTop_toBottomOf="@+id/amountTextView" />
 
     <Button
         android:id="@+id/declineButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Decline"
-        app:layout_constraintTop_toBottomOf="@+id/amountTextView"
+        app:layout_constraintLeft_toRightOf="@id/acceptButton"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/acceptButton"/>
+        app:layout_constraintTop_toBottomOf="@+id/amountTextView" />
 
 
 </android.support.constraint.ConstraintLayout>

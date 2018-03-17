@@ -23,16 +23,11 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
-
-        User testuser1 = new User("Jim", "jim@ualberta.ca", "6666969642");
 
         setTitle("Welcome to FunkyTasks!");
         EditText inputUsername = (EditText) findViewById(R.id.editLoginName);
         inputUsername.setHintTextColor(Color.WHITE);
 
-        userArrayList.add(testuser1);
-        //Log.e("WHAT THE FUCK", "The globalvariable is not fuck up");
     }
 
     @Override
@@ -52,35 +47,12 @@ public class LoginActivity extends AppCompatActivity{
             return;
         }
         else {
-            //TODO implement alphanum check
-//            if (username.matches(".*[A-Za-z].*") && username.matches(".*[0-9].*") && username.matches("[A-Za-z0-9]*")) {
-//                checkUserName(username);
-//            } else {
-//                Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
             checkUserName(username);
 
         }
     }
 
     public void checkUserName(String checkusername){
-
-        // ****** uncomment this to use temporary list of username (must uncomment elastic search then)
-//        for (User user: userArrayList){
-//            Log.e("HALP", user.getUsername());
-//            Log.e("Name entered", username);
-//            if(username.equals(user.getUsername())){
-//                Intent intent = new Intent(this, MainMenuActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//            else{
-//                continue;
-////                Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
-////                return;
-//            }
-//        }
 
         ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
         allUsers.execute(""); // grab all current users in the system
@@ -99,7 +71,7 @@ public class LoginActivity extends AppCompatActivity{
         for (User postedUser: userList){
             Log.e("postedUser",postedUser.getUsername()); // print out all users in system
             if (postedUser.getUsername().equals(checkusername)){ // if user is in th system, log them in
-//                Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MainMenuActivity.class);
                 username = checkusername;
                 intent.putExtra("username", postedUser.getUsername());

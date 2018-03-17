@@ -31,7 +31,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView statusValue;
     private ListView bidListView;
     private String id;
-    //private Button deleteBT;
+
     private String username;
     private Task task;
     private int index;
@@ -61,16 +61,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-
-        setTaskdetails();
+        setTaskDetails();
         setBids();
         setAdapter();
-
-
-//TODO waiting for  E.S
-
-
-        //view bids
 
         bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,17 +75,33 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 dialog.show();
 
                 TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-                TextView contactTextView =(TextView) View.findViewById(R.id.contactTextView);
+                TextView contactTextViewPhone =(TextView) View.findViewById(R.id.contactTextView);
+                TextView contactTextViewEmail = (TextView) View.findViewById(R.id.contactTextViewEmail);
                 TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
                 Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
                 Button declineBTN=(Button) View.findViewById(R.id.declineButton);
 
-                //TODO get contact info and rating for user
-                bidderTextView.setText(bidList.get(i).getBidder());
+                //TODO get rating for user
+                String biddername = bidList.get(i).getBidder();
+                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+                getUser.execute(biddername);
+                User bidder;
+                try{
+                    bidder = getUser.get();
+                    Log.e("Success",bidder.getUsername());
+                    contactTextViewPhone.setText(bidder.getPhonenumber());
+                    contactTextViewEmail.setText(bidder.getEmail());
+                }
+                catch (Exception e){
+                    Log.e("Error","Unable to get the bidder's username");
+                }
+
+                bidderTextView.setText(biddername);
                 Double bidAmount = bidList.get(i).getAmount();
                 amountTextView.setText(bidAmount.toString());
-                final int target=i;
 
+
+                final int target=i;
                 //accept or decline bids
                 acceptBTN.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -112,23 +121,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
                     }
                 });
 
-
             }
 
         });
 
-
-
-     /*   // delete a task
-        deleteBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onDeleteTask();
-                intent.putExtra("id",id);
-                setResult(RESULT_OK,intent);
-                finish();
-            }
-        });*/
     }
 
 
@@ -155,14 +151,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
             task = (Task) intent.getSerializableExtra("updatedTask");
-
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
 
@@ -175,6 +168,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         adpater.notifyDataSetChanged();
         bidListView.setAdapter(adpater);
     }
+
     public void setBids(){
         ElasticSearchController.GetBidsByTaskID getBids = new ElasticSearchController.GetBidsByTaskID();
         getBids.execute(id);
@@ -187,14 +181,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
             Log.e("Bid get","not workng");
         }
 
-
-
     }
 
-    public void setTaskdetails(){
+    public void setTaskDetails(){
 
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-
         getTask.execute(id);
         try{
             task = getTask.get();
@@ -212,7 +203,25 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     public void onDeleteTask(){
-        // delete task in global list of all tasks
+
+        if (!task.getStatus().equals("requested")) {
+            // to delete any bids associated with the task
+            ArrayList<Bid> bids;
+            ElasticSearchController.GetBidsByTaskID taskBids = new ElasticSearchController.GetBidsByTaskID();
+            taskBids.execute(task.getId());
+            try {
+                bids = taskBids.get();
+                Log.e("It works", "got list of bids");
+
+                ElasticSearchController.deleteBid deleteBids = new ElasticSearchController.deleteBid();
+                for (Bid bid : bids) {
+                    deleteBids.execute(bid.getId());
+                }
+                Log.e("It works", "Deleted all related bids to this task");
+            } catch (Exception e) {
+                Log.e("Error", "With getting bids by task id");
+            }
+        }
         ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
         deleteTask.execute(id);
         Log.e("deleted","task");
@@ -220,35 +229,28 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     public void acceptBid(int target){
-        //deleting all tasks excpet acceptted one;
-        Bid accepetBid=bidList.get(target);
-        for (int i = 0; i < bidList.size(); i++) {
-            if(!accepetBid.getId().equals(bidList.get(i).getId())){
-                ElasticSearchController.deleteBid deleteAllBids=new ElasticSearchController.deleteBid();
-                deleteAllBids.execute(bidList.get(i).getId());
+        //deleting all tasks except the accepted bid
+        Bid acceptedBid=bidList.get(target);
+        ElasticSearchController.deleteBid deleteAllBids=new ElasticSearchController.deleteBid();
+        for (int index = 0; index < bidList.size(); index++) {
+            if(!acceptedBid.getId().equals(bidList.get(index).getId())){
+                deleteAllBids.execute(bidList.get(index).getId());
             }
         }
         //update local bidList
         bidList.clear();
-        bidList.add(accepetBid);
+        bidList.add(acceptedBid);
+
         //change task status to done
         task.setAssigned();
         ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
         assigned.execute(task);
-        Toast.makeText(DashboardRequestedTask.this, "acceptted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(DashboardRequestedTask.this, "Task has been assigned", Toast.LENGTH_SHORT).show();
 
 
     }
     public void declineBids(int target){
-        ElasticSearchController.deleteBid deleteABid=new ElasticSearchController.deleteBid();
-        deleteABid.execute(bidList.get(target).getId());
-        bidList.remove(bidList.get(target));
-        if(bidList.isEmpty()){
-            task.setRequested();
-            ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
-            assigned.execute(task);
-        }
-        Toast.makeText(DashboardRequestedTask.this, "acceptted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(DashboardRequestedTask.this, "Declined Bid", Toast.LENGTH_SHORT).show();
 
     }
 

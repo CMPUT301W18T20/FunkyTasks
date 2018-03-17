@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import static android.app.Activity.RESULT_OK;
 
 
-public class MyRequestedTasks extends Fragment {
+public class MyRequestedTasksFragment extends Fragment {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
     CheckBox statusCheckbox;
@@ -43,22 +43,21 @@ public class MyRequestedTasks extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_task_dashboard, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        View rootView = inflater.inflate(R.layout.activity_task_dashboard, container, false);
 
         Intent intent = getActivity().getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-//        statusCheckbox=(CheckBox) rootView.findViewById(R.ids.checkBox);
+
         listView = (ListView) rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
-        String[] menuOptions = new String[]{"Status","Bidded", "Assigned"};
+        String[] menuOptions = new String[]{"My Tasks","Bidded", "Assigned"};
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
-        //Get tasks using E.S and display tassks
+        //Get tasks using E.S and display tasks
         getTask();
         setListViewAdapter(taskList);
 
@@ -81,10 +80,6 @@ public class MyRequestedTasks extends Fragment {
 
             }
         });
-
-        //show bided task
-
-
 
 
         //ListView item on click
@@ -146,22 +141,12 @@ public class MyRequestedTasks extends Fragment {
             }
         }
 
-
-
-
     }
 
     public void taskOnClick(int i){
         Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
         intent.putExtra("username", username);
         Task detailedTask;
-//
-//        if(statusCheckbox.isChecked()){
-//            detailedTask = biddedTaskList.get(i);
-//        }
-//        else{
-//            detailedTask = taskList.get(i);
-//        }
 
         detailedTask = taskList.get(i);
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();

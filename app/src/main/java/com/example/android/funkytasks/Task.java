@@ -26,8 +26,6 @@ public class Task implements Serializable{
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
     private Integer numberOfBids = 0;
-//    private ArrayList<Bid> bids;
-//    private double smallest;
 
     @JestId
     private String id;
@@ -42,22 +40,6 @@ public class Task implements Serializable{
         this.status = statuses[0];
     }
 
-
-//    public double getLowestBid() throws IllegalAccessException {
-//        if (bids.size() == 0){
-//            throw new IllegalAccessException();
-//        }
-//        smallest = bids.get(0).getAmount();
-//        for (int i = 0; i < bids.size(); i++){
-//             Bid bid = bids.get(i);
-//             if (smallest > bid.getAmount()){
-//                 smallest = bid.getAmount();
-//             }
-//
-//        }
-//        return smallest;
-//
-//    }
     public void setId(String newId){
         this.id = newId;
     }

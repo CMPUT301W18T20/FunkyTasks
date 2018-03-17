@@ -59,21 +59,16 @@ public class SignUpActivity extends AppCompatActivity {
     public void checkForClash(String username, String phone, String email) {
         User userToAdd = new User(username, email, phone);
 
-//        for (User user : userArrayList) {
         if (username.length() < 8) {
             Toast.makeText(SignUpActivity.this, "Username needs to be at least 8 characters long", Toast.LENGTH_SHORT).show();
             return;
         }
-//            } else if (phone.equals(user.getPhonenumber())) {
-//                Toast.makeText(SignUpActivity.this, "Phone number already in use", Toast.LENGTH_SHORT).show();
-//            } else if (email.equals(user.getEmail())) {
-//                Toast.makeText(SignUpActivity.this, "E-mail already in use", Toast.LENGTH_SHORT).show();
-//            } else {
-//                userArrayList.add(userToAdd);
-//                ((GlobalVariables) this.getApplication()).setUserArrayList(userArrayList);
 
-
-                // Elastic search stuff starts here -------------
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if (!email.matches(emailPattern)){
+            Toast.makeText(SignUpActivity.this,"Invalid email address",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
         allUsers.execute(); // grab all current users in the system
@@ -108,7 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e("Error", "We arnt getting the user");
         }
-                // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
 
 
         Intent intent = new Intent(this, LoginActivity.class);

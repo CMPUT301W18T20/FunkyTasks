@@ -62,7 +62,6 @@ public class ElasticSearchController {
 
     public static class PostTask extends AsyncTask<Task, Void, Task> { // adds new task for the user
 
-        // https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
         @Override
         protected Task doInBackground(Task... params) {
             verifySettings();
@@ -98,8 +97,6 @@ public class ElasticSearchController {
 
             User returnUser = null;
 
-            //https://www.elastic.co/guide/en/elasticsearch/reference/2.3/query-dsl-term-query.html
-            // http://okfnlabs.org/blog/2013/07/01/elasticsearch-query-tutorial.html#basic-queries-using-only-the-query-string
             String query = "{\n" +
                     "    \"query\" : {\n" +
                     "       \"constant_score\" : {\n" +
@@ -137,7 +134,6 @@ public class ElasticSearchController {
             ArrayList<User> foundUsers = new ArrayList<User>();
 
             int size = 50; // change this number to get back more results
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n"+
                     "\"size\":" + size + ",\n"+
@@ -201,7 +197,6 @@ public class ElasticSearchController {
                     "  \"query\": { \"term\": {\"_id\": \"" + search_parameters[0] + "\"} }\n" + "}";
 
             Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
-            //Get get = new Get.Builder(indexType, search_parameters[0]).type(taskType).build();
 
             try {
                 JestResult result = client.execute(search);
@@ -228,7 +223,6 @@ public class ElasticSearchController {
             verifySettings();
 
             int size = 50000; // change this number to get back more results
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n" +
                     "\"size\":" + size + ",\n" +
@@ -300,7 +294,7 @@ public class ElasticSearchController {
                     .build();
 
             try{
-                DocumentResult result = client.execute(index); // Use JestResult for one result and searchresult for all results to add to a list
+                DocumentResult result = client.execute(index);
                 if(result.isSucceeded()){
                     Log.e("Update","successful for task");
                     return null;
@@ -352,7 +346,7 @@ public class ElasticSearchController {
 
             int size = 50000;
             String username = searchParameters[1];
-            // https://www.elastic.co/guide/en/elasticsearch/guide/current/phrase-matching.html
+
             String query = "{\n" +
                     "\"size\":" + size + ",\n" +
                     "\"query\": {\n" +
@@ -397,7 +391,6 @@ public class ElasticSearchController {
 
     public static class PlaceBid extends AsyncTask<Bid, Void, Bid> { // adds new bid for the user
 
-        // https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
         @Override
         protected Bid doInBackground(Bid... params) {
             verifySettings();
@@ -465,7 +458,6 @@ public class ElasticSearchController {
             verifySettings();
 
             int size = 50000; // change this number to get back more results
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n" +
                     "\"size\":" + size + ",\n" +
@@ -507,7 +499,6 @@ public class ElasticSearchController {
             verifySettings();
 
             int size = 50000; // change this number to get back more results
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n" +
                     "\"size\":" + size + ",\n" +
@@ -549,7 +540,6 @@ public class ElasticSearchController {
             verifySettings();
 
             int size = 50000; // change this number to get back more results
-            // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-from-size.html
 
             String query = "{\n" +
                     "\"size\":" + size + ",\n" +

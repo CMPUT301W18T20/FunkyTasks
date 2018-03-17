@@ -1,8 +1,6 @@
 package com.example.android.funkytasks;
 
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -21,19 +19,9 @@ import android.widget.TextView;
 
 public class MyTasksActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -131,10 +119,10 @@ public class MyTasksActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    MyRequestedTasks tab1 = new MyRequestedTasks();
+                    MyRequestedTasksFragment tab1 = new MyRequestedTasksFragment();
                     return tab1;
                 case 1:
-                    ToSolveTasks tab2 = new ToSolveTasks();
+                    ToSolveTasksFragment tab2 = new ToSolveTasksFragment();
                     return tab2;
                 default:
                     return null;
@@ -143,7 +131,7 @@ public class MyTasksActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 2 total pages.
             return 2;
         }
         @Override
