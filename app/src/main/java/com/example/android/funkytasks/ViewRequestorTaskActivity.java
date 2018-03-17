@@ -194,8 +194,8 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     }
 
     public static Bid getLowestBid(ArrayList<Bid> bidsList){
+        int i = 0;
         Bid lowestBid;
-        int i;
         Double lowestBidAmount = bidsList.get(0).getAmount();
 
         if (bidsList.size() > 1) {
@@ -204,15 +204,11 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
                     continue;
                 }
             }
-            lowestBid = bidsList.get(i);
-
-        } else {
-            lowestBid = bidsList.get(0);
         }
+
+        lowestBid = bidsList.get(i);
+
         return lowestBid;
     }
-
-
-
 
 }

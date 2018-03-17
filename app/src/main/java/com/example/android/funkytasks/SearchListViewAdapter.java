@@ -70,21 +70,20 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
     }
 
     public static Bid getLowestBid(ArrayList<Bid> bidsList){
+        int i = 0;
         Bid lowestBid;
-        int i;
-        Double lowestBidAmount = bidsList.get(0).getAmount();
+        Double lowestBidAmount = bidsList.get(i).getAmount();
 
         if (bidsList.size() > 1) {
             for (i = 1; i < bidsList.size(); i++) {
                 if (lowestBidAmount > bidsList.get(i).getAmount()) {
-                    continue;
+                    Log.e("Lowest bid", Double.toString(bidsList.get(i).getAmount()));
                 }
             }
-            lowestBid = bidsList.get(i);
-
-        } else {
-            lowestBid = bidsList.get(0);
         }
+        Log.e("Index", Integer.toString(i));
+        lowestBid = bidsList.get(i);
+
         return lowestBid;
     }
 
