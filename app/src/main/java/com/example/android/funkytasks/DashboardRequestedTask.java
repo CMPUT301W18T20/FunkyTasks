@@ -61,12 +61,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-        //for testing
-//        ElasticSearchController.PlaceBid placeabid=new ElasticSearchController.PlaceBid();
-//        Bid bid=new Bid("testing12",1.0,id);
-//        placeabid.execute(bid);
-//        bidList.add(bid);
-        //for testing
 
         setTaskdetails();
         setBids();
