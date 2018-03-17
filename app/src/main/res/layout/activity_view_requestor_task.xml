@@ -59,7 +59,7 @@
     <TextView
         android:id="@+id/requestorTaskLowestBid"
         android:layout_width="0dp"
-        android:layout_height="32dp"
+        android:layout_height="37dp"
         android:layout_marginEnd="16dp"
         android:text="Lowest Bid"
         app:layout_constraintBaseline_toBaselineOf="@+id/requestorTaskLowestBidTitle"
@@ -183,4 +183,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
 </android.support.constraint.ConstraintLayout>

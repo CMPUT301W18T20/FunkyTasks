@@ -59,7 +59,7 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
         if (task.getStatus().equals("requested")) {
             lowestBidString = "N/A";
         } else if (task.getStatus().equals("bidded")) {
-            lowestBidString = Double.toString(getLowestBid(bidsList));
+            lowestBidString = Double.toString(getLowestBid(bidsList).getAmount()) + "  by  " + getLowestBid(bidsList).getBidder();
         }
 
         lowestbid.setText(lowestBidString);
@@ -69,14 +69,24 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
 
     }
 
-    public static Double getLowestBid(ArrayList<Bid> bidsList){
-        Double lowestBid = bidsList.get(0).getAmount();
-        for(int i = 1;i <bidsList.size(); i++){
-            if(lowestBid > bidsList.get(i).getAmount()){
-                lowestBid = bidsList.get(i).getAmount();
+    public static Bid getLowestBid(ArrayList<Bid> bidsList){
+        Bid lowestBid;
+        int i;
+        Double lowestBidAmount = bidsList.get(0).getAmount();
+
+        if (bidsList.size() > 1) {
+            for (i = 1; i < bidsList.size(); i++) {
+                if (lowestBidAmount > bidsList.get(i).getAmount()) {
+                    continue;
+                }
             }
+            lowestBid = bidsList.get(i);
+
+        } else {
+            lowestBid = bidsList.get(0);
         }
         return lowestBid;
     }
+
 
 }
