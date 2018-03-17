@@ -6,44 +6,48 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.funkytasks.DashboardRequestedTask"
-    tools:showIn="@layout/activity_dashboard_requested_task">
+    tools:showIn="@layout/activity_dashboard_requested_task"
+    android:padding="16dp">
 
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="29dp"
-        android:text="Task: "
-        android:textSize="35sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/taskName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="task1"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@id/textView1"
-        app:layout_constraintLeft_toRightOf="@id/textView1" />
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="5dp"
+        android:text="Status:  "
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="@id/taskName"
+        app:layout_constraintTop_toBottomOf="@id/taskName" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Description: "
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="@id/textView1"
-        app:layout_constraintTop_toBottomOf="@id/textView1" />
+        android:layout_marginTop="8dp"
+        android:text="Description:  "
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="@id/textView3"
+        app:layout_constraintTop_toBottomOf="@id/textView3" />
 
     <TextView
         android:id="@+id/textDescription"
         android:layout_width="310dp"
         android:layout_height="wrap_content"
         android:text="make ken happy"
+        android:textStyle="bold"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/textView2"
         app:layout_constraintLeft_toRightOf="@id/textView2" />
@@ -54,9 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="301dp"
         android:layout_marginTop="16dp"
-        android:text="Bid: "
-        android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="@id/textView1"
+        android:text="Bid:  "
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/textView2" />
 
     <ListView
@@ -74,7 +78,8 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="15sp"
-        app:layout_constraintLeft_toRightOf="@id/taskName"
-        app:layout_constraintTop_toTopOf="@id/taskName" />
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/textView3"
+        app:layout_constraintBottom_toBottomOf="@id/textView3" />
 
 </android.support.constraint.ConstraintLayout>

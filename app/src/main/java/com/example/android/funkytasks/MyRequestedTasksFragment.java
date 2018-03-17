@@ -37,6 +37,7 @@ public class MyRequestedTasksFragment extends Fragment {
     ArrayList<Task> assignedTaskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
     final int DELETECODE = 0;
+    final int Assignedcode=0;
     ArrayList<Task> requestedTasks;
     User user;
 
@@ -150,7 +151,6 @@ public class MyRequestedTasksFragment extends Fragment {
 
         detailedTask = taskList.get(i);
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-
         getTask.execute(detailedTask.getId());
         try {
             Task x = getTask.get();
@@ -158,7 +158,6 @@ public class MyRequestedTasksFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "Task get not working");
         }
-
         intent.putExtra("task", detailedTask);
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
@@ -176,6 +175,7 @@ public class MyRequestedTasksFragment extends Fragment {
 
             }
         }
+
     }
 
 }

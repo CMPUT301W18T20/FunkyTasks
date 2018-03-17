@@ -127,7 +127,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -195,11 +194,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
         catch(Exception e){
             Log.e("Task get","not workng");
         }
-
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
-
     }
 
     public void onDeleteTask(){
@@ -241,15 +238,14 @@ public class DashboardRequestedTask extends AppCompatActivity {
         bidList.clear();
         bidList.add(acceptedBid);
 
-        //change task status to done
+        //change task status to assigned
         task.setAssigned();
         ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
         assigned.execute(task);
         Toast.makeText(DashboardRequestedTask.this, "Task has been assigned", Toast.LENGTH_SHORT).show();
-
-
     }
     public void declineBids(int target){
+
         Toast.makeText(DashboardRequestedTask.this, "Declined Bid", Toast.LENGTH_SHORT).show();
 
     }
