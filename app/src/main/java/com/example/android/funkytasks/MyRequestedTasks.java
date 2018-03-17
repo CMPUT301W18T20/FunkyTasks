@@ -17,6 +17,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+
 
 import java.util.ArrayList;
 
@@ -31,10 +34,12 @@ public class MyRequestedTasks extends Fragment {
     ListView listView;
     ListViewAdapter listViewAdapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
+    ArrayList<Task> assignedTaskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
     final int DELETECODE = 0;
     ArrayList<Task> requestedTasks;
     User user;
+
 
 
     @Override
@@ -48,18 +53,35 @@ public class MyRequestedTasks extends Fragment {
         username = LoginActivity.username;
 //        statusCheckbox=(CheckBox) rootView.findViewById(R.ids.checkBox);
         listView = (ListView) rootView.findViewById(R.id.myTasks);
+        Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
+        String[] menuOptions = new String[]{"Status","Bidded", "Asigned"};
+        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
+        dropdown.setAdapter(arrayAdapter);
 
         //Get tasks using E.S and display tassks
         getTask();
         setListViewAdapter(taskList);
 
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i==0){
+                    setListViewAdapter(taskList);
+                }
+                if(i==1){
+                    setListViewAdapter(biddedTaskList);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         //show bided task
-//        statusCheckbox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showBided();
-//            }
-//        });
+
+
 
 
         //ListView item on click
@@ -73,12 +95,6 @@ public class MyRequestedTasks extends Fragment {
         return rootView;
 
     }
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent(MyRequestedTasks.this, MainMenuActivity.class);
-//        intent.putExtra("username", username);
-//        startActivity(intent);
-//    }
 
     public void setListViewAdapter(ArrayList<Task> tasklist){
         listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listviewitem, tasklist);
@@ -122,14 +138,6 @@ public class MyRequestedTasks extends Fragment {
 
 
     }
-//    public void showBided(){
-//        if(statusCheckbox.isChecked()){
-//            setListViewAdapter(biddedTaskList);
-//        }
-//        else{
-//            setListViewAdapter(taskList);
-//        }
-//    }
 
     public void taskOnClick(int i){
         Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
