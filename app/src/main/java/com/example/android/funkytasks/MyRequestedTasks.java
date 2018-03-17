@@ -46,7 +46,7 @@ public class MyRequestedTasks extends Fragment {
         Intent intent = getActivity().getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        statusCheckbox=(CheckBox) rootView.findViewById(R.id.checkBox);
+//        statusCheckbox=(CheckBox) rootView.findViewById(R.ids.checkBox);
         listView = (ListView) rootView.findViewById(R.id.myTasks);
 
         //Get tasks using E.S and display tassks
@@ -54,12 +54,12 @@ public class MyRequestedTasks extends Fragment {
         setListViewAdapter(taskList);
 
         //show bided task
-        statusCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBided();
-            }
-        });
+//        statusCheckbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showBided();
+//            }
+//        });
 
 
         //ListView item on click
@@ -122,27 +122,28 @@ public class MyRequestedTasks extends Fragment {
 
 
     }
-    public void showBided(){
-        if(statusCheckbox.isChecked()){
-            setListViewAdapter(biddedTaskList);
-        }
-        else{
-            setListViewAdapter(taskList);
-        }
-    }
+//    public void showBided(){
+//        if(statusCheckbox.isChecked()){
+//            setListViewAdapter(biddedTaskList);
+//        }
+//        else{
+//            setListViewAdapter(taskList);
+//        }
+//    }
 
     public void taskOnClick(int i){
         Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
         intent.putExtra("username", username);
         Task detailedTask;
+//
+//        if(statusCheckbox.isChecked()){
+//            detailedTask = biddedTaskList.get(i);
+//        }
+//        else{
+//            detailedTask = taskList.get(i);
+//        }
 
-        if(statusCheckbox.isChecked()){
-            detailedTask = biddedTaskList.get(i);
-        }
-        else{
-            detailedTask = taskList.get(i);
-        }
-
+        detailedTask = taskList.get(i);
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
 
         getTask.execute(detailedTask.getId());

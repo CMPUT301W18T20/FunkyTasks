@@ -33,7 +33,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        statusCheckbox=(CheckBox) findViewById(R.id.checkBox);
+//        statusCheckbox=(CheckBox) findViewById(R.id.checkBox);
         listView = (ListView) findViewById(R.id.myTasks);
 
         //Get tasks using E.S and display tassks
@@ -41,12 +41,12 @@ public class TaskDashboardActivity extends AppCompatActivity {
         setListViewAdapter(taskList);
 
        //show bided task
-        statusCheckbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBided();
-            }
-        });
+//        statusCheckbox.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showBided();
+//            }
+//        });
 
 
         //ListView item on click
