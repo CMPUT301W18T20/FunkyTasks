@@ -11,43 +11,45 @@
         android:id="@+id/requestorTaskName"
         android:layout_width="0dp"
         android:layout_height="57dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Task Name"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/requestorTaskStatus"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/requestorTaskStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="27dp"
         android:layout_marginEnd="16dp"
         android:text="Task Status"
         android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintStart_toEndOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/requestorTaskDescription"
         android:layout_width="0dp"
-        android:layout_height="101dp"
+        android:layout_height="72dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:text="Task Description"
+        app:layout_constraintBottom_toTopOf="@+id/requestorTaskLowestBid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requestorTaskUsernameTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/requestorTaskLowestBidTitle"
         android:layout_width="82dp"
         android:layout_height="31dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:text="Lowest Bid:"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/requestorTaskLowestBid"
@@ -59,21 +61,22 @@
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
         android:text="Lowest Bid"
+        app:layout_constraintBaseline_toBaselineOf="@+id/requestorTaskLowestBidTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/requestorTaskLowestBidTitle"
-        app:layout_constraintTop_toBottomOf="@+id/requestorTaskDescription" />
+        app:layout_constraintStart_toEndOf="@+id/requestorTaskLowestBidTitle" />
 
     <TextView
         android:id="@+id/requestorTaskUsernameTitle"
-        android:layout_width="78dp"
-        android:layout_height="22dp"
+        android:layout_width="96dp"
+        android:layout_height="29dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="64dp"
         android:text="Posted by:"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/requestorTaskUsername"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/requestorTaskName" />
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskLowestBid" />
 
     <TextView
         android:id="@+id/requestorTaskUsername"
@@ -82,9 +85,9 @@
         android:layout_marginEnd="16dp"
         android:text="Task requestor username"
         android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@+id/requestorTaskUsernameTitle"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/requestorTaskUsernameTitle"
-        app:layout_constraintTop_toBottomOf="@+id/requestorTaskName" />
+        app:layout_constraintStart_toEndOf="@+id/requestorTaskUsernameTitle" />
 
     <Button
         android:id="@+id/bidButton"
@@ -97,4 +100,87 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/contactInformation"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Contact Information"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskUsernameTitle" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="112dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="16dp"
+        android:text="Phone number:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contactInformation" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="112dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="16dp"
+        android:text="Email address:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/requestorPhoneNumber"
+        android:layout_width="0dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="Task requestor phone number"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/requestorEmail"
+        android:layout_width="0dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="16dp"
+        android:text="Task requestor email address"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.687"
+        app:layout_constraintStart_toEndOf="@+id/textView3" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="80dp"
+        android:layout_height="27dp"
+        android:layout_marginStart="16dp"
+        android:text="Status:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/requestorTaskName" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Description:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 </android.support.constraint.ConstraintLayout>

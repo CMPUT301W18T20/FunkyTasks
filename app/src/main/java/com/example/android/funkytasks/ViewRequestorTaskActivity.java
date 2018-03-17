@@ -23,11 +23,16 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private TextView statusValue;
     private TextView usernameValue;
     private TextView lowestBidValue;
+    private TextView phoneNumberValue;
+    private TextView emailValue;
     private Double bidAmount;
     private String id;
     private String bidder;
     private String requester;
+    private String phoneNumber;
+    private String email;
     private Task task;
+    private User user;
     private int index;
 
 
@@ -42,6 +47,9 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         statusValue = (TextView) findViewById(R.id.requestorTaskStatus);
         usernameValue = (TextView) findViewById(R.id.requestorTaskUsername);
         lowestBidValue = (TextView) findViewById(R.id.requestorTaskLowestBid);
+        phoneNumberValue = (TextView) findViewById(R.id.requestorPhoneNumber);
+        emailValue = (TextView) findViewById(R.id.requestorEmail);
+
 
         final Intent intent = getIntent();
         bidder = intent.getExtras().getString("username");
@@ -60,8 +68,23 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         }
 
         requester = task.getRequester();
+        Log.e("Return task.getRequester", requester);
 
-                ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+        getUser.execute(requester);
+
+        try {
+            user = getUser.get();
+            Log.e("Return username", user.getUsername());
+        } catch (Exception e) {
+            Log.e("User get", "not workng");
+        }
+
+        email = user.getEmail();
+        phoneNumber = user.getPhonenumber();
+
+
+        ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
         idBids.execute(task.getId()); // grab all current users in the system
 
         ArrayList<Bid> bidsList = new ArrayList<Bid>();
@@ -79,6 +102,8 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
         usernameValue.setText(requester);
+        phoneNumberValue.setText(phoneNumber);
+        emailValue.setText(email);
 
 
 
