@@ -31,6 +31,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView statusValue;
     private ListView bidListView;
     private String id;
+    private Button editBtn;
 
     private String username;
     private Task task;
@@ -53,6 +54,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
         statusValue = (TextView) findViewById(R.id.taskStatus);
+        editBtn = (Button) findViewById(R.id.editTaskButton);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
@@ -64,6 +66,22 @@ public class DashboardRequestedTask extends AppCompatActivity {
         setTaskDetails();
         setBids();
         setAdapter();
+
+        editBtn.setOnClickListener(new View.OnClickListener(){
+            //TODO fix it so that if I edit the title of the task, changes should be reflected in the my requested tasks fragment
+            @Override
+            public void onClick(View v) {
+                if (task.getStatus().equals("requested")) {
+                    Intent editIntent = new Intent(DashboardRequestedTask.this, EditDashboardRequestedTask.class);
+                    editIntent.putExtra("username", username);
+                    editIntent.putExtra("id", id);
+                    startActivityForResult(editIntent, EDIT_CODE);
+                }
+                else{
+                    Toast.makeText(DashboardRequestedTask.this, "Task cannot be edited", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

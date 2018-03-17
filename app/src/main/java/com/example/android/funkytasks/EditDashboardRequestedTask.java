@@ -34,7 +34,6 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
 
         final Intent intent = getIntent();
 
-        //task = (Task)intent.getSerializableExtra("edittask");
         index = intent.getExtras().getInt("index");
         id = intent.getExtras().getString("id");
 
@@ -88,11 +87,4 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this,DashboardRequestedTask.class);
-        intent.putExtra("username",username);
-        intent.putExtra("id",id);
-        startActivity(intent);
-    }
 }

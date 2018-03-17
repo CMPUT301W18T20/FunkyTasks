@@ -1,6 +1,7 @@
 package com.example.android.funkytasks;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -35,7 +36,6 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private User user;
     private int index;
 
-
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +68,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         }
 
         requester = task.getRequester();
-        Log.e("Return task.getRequester", requester);
+        Log.e("task.getRequester", requester);
 
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(requester);
@@ -96,15 +96,12 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
         String lowestBidString = "";
 
-        //TODO SET REQUESTER'S CONTACT INFO TO BE SHOWN ON SCREEN WITH PHONE AND EMAIL (use case 3.3)
-
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
         usernameValue.setText(requester);
         phoneNumberValue.setText(phoneNumber);
         emailValue.setText(email);
-
 
 
         if (task.getStatus().equals("requested")) {
@@ -159,10 +156,6 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
                     }
                 }
-
-
-
-
                 //Integer numBids = task.getNumberOfBids();
                 //numBids += 1;
                 //task.setNumberOfBids(numBids);
@@ -174,6 +167,13 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(ViewRequestorTaskActivity.this, MyTasksActivity.class);
+        intent.putExtra("id",id);
+        startActivity(intent);
     }
 
     public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
