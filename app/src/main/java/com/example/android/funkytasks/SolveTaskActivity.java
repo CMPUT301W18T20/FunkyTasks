@@ -38,27 +38,27 @@ public class SolveTaskActivity extends AppCompatActivity {
         username = LoginActivity.username;
         Log.e("PUBLIC",MainMenuActivity.username);
 
-        //ElasticSearchController.GetDefaultSearchTaskList getDefaultSearchTaskList = new ElasticSearchController.GetDefaultSearchTaskList();
-        //getDefaultSearchTaskList.execute(username);
+        ElasticSearchController.GetDefaultSearchTaskList getDefaultSearchTaskList = new ElasticSearchController.GetDefaultSearchTaskList();
+        getDefaultSearchTaskList.execute(username);
 
-        //try{
-            //taskList = getDefaultSearchTaskList.get();
+        try{
+            taskList = getDefaultSearchTaskList.get();
             //@TODO TEST IF THERES ANYTHING IN Tasks
-        //}
-        //catch(Exception e){
-            //Log.e("Error", "Failed to get default tasks");
-            //return;
-        //}
+        }
+        catch(Exception e){
+            Log.e("Error", "Failed to get default tasks");
+            return;
+        }
 
 
 
 
 
         taskView = (ListView) findViewById(R.id.taskView);
-        //searchListViewAdapter = new SearchListViewAdapter(SolveTaskActivity.this, R.layout.search_listviewitem, taskList);
+        searchListViewAdapter = new SearchListViewAdapter(SolveTaskActivity.this, R.layout.search_listviewitem, taskList);
 
-        //taskView.setAdapter(searchListViewAdapter);
-        //searchListViewAdapter.notifyDataSetChanged();
+        taskView.setAdapter(searchListViewAdapter);
+        searchListViewAdapter.notifyDataSetChanged();
 
 
         final EditText search = (EditText) findViewById(R.id.search);
@@ -90,31 +90,31 @@ public class SolveTaskActivity extends AppCompatActivity {
                 taskView.setAdapter(searchListViewAdapter);
                 searchListViewAdapter.notifyDataSetChanged();
 
-                taskView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(SolveTaskActivity.this,ViewRequestorTaskActivity.class);
-                        intent.putExtra("username",username);
-                        Task detailedTask = taskList.get(i);
 
-                        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            }
+        });
 
-                        getTask.execute(detailedTask.getId());
-                        try{
-                            Task x = getTask.get();
-                            Log.e("Return task title",x.getTitle());
-                        }
-                        catch(Exception e){
-                            Log.e("Task get","not workng");
-                        }
-                        intent.putExtra("task",detailedTask);
-                        intent.putExtra("position",i);
-                        intent.putExtra("id",detailedTask.getId());
-                        startActivity(intent);
-                    }
-                });
+        taskView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(SolveTaskActivity.this,ViewRequestorTaskActivity.class);
+                intent.putExtra("username",username);
+                Task detailedTask = taskList.get(i);
 
+                ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
 
+                getTask.execute(detailedTask.getId());
+                try{
+                    Task x = getTask.get();
+                    Log.e("Return task title",x.getTitle());
+                }
+                catch(Exception e){
+                    Log.e("Task get","not workng");
+                }
+                intent.putExtra("task",detailedTask);
+                intent.putExtra("position",i);
+                intent.putExtra("id",detailedTask.getId());
+                startActivity(intent);
             }
         });
 

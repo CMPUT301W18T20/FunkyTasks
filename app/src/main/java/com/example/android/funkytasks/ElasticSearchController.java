@@ -13,6 +13,7 @@ import com.searchly.jestdroid.JestDroidClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -367,17 +368,16 @@ public class ElasticSearchController {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
-                    for (int i = 0; i < tasks.size(); i++) {
-                        Task task = tasks.get(i);
+
+                    for (Iterator<Task> iterator = tasks.iterator(); iterator.hasNext(); ) {
+                        Task task = iterator.next();
                         Log.e("Task title ", task.getTitle());
                         Log.e("Requester and username ", task.getRequester() + "-" + username);
                         if (task.getRequester().equals(username)) {
-                            Log.e("Deleting ", task.getRequester() + username);
-                            tasks.remove(i);
-                            i -= 1;
+                            Log.e("Deleting ", task.getRequester() + "-" +username);
+                            iterator.remove();
                         } else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")) {
-                            tasks.remove(i);
-                            i -= 1;
+                            iterator.remove();
                         }
                     }
                     return tasks;
@@ -392,11 +392,10 @@ public class ElasticSearchController {
         }
     }
 
-
-    public static class GetDefaultSearchTaskList extends AsyncTask<String,Void,ArrayList<Task>>{
+    public static class GetDefaultSearchTaskList extends AsyncTask<String,Void,ArrayList<Task>> {
 
         @Override
-        protected ArrayList<Task> doInBackground(String... searchParameters){
+        protected ArrayList<Task> doInBackground(String... searchParameters) {
             verifySettings();
 
             int size = 50000;
@@ -413,28 +412,27 @@ public class ElasticSearchController {
 
             Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
 
-            try{
+            try {
                 SearchResult result = client.execute(search);
-                if(result.isSucceeded()){
+                if (result.isSucceeded()) {
                     tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
-                    for (int i = 0; i < tasks.size(); i++){
-                        Task task = tasks.get(i);
-                        if (task.getRequester().equals(username)){
-                            tasks.remove(i);
-                            i -= 1;
-                        }
-                        else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")){
-                            tasks.remove(i);
-                            i -= 1;
+
+                    for (Iterator<Task> iterator = tasks.iterator(); iterator.hasNext(); ) {
+                        Task task = iterator.next();
+                        Log.e("Task title ", task.getTitle());
+                        Log.e("Requester and username ", task.getRequester() + "-" + username);
+                        if (task.getRequester().equals(username)) {
+                            Log.e("Deleting ", task.getRequester() + "-" +username);
+                            iterator.remove();
+                        } else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")) {
+                            iterator.remove();
                         }
                     }
                     return tasks;
-                }
-                else{
+                } else {
                     Log.e("Nothing", "No tasks in database");
                 }
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 Log.e("Error", "Something went wrong with getting all tasks");
             }
 
