@@ -54,7 +54,7 @@ public class MyRequestedTasks extends Fragment {
 //        statusCheckbox=(CheckBox) rootView.findViewById(R.ids.checkBox);
         listView = (ListView) rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
-        String[] menuOptions = new String[]{"Status","Bidded", "Asigned"};
+        String[] menuOptions = new String[]{"Status","Bidded", "Assigned"};
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
@@ -70,6 +70,9 @@ public class MyRequestedTasks extends Fragment {
                 }
                 if(i==1){
                     setListViewAdapter(biddedTaskList);
+                }
+                if(i==2){
+                    setListViewAdapter(assignedTaskList);
                 }
             }
 
@@ -131,10 +134,19 @@ public class MyRequestedTasks extends Fragment {
 
         int size=taskList.size();
         for(int i=0;i<size;i++){
-            if(taskList.get(i).getStatus()=="bidded"){
+            if(taskList.get(i).getStatus().equals("bidded")){
                 biddedTaskList.add(taskList.get(i));
             }
         }
+
+
+        for(int i=0;i<size;i++){
+            if(taskList.get(i).getStatus().equals("assigned")){
+                assignedTaskList.add(taskList.get(i));
+            }
+        }
+
+
 
 
     }
@@ -172,6 +184,7 @@ public class MyRequestedTasks extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == DELETECODE) {
             if (resultCode == RESULT_OK) {
+                assignedTaskList.remove(taskList.get(position));
                 biddedTaskList.remove(taskList.get(position));
                 taskList.remove(position);
                 setListViewAdapter(taskList);

@@ -87,6 +87,9 @@ public class Task implements Serializable{
     public void setBidded(){
         this.status = statuses[1];
     }
+    public void setRequested(){
+        this.status = statuses[0];
+    }
     public void setAssigned(){
         this.status = statuses[2];
     }

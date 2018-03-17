@@ -243,6 +243,12 @@ public class DashboardRequestedTask extends AppCompatActivity {
         ElasticSearchController.deleteBid deleteABid=new ElasticSearchController.deleteBid();
         deleteABid.execute(bidList.get(target).getId());
         bidList.remove(bidList.get(target));
+        if(bidList.isEmpty()){
+            task.setRequested();
+            ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
+            assigned.execute(task);
+        }
+        Toast.makeText(DashboardRequestedTask.this, "acceptted", Toast.LENGTH_SHORT).show();
 
     }
 
