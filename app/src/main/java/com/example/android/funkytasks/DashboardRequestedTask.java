@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,7 +31,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView statusValue;
     private ListView bidListView;
     private String id;
-    private Button deleteBT;
+    //private Button deleteBT;
     private String username;
     private Task task;
     private int index;
@@ -45,10 +46,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardRequestedTasktoolbar);
         setSupportActionBar(myToolbar);
 
-        deleteBT=(Button)findViewById(R.id.deleteButton);
 
         // set bids listview
         bidListView=(ListView)findViewById(R.id.bidlistView);
@@ -127,7 +127,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
 
 
-        // delete a task
+     /*   // delete a task
         deleteBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,7 +136,30 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 setResult(RESULT_OK,intent);
                 finish();
             }
-        });
+        });*/
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.delete_task, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.deleteActionBar:
+                Intent intent = getIntent();
+                onDeleteTask();
+                intent.putExtra("id",id);
+                setResult(RESULT_OK,intent);
+                finish();
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -146,13 +169,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // create an action bar button
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.editmenu, menu);
-        return true;
 
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -166,26 +183,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
         }
     }
 
-    // handle button activities
-    public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
-            case R.id.editButton:
-                if (task.getStatus().equals("requested")){
-                    Intent intent1= new Intent(this,EditDashboardRequestedTask.class);
-                    intent1.putExtra("edittask",task);
-                    intent1.putExtra("index",index);
-                    intent1.putExtra("id",id);
-                    startActivityForResult(intent1,EDIT_CODE);
-                    return true;
-                }
-                else{
-                    Toast.makeText(DashboardRequestedTask.this, "Cannot edit", Toast.LENGTH_SHORT).show();
-                }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
     public void setAdapter(){
         ArrayAdapter<Bid> adpater=new ArrayAdapter<Bid>(DashboardRequestedTask.this, android.R.layout.simple_list_item_1, bidList) ;
         adpater.notifyDataSetChanged();
