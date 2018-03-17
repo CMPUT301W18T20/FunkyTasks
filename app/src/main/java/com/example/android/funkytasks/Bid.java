@@ -61,7 +61,7 @@ public class Bid {
     }
 
     public String getRequester() {
-        return bidder;
+        return requester;
     }
 
     public void setRequester(String requester) {
