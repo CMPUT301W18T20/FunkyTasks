@@ -29,6 +29,9 @@
             android:label="@string/title_activity_create_task"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".TaskDashboardActivity" />
+        <activity android:name=".DashboardProviderTask"
+            android:label="DashboardProviderTask"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".DashboardRequestedTask"
             android:label="DashboardRequeestedTask"
             android:theme="@style/AppTheme.NoActionBar" />

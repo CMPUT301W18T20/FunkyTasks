@@ -35,6 +35,7 @@ public class ListViewAdapter extends ArrayAdapter<Task>{
         TextView status = (TextView) view.findViewById(R.id.taskStatus);
         //TextView bid = (TextView) view.findViewById(R.id.taskBid);
 
+
         title.setText(task.getTitle());
         //description.setText(task.getDescription());
         status.setText(task.getStatus());

@@ -31,7 +31,6 @@ import static android.app.Activity.RESULT_OK;
 public class MyRequestedTasksFragment extends Fragment {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
-    CheckBox statusCheckbox;
     private int position ;
     ListView listView;
     ListViewAdapter listViewAdapter;
@@ -39,7 +38,6 @@ public class MyRequestedTasksFragment extends Fragment {
     ArrayList<Task> assignedTaskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
     final int DELETECODE = 0;
-    final int Assignedcode=0;
     ArrayList<Task> requestedTasks;
     User user;
 
@@ -51,9 +49,6 @@ public class MyRequestedTasksFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_task_dashboard, container, false);
 
         Intent intent = getActivity().getIntent();
-
-
-
 
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;

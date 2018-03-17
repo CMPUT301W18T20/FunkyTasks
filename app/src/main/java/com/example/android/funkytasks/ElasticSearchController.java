@@ -258,6 +258,48 @@ public class ElasticSearchController {
         }
     }
 
+
+    public static class GetAllProviderTask extends AsyncTask<String, Void, ArrayList<Task>> {
+
+        @Override
+        protected ArrayList<Task> doInBackground (String... search_parameters) {
+            verifySettings();
+
+            int size = 50000; // change this number to get back more results
+
+            String query = "{\n" +
+                    "\"size\":" + size + ",\n" +
+                    "\"query\": {\n" +
+                    "\"match\": {\n" +
+                    "\"provider\": {\n" +
+                    "\"query\": \"" + search_parameters[0] +
+                    "\" }\n" +
+                    "}\n" +
+                    "}\n" +
+                    "}";
+
+            ArrayList<Task> tasks;
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+
+            try{
+                SearchResult result = client.execute(search);
+                if(result.isSucceeded()){
+                    tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
+                    return tasks;
+                }
+                else{
+                    Log.e("Nothing", "No tasks in database");
+                }
+            }
+            catch(Exception e){
+                Log.e("Error", "Something went wrong with getting all tasks");
+            }
+
+            return null;
+        }
+    }
+
     public static class updateUser extends AsyncTask<User,Void,Void>{ // update a user's contact info by passing in the user object
 
         @Override

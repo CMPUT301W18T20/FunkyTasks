@@ -68,7 +68,6 @@ public class DashboardRequestedTask extends AppCompatActivity {
         setAdapter();
 
         editBtn.setOnClickListener(new View.OnClickListener(){
-            //TODO fix it so that if I edit the title of the task, changes should be reflected in the my requested tasks fragment
             @Override
             public void onClick(View v) {
                 if (task.getStatus().equals("requested")) {
@@ -246,6 +245,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     public void acceptBid(int target){
         //deleting all tasks except the accepted bid
+        if (task.getStatus().equals("accepted")){
+            Toast.makeText(DashboardRequestedTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Bid acceptedBid=bidList.get(target);
         ElasticSearchController.deleteBid deleteAllBids=new ElasticSearchController.deleteBid();
         for (int index = 0; index < bidList.size(); index++) {
@@ -253,18 +256,23 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 deleteAllBids.execute(bidList.get(index).getId());
             }
         }
+
         //update local bidList
         bidList.clear();
         bidList.add(acceptedBid);
 
-        //change task status to assigned
+        //change task status to assigned and set provider field of the task to the bidder
         task.setAssigned();
+        task.setProvider(username);
         ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
         assigned.execute(task);
         Toast.makeText(DashboardRequestedTask.this, "Task has been assigned", Toast.LENGTH_SHORT).show();
     }
     public void declineBids(int target){
-
+        if (task.getStatus().equals("accepted")){
+            Toast.makeText(DashboardRequestedTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Toast.makeText(DashboardRequestedTask.this, "Declined Bid", Toast.LENGTH_SHORT).show();
 
     }
