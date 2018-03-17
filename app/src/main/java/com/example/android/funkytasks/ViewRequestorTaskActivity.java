@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -170,10 +171,9 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
-        Intent intent = new Intent(ViewRequestorTaskActivity.this, MyTasksActivity.class);
-        intent.putExtra("id",id);
-        startActivity(intent);
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {

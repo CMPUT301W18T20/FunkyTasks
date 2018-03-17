@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
 
@@ -50,6 +51,8 @@ public class MyRequestedTasksFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_task_dashboard, container, false);
 
         Intent intent = getActivity().getIntent();
+
+
 
 
         username = intent.getExtras().getString("username");
@@ -180,6 +183,10 @@ public class MyRequestedTasksFragment extends Fragment {
                 taskList.remove(position);
                 setListViewAdapter(taskList);
 
+            }
+            else if (resultCode == RESULT_CANCELED){
+                getTask();
+                setListViewAdapter(taskList);
             }
         }
 
