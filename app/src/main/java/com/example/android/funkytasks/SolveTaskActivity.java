@@ -54,7 +54,7 @@ public class SolveTaskActivity extends AppCompatActivity {
 
 
 
-        //taskView = (ListView) findViewById(R.id.taskView);
+        taskView = (ListView) findViewById(R.id.taskView);
         //searchListViewAdapter = new SearchListViewAdapter(SolveTaskActivity.this, R.layout.search_listviewitem, taskList);
 
         //taskView.setAdapter(searchListViewAdapter);
