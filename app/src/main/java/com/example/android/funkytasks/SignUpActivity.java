@@ -66,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         if (!email.matches(emailPattern)){
-            Toast.makeText(SignUpActivity.this,"Invalid email address",Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpActivity.this,"Invalid email address format",Toast.LENGTH_SHORT).show();
             return;
         }
 

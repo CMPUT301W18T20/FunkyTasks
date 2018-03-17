@@ -38,20 +38,19 @@ public class SolveTaskActivity extends AppCompatActivity {
         username = LoginActivity.username;
         Log.e("PUBLIC",MainMenuActivity.username);
 
-        ElasticSearchController.GetDefaultSearchTaskList getDefaultSearchTaskList = new ElasticSearchController.GetDefaultSearchTaskList();
-        getDefaultSearchTaskList.execute(username);
-
-        try{
-            taskList = getDefaultSearchTaskList.get();
-            //@TODO TEST IF THERES ANYTHING IN Tasks
-        }
-        catch(Exception e){
-            Log.e("Error", "Failed to get default tasks");
-            return;
-        }
-
-
-
+//        ElasticSearchController.GetDefaultSearchTaskList getDefaultSearchTaskList = new ElasticSearchController.GetDefaultSearchTaskList();
+//        getDefaultSearchTaskList.execute(username);
+//
+//        try{
+//            taskList = getDefaultSearchTaskList.get();
+//            Log.e("tasklist contents",taskList.toString());
+//            //TODO TEST IF THERES ANYTHING IN Tasks
+//            // it may return a null list which is why its giving errors
+//        }
+//        catch(Exception e){
+//            Log.e("Error", "Failed to get default tasks");
+//            return;
+//        }
 
 
         taskView = (ListView) findViewById(R.id.taskView);
@@ -78,6 +77,7 @@ public class SolveTaskActivity extends AppCompatActivity {
 
                 try {
                     taskList = searchTask.get();
+                    Log.e("tasklist",taskList.toString());
                 }
                 catch(Exception e) {
                     Log.e("Error", "Failed to get tasks");

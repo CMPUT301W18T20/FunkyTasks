@@ -33,12 +33,6 @@ public class MainMenuActivity extends AppCompatActivity {
         setTitle("Main Menu");
         Intent intent = getIntent();
 
-//        userArrayList = ((GlobalVariables) this.getApplication()).getUserArrayList();
-//        Task task1 = new Task("Funky", "make ken happy", userArrayList.get(0));
-//        Bid bid1 = new Bid(userArrayList.get(0), 10.0);
-//        task1.addBid(bid1);
-//        tasksArrayList.add(task1);
-
         //username = intent.getExtras().getString("username");
         username = LoginActivity.username;
 
@@ -50,18 +44,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-/*
-        Button profile = (Button) findViewById(R.id.profileActionBar);
-
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainMenuActivity.this, EditProfileActivity.class);
-                intent.putExtra("username", username);
-                startActivityForResult(intent, EDIT_CODE);
-            }
-        });
-*/
         notifyBidsChanged();
 
 
@@ -188,10 +170,6 @@ public class MainMenuActivity extends AppCompatActivity {
         catch(Exception e){
             Log.e("User get in main","not working");
         }
-
-
-
-
 
     }
 }

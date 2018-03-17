@@ -62,7 +62,7 @@ public class MyRequestedTasksFragment extends Fragment {
         dropdown.setAdapter(arrayAdapter);
 
 
-        //Get tasks using E.S and display tasks
+        //Get tasks using Elastic search and display tasks
 
         getTask();
         setListViewAdapter(taskList);

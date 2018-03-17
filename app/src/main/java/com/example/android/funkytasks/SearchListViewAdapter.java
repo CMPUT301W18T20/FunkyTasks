@@ -59,6 +59,7 @@ public class SearchListViewAdapter extends ArrayAdapter<Task> {
         if (task.getStatus().equals("requested")) {
             lowestBidString = "N/A";
         } else {
+            if (bidsList != null && bidsList.size() > 0)
             lowestBidString = Double.toString(getLowestBid(bidsList).getAmount()) + "  by  " + getLowestBid(bidsList).getBidder();
         }
 
