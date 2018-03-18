@@ -26,23 +26,41 @@ public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestC
         solo = new Solo(getInstrumentation(),getActivity());
     }
 
+    public void addTask(){
+        Task newTask = new Task("test1", "test description", "qwerty123", 0);
+        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+        postTask.execute(newTask);
+    }
+
     public void goToEditTask(){
+        addTask();
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
         solo.clickOnView(solo.getView(R.id.fab));
-        solo.waitForActivity("TaskDashboardActivity.class");
-        solo.assertCurrentActivity("Wrong activity", TaskDashboardActivity.class);
-        solo.clickInList(1);
-        //This is not done
+        solo.waitForActivity("MyTasksActivity.class");
+        solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
+        solo.clickOnActionBarItem(R.id.tabItem);
+        solo.clickOnText("test1");
+        solo.clickOnView(solo.getView(R.id.editRequestedTask));
     }
 
+
     public void testClickSave() throws Exception{
+        goToEditTask();
         solo.assertCurrentActivity("Wrong activity", EditDashboardRequestedTask.class);
-        solo.clickOnButton(R.id.buttonDone);
+        String newTitle = "New Title";
+        String newDes = "New Description";
+        solo.clearEditText((EditText) solo.getView(R.id.editTitle));
+        solo.clearEditText((EditText) solo.getView(R.id.editDescription));
+        solo.enterText((EditText) solo.getView(R.id.editTitle), newTitle);
+        solo.enterText((EditText) solo.getView(R.id.editDescription), newDes);
+        solo.clickOnText("Save");
         solo.waitForActivity("DashboardRequestedTask.class");
+        assertTrue(solo.searchText(newTitle));
+        assertTrue(solo.searchText(newDes));
         solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
     }
 
@@ -50,6 +68,7 @@ public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestC
 
     @After
     public void tearDown() throws Exception {
+        solo.clickOnView(solo.getView(R.id.deleteActionBar));
         solo.finishOpenedActivities();
     }
 
