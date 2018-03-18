@@ -30,14 +30,13 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView descriptionValue;
     private TextView statusValue;
     private ListView bidListView;
-    private String id;
-   // private Button editBtn;
+    private String id; // id of the detailed task
 
-    private String username;
+    private String username; // username of the person who logged in
     private Task task;
     private int index;
     private int EDIT_CODE = 1;
-
+    private User bidder;
     ListViewAdapter listViewAdapter;
     ArrayList<Bid> bidList = new ArrayList<Bid>();
 
@@ -63,27 +62,13 @@ public class DashboardRequestedTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-        setTaskDetails();
-        setBids();
-        setAdapter();
-
-        /*editBtn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (task.getStatus().equals("requested")) {
-                    Intent editIntent = new Intent(DashboardRequestedTask.this, EditDashboardRequestedTask.class);
-                    editIntent.putExtra("username", username);
-                    editIntent.putExtra("id", id);
-                    startActivityForResult(editIntent, EDIT_CODE);
-                }
-                else{
-                    Toast.makeText(DashboardRequestedTask.this, "Task cannot be edited", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        */
+        setTaskDetails(); // set the contents of the screen to the task details
+        setBids(); // grab the associated bids of the task
+        setAdapter(); // set adapter ot the list view for bids
 
         bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // if we click on a bid, create a pop up window to display bid details
+
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
@@ -99,11 +84,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
                 Button declineBTN=(Button) View.findViewById(R.id.declineButton);
 
-                //TODO get rating for user
+                //TODO get rating for provider
                 String biddername = bidList.get(i).getBidder();
                 ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
                 getUser.execute(biddername);
-                User bidder;
+
                 try{
                     bidder = getUser.get();
                     Log.e("Success",bidder.getUsername());
@@ -113,7 +98,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 catch (Exception e){
                     Log.e("Error","Unable to get the bidder's username");
                 }
-
+                // set the provider's contact info
                 bidderTextView.setText(biddername);
                 Double bidAmount = bidList.get(i).getAmount();
                 amountTextView.setText("$"+bidAmount.toString());
@@ -155,27 +140,30 @@ public class DashboardRequestedTask extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.deleteActionBar:
+            case R.id.deleteActionBar: // if clicked on the delete button
                 if (task.getStatus().equals("requested")){
                     Intent intent = getIntent();
-                    onDeleteTask();
+                    onDeleteTask(); // delete the task and any bids along with it
                     intent.putExtra("id", id);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
-                Toast.makeText(DashboardRequestedTask.this, "Task cannot be deleted", Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(DashboardRequestedTask.this, "Task cannot be deleted", Toast.LENGTH_SHORT).show();
+                }
                 break;
-            case R.id.editRequestedTask:
+            case R.id.editRequestedTask: // if clicked on the edit button
                 if (task.getStatus().equals("requested")) {
                     Intent editIntent = new Intent(DashboardRequestedTask.this, EditDashboardRequestedTask.class);
                     editIntent.putExtra("username", username);
                     editIntent.putExtra("id", id);
-                    startActivityForResult(editIntent, EDIT_CODE);
+                    startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }
                 else{
                     Toast.makeText(DashboardRequestedTask.this, "Task cannot be edited", Toast.LENGTH_SHORT).show();
                 }
                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -186,7 +174,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
+        if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
             task = (Task) intent.getSerializableExtra("updatedTask");
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
@@ -202,6 +190,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     public void setBids(){
+        // get all bids associated with the task
         ElasticSearchController.GetBidsByTaskID getBids = new ElasticSearchController.GetBidsByTaskID();
         getBids.execute(id);
         try{
@@ -216,7 +205,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     public void setTaskDetails(){
-
+        // get the task details to place on screen
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(id);
         try{
@@ -233,7 +222,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     public void onDeleteTask(){
-
+        // delete the task along with any other associated bids with it
         if (!task.getStatus().equals("requested")) {
             // to delete any bids associated with the task
             ArrayList<Bid> bids;
@@ -259,7 +248,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
     public void acceptBid(int target){
-        //deleting all tasks except the accepted bid
+        //deleting all bids except the accepted bid, and update the task's provider and status
         if (task.getStatus().equals("accepted")){
             Toast.makeText(DashboardRequestedTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
             return;
@@ -278,7 +267,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
         //change task status to assigned and set provider field of the task to the bidder
         task.setAssigned();
-        task.setProvider(username);
+        task.setProvider(bidder.getUsername());
         ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
         assigned.execute(task);
         Toast.makeText(DashboardRequestedTask.this, "Task has been assigned", Toast.LENGTH_SHORT).show();
