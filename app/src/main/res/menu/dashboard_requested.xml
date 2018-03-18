@@ -10,9 +10,9 @@
         app:showAsAction="always" />
 
     <item
-
         android:id="@+id/editRequestedTask"
         android:icon="@drawable/ic_edit"
         android:title=""
         app:showAsAction="always" />
+
 </menu>

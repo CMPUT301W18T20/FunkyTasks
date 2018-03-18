@@ -142,7 +142,7 @@ public class ToSolveTasksFragment extends Fragment {
     }
 
     public void taskOnClick(int i){
-        Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
+        Intent intent = new Intent(getActivity(), DashboardProviderTask.class);
         intent.putExtra("username", username);
         Task detailedTask;
 

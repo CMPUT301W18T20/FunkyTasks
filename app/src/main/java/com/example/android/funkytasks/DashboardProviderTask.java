@@ -41,8 +41,8 @@ public class DashboardProviderTask extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_provider_task);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardProviderTasktoolbar);
-        setSupportActionBar(myToolbar);
+        //Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardProviderTasktoolbar);
+        //setSupportActionBar(myToolbar);
 
         // set bids listview
         bidListView=(ListView)findViewById(R.id.bidlistViewprovider);
@@ -125,7 +125,7 @@ public class DashboardProviderTask extends AppCompatActivity {
 
     }
 
-    @Override
+  /*  @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.delete_task, menu);
@@ -142,7 +142,7 @@ public class DashboardProviderTask extends AppCompatActivity {
         }
     }
 
-
+*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

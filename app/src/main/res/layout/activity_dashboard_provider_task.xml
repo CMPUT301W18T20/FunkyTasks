@@ -19,12 +19,6 @@
             app:toolbarId="@android:drawable/ic_menu_delete">
 
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/DashboardProviderTasktoolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"></android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
