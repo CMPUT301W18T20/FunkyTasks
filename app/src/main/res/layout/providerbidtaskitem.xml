@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/requesterUsernametext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Requester Username"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/requesterUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Requester Username"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/taskTitletext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="Task Title"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/taskTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Task Title"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/taskStatustext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        />
+    <TextView
+        android:id="@+id/taskStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        />
+
+    <TextView
+        android:id="@+id/lowestBidtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lowest Bid"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/lowestBid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lowest Bid"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/myBidtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Bid"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/myBid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Bid"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+</LinearLayout>
