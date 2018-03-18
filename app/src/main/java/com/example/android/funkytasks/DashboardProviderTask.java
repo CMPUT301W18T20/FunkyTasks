@@ -78,7 +78,7 @@ public class DashboardProviderTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-        //change button function
+
 //         TODO implement each button function
         if(task.getStatus().equals("bidded")){
             Log.e("Provider task status",task.getStatus());
@@ -96,86 +96,16 @@ public class DashboardProviderTask extends AppCompatActivity {
         setTaskDetails();
 
 
-//        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardProviderTask.this);
-//                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
-//                Builder.setView(View);
-//                final AlertDialog dialog=Builder.create();
-//                dialog.show();
-//
-//                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-//                TextView contactTextViewPhone =(TextView) View.findViewById(R.id.contactTextView);
-//                TextView contactTextViewEmail = (TextView) View.findViewById(R.id.contactTextViewEmail);
-//                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
-//                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
-//                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
-//
-//                //TODO get rating for user
-//                String biddername = bidList.get(i).getBidder();
-//                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-//                getUser.execute(biddername);
-//                User bidder;
-//                try{
-//                    bidder = getUser.get();
-//                    Log.e("Success",bidder.getUsername());
-//                    contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
-//                    contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
-//                }
-//                catch (Exception e){
-//                    Log.e("Error","Unable to get the bidder's username");
-//                }
-//
-//                bidderTextView.setText(biddername);
-//                Double bidAmount = bidList.get(i).getAmount();
-//                amountTextView.setText("$"+bidAmount.toString());
-//
-//
-//                final int target=i;
-//                //accept or decline bids
-//                acceptBTN.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        acceptBid(target);
-//                        dialog.dismiss();
-//                        statusValue.setText("assigned");
-//                        setAdapter();
-//                    }
-//                });
-//                declineBTN.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        declineBids(target);
-//                        dialog.dismiss();
-//                        setAdapter();
-//                    }
-//                });
-//
-//            }
-//
-//        });
-
-    }
-
-  /*  @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.delete_task, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.deleteActionBar:
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if(task.getStatus().equals("bidded")){
+            multiFunctionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //todo implement this later
+                }
+            });
         }
-    }
 
-*/
+    }
 
 
     @Override
@@ -225,40 +155,5 @@ public class DashboardProviderTask extends AppCompatActivity {
 
     }
 
-
-
-    public void acceptBid(int target){
-        //deleting all tasks except the accepted bid
-        if (task.getStatus().equals("accepted")){
-            Toast.makeText(DashboardProviderTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Bid acceptedBid=bidList.get(target);
-        ElasticSearchController.deleteBid deleteAllBids=new ElasticSearchController.deleteBid();
-        for (int index = 0; index < bidList.size(); index++) {
-            if(!acceptedBid.getId().equals(bidList.get(index).getId())){
-                deleteAllBids.execute(bidList.get(index).getId());
-            }
-        }
-
-        //update local bidList
-        bidList.clear();
-        bidList.add(acceptedBid);
-
-        //change task status to assigned and set provider field of the task to the bidder
-        task.setAssigned();
-        task.setProvider(username);
-        ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
-        assigned.execute(task);
-        Toast.makeText(DashboardProviderTask.this, "Task has been assigned", Toast.LENGTH_SHORT).show();
-    }
-    public void declineBids(int target){
-        if (task.getStatus().equals("accepted")){
-            Toast.makeText(DashboardProviderTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Toast.makeText(DashboardProviderTask.this, "Declined Bid", Toast.LENGTH_SHORT).show();
-
-    }
 
 }
