@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -152,10 +151,6 @@ public class MyTasksActivity extends AppCompatActivity {
             return null;
         }
     }
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this,MainMenuActivity.class);
 
-        startActivity(intent);
-    }
+
 }

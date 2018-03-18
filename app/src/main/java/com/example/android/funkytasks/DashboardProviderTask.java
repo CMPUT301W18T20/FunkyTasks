@@ -65,12 +65,14 @@ public class DashboardProviderTask extends AppCompatActivity {
         id = intent.getExtras().getString("id");
 
         //change button function
-        // TODO implement ench button function
+//         TODO implement each button function
         if(task.getStatus().equals("bidded")){
+            Log.e("Provider task status",task.getStatus());
             multiFunctionButton.setText("UPDATE BID");
         }
 
         if(task.getStatus().equals("assigned")){
+            Log.e("Provider task status",task.getStatus());
             multiFunctionButton.setText("UPDATE STATUS");
         }
         if(task.getStatus().equals("done")){

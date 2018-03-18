@@ -73,10 +73,10 @@ public class ToSolveTasksFragment extends Fragment {
                     setListViewAdapter(biddedTaskList);
                 }
                 if (i == 2) {
-                    setListViewAdapter(SolvedTaskList);
+                    setListViewAdapter(SolvingTaskList);
                 }
                 if (i == 3) {
-                    setListViewAdapter(SolvingTaskList);
+                    setListViewAdapter(SolvedTaskList);
                 }
             }
 
