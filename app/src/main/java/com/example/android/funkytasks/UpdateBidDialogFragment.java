@@ -115,6 +115,14 @@ public class UpdateBidDialogFragment extends DialogFragment {
     }
 
     public void sendToSolveTaskActivity(String username) {
+        if (getActivity().toString().equals("com.example.android.funkytasks.DashboardProviderTask@103149")){
+            // go back to our task dashboard instead
+            Intent intent = new Intent(getActivity(), MyTasksActivity.class);
+            intent.putExtra("username", username);
+            startActivity(intent);
+            return;
+        }
+        // otherwise go back to search screen
         Intent intent = new Intent(getActivity(), SolveTaskActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
