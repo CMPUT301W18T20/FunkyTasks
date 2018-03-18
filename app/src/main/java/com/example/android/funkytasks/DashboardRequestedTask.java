@@ -1,3 +1,13 @@
+/**
+ * This activity displays the requester's tasks and gives the activity_dashboard_requested_task
+ * view functionality.
+ *
+ * Version 1.0.0
+ *
+ * Created on March 8th by Funky Tasks
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
 package com.example.android.funkytasks;
 
 import android.app.AlertDialog;
@@ -23,7 +33,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
 public class DashboardRequestedTask extends AppCompatActivity {
 
     private TextView titleValue;
@@ -41,24 +50,29 @@ public class DashboardRequestedTask extends AppCompatActivity {
     ArrayList<Bid> bidList = new ArrayList<Bid>();
 
 
+    /**
+     * Overrides the default onCreate class and starts the activity with the proper view
+     *
+     * @param savedInstanceState a bundle storing the last state the app was in before it
+     *                           was last closed
+     */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_requested_task);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardRequestedTasktoolbar);
+        Toolbar myToolbar = findViewById(R.id.DashboardRequestedTasktoolbar);
         setSupportActionBar(myToolbar);
 
         // set bids listview
-        bidListView=(ListView)findViewById(R.id.bidlistView);
-        descriptionValue=(TextView)findViewById(R.id.textDescription);
-        titleValue=(TextView) findViewById(R.id.taskName);
-        statusValue = (TextView) findViewById(R.id.taskStatus);
-       // editBtn = (Button) findViewById(R.id.editTaskButton);
+        bidListView = findViewById(R.id.bidlistView);
+        descriptionValue = findViewById(R.id.textDescription);
+        titleValue = findViewById(R.id.taskName);
+        statusValue = findViewById(R.id.taskStatus);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        task = (Task)intent.getSerializableExtra("task");
+        task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
@@ -71,23 +85,23 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
+                final AlertDialog.Builder Builder = new AlertDialog.Builder(DashboardRequestedTask.this);
                 View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
                 Builder.setView(View);
                 final AlertDialog dialog=Builder.create();
                 dialog.show();
 
-                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-                TextView contactTextViewPhone =(TextView) View.findViewById(R.id.contactTextView);
-                TextView contactTextViewEmail = (TextView) View.findViewById(R.id.contactTextViewEmail);
-                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
-                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
-                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
+                TextView bidderTextView = View.findViewById(R.id.bidderTextView);
+                TextView contactTextViewPhone = View.findViewById(R.id.contactTextView);
+                TextView contactTextViewEmail = View.findViewById(R.id.contactTextViewEmail);
+                TextView amountTextView = View.findViewById(R.id.amountTextView);
+                Button acceptBTN = View.findViewById(R.id.acceptButton);
+                Button declineBTN = View.findViewById(R.id.declineButton);
 
                 //TODO get rating for provider
-                String biddername = bidList.get(i).getBidder();
+                String bidderName = bidList.get(i).getBidder();
                 ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-                getUser.execute(biddername);
+                getUser.execute(bidderName);
 
                 try{
                     bidder = getUser.get();
@@ -99,7 +113,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
                     Log.e("Error","Unable to get the bidder's username");
                 }
                 // set the provider's contact info
-                bidderTextView.setText(biddername);
+                bidderTextView.setText(bidderName);
                 Double bidAmount = bidList.get(i).getAmount();
                 amountTextView.setText("$"+bidAmount.toString());
 
@@ -110,7 +124,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
-                            Toast.makeText(DashboardRequestedTask.this, "Already accepted the bid", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashboardRequestedTask.this,
+                                    "Already accepted the bid", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         acceptBid(target);
@@ -123,7 +138,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
-                            Toast.makeText(DashboardRequestedTask.this, "Cannot decline a bid with current task status", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DashboardRequestedTask.this,
+                                    "Cannot decline a bid with current task status",
+                                    Toast.LENGTH_SHORT).show();
                             return;
                         }
                         declineBids(target);
@@ -138,6 +155,12 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Creates the options menu on a given screen using the provided menu
+     *
+     * @param menu a menu item representing the menu to be displayed by the method
+     * @return returns a boolean stating whether or not the menu was successfully instantiated
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -145,6 +168,12 @@ public class DashboardRequestedTask extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Dictates what happens when an item in the options menu is selected.
+     *
+     * @param item a MenuItem representing one item in the list of items
+     * @return returns a boolean value stating whether an item was successfully selected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -158,13 +187,15 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 break;
             case R.id.editRequestedTask: // if clicked on the edit button
                 if (task.getStatus().equals("requested")) {
-                    Intent editIntent = new Intent(DashboardRequestedTask.this, EditDashboardRequestedTask.class);
+                    Intent editIntent = new Intent(DashboardRequestedTask.this,
+                            EditDashboardRequestedTask.class);
                     editIntent.putExtra("username", username);
                     editIntent.putExtra("id", id);
                     startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }
                 else{
-                    Toast.makeText(DashboardRequestedTask.this, "Task cannot be edited", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DashboardRequestedTask.this,
+                            "Task cannot be edited", Toast.LENGTH_SHORT).show();
                 }
                break;
 
@@ -175,6 +206,15 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
 
+    /**
+     * States what happens when an item in the menu list is selected. It starts an activity
+     * with the given intent and sets variables to their proper values.
+     *
+     * @param requestCode an integer stating what type of activity should be performed
+     * @param resultCode an integer that is returned by the activity stating
+     *                   whether the activity was successfully completed or otherwise
+     * @param intent a passed intent that states which activity should be loaded
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -187,12 +227,19 @@ public class DashboardRequestedTask extends AppCompatActivity {
     }
 
 
+    /**
+     * Set the proper adapter for the bid list view
+     */
     public void setAdapter(){
-        BidListViewAdapter adpater=new BidListViewAdapter(DashboardRequestedTask.this, android.R.layout.simple_list_item_1, bidList) ;
+        BidListViewAdapter adpater = new BidListViewAdapter(DashboardRequestedTask.this,
+                android.R.layout.simple_list_item_1, bidList) ;
         adpater.notifyDataSetChanged();
         bidListView.setAdapter(adpater);
     }
 
+    /**
+     * Get the bids from the server in order to display them
+     */
     public void setBids(){
         // get all bids associated with the task
         ElasticSearchController.GetBidsByTaskID getBids = new ElasticSearchController.GetBidsByTaskID();
@@ -208,6 +255,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Retrieve the task details in order to be displayed by the activity
+     */
     public void setTaskDetails(){
         // get the task details to place on screen
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
@@ -225,6 +275,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
         statusValue.setText(task.getStatus());
     }
 
+    /**
+     * States what should happen when a task is deleted.
+     * This function searches for the task and deletes it from the server upon the
+     *  user's prompting.
+     */
     public void onDeleteTask(){
         // delete the task along with any other associated bids with it
         if (!task.getStatus().equals("requested")) {
@@ -244,7 +299,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e("Error", "With getting bids by task id");
             }
-            Toast.makeText(DashboardRequestedTask.this, "Deleted associated bids with task", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DashboardRequestedTask.this,
+                    "Deleted associated bids with task", Toast.LENGTH_SHORT).show();
 
         }
         ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
@@ -254,14 +310,22 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
+    /**
+     * Allows a task requester to accept a bid. This clears all other bids from the bid list
+     * and changes the task status to "accepted"
+     *
+     * @param target an integer representing the index of the bid that is retrieved
+     *               by the activity
+     */
     public void acceptBid(int target){
         //deleting all bids except the accepted bid, and update the task's provider and status
         if (task.getStatus().equals("accepted")){
-            Toast.makeText(DashboardRequestedTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DashboardRequestedTask.this,
+                    "Task has already been assigned", Toast.LENGTH_SHORT).show();
             return;
         }
-        Bid acceptedBid=bidList.get(target);
-        ElasticSearchController.deleteBid deleteAllBids=new ElasticSearchController.deleteBid();
+        Bid acceptedBid = bidList.get(target);
+        ElasticSearchController.deleteBid deleteAllBids = new ElasticSearchController.deleteBid();
         for (int index = 0; index < bidList.size(); index++) {
             if(!acceptedBid.getId().equals(bidList.get(index).getId())){
                 deleteAllBids.execute(bidList.get(index).getId());
@@ -275,16 +339,27 @@ public class DashboardRequestedTask extends AppCompatActivity {
         //change task status to assigned and set provider field of the task to the bidder
         task.setAssigned();
         task.setProvider(bidder.getUsername());
-        ElasticSearchController.updateTask assigned= new ElasticSearchController.updateTask();
+        ElasticSearchController.updateTask assigned = new ElasticSearchController.updateTask();
         assigned.execute(task);
-        Toast.makeText(DashboardRequestedTask.this, "Task has been assigned", Toast.LENGTH_SHORT).show();
+        Toast.makeText(DashboardRequestedTask.this,
+                "Task has been assigned", Toast.LENGTH_SHORT).show();
     }
+
+    /**
+     * Declines a bid placed on a task. This should delete the bid from the bids list but not
+     * delete the task and all other bids from the server.
+     *
+     * @param target an integer representing which list item was selected and should be
+     *               treated by the method
+     */
     public void declineBids(int target){
         if (task.getStatus().equals("accepted")){
-            Toast.makeText(DashboardRequestedTask.this, "Task has already been assigned", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DashboardRequestedTask.this,
+                    "Task has already been assigned", Toast.LENGTH_SHORT).show();
             return;
         }
-        Toast.makeText(DashboardRequestedTask.this, "Declined Bid", Toast.LENGTH_SHORT).show();
+        Toast.makeText(DashboardRequestedTask.this,
+                "Declined Bid", Toast.LENGTH_SHORT).show();
 
     }
 

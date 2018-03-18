@@ -53,7 +53,8 @@ public class DashboardProviderTask extends AppCompatActivity {
     /**
      * Overrides the onCreate super class and instantiates the proper view for this class
      * 
-     * @param savedInstanceState
+     * @param savedInstanceState a bundle of the previous saved instance state that is used to
+     *                           load a snapshot of the app in the state it was last in
      */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -64,17 +65,17 @@ public class DashboardProviderTask extends AppCompatActivity {
 
         // set bids listview
 
-        descriptionValue=(TextView)findViewById(R.id.textDescriptionprovider);
-        titleValue=(TextView) findViewById(R.id.taskNamerequester);
-        statusValue = (TextView) findViewById(R.id.taskStatustext);
-        multiFunctionButton=(Button) findViewById(R.id.multiFunction);
-        lowestBidValue = (TextView) findViewById(R.id.lowestBidAmount);
-        myBidValue = (TextView) findViewById(R.id.myBidAmount);
+        descriptionValue = findViewById(R.id.textDescriptionprovider);
+        titleValue = findViewById(R.id.taskNamerequester);
+        statusValue = findViewById(R.id.taskStatustext);
+        multiFunctionButton = findViewById(R.id.multiFunction);
+        lowestBidValue = findViewById(R.id.lowestBidAmount);
+        myBidValue = findViewById(R.id.myBidAmount);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        task = (Task)intent.getSerializableExtra("task");
+        task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
@@ -100,23 +101,11 @@ public class DashboardProviderTask extends AppCompatActivity {
             multiFunctionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //todo implement this later
+                    //TODO implement this later
                 }
             });
         }
 
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == EDIT_CODE && resultCode == RESULT_OK) {
-            task = (Task) intent.getSerializableExtra("updatedTask");
-            titleValue.setText(task.getTitle());
-            descriptionValue.setText(task.getDescription());
-
-        }
     }
 
 
@@ -130,7 +119,7 @@ public class DashboardProviderTask extends AppCompatActivity {
 
         }
         catch(Exception e){
-            Log.e("Task get","not workng");
+            Log.e("Task get","not working");
         }
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
@@ -152,8 +141,5 @@ public class DashboardProviderTask extends AppCompatActivity {
                 break;
             }
         }
-
     }
-
-
 }
