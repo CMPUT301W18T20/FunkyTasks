@@ -18,7 +18,7 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<CreateTaskA
     private Solo solo;
     private Task createdTask;
 
-    private Task testingUS010101 = new Task("Testing create task","test","qwerty123",0);
+    private Task testingUS010101 = new Task("Testing create task","test","qwerty123");
 
 
     public CreateTaskTest() {

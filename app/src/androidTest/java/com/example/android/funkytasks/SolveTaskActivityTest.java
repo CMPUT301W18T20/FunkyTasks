@@ -27,7 +27,6 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
     @Before
     public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
-
     }
 /*
     public void addUser(){

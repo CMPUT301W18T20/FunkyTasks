@@ -1,12 +1,15 @@
 package com.example.android.funkytasks;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +19,7 @@ import static org.junit.Assert.*;
 public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestCase2<LoginActivity>{
         private Solo solo;
         private Task newTask;
+        private User user;
 
     public EditDashboardRequestedTaskTest(){
         super(LoginActivity.class);
@@ -33,8 +37,30 @@ public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestC
     }
 
     public void goToEditTask(){
-        addTask();
+
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
+        user = new User("qwerty123", "1234567890", "IT@ualbertac.ca");
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(); // grab all current users in the system
+        ArrayList<User> userList = new ArrayList<User>();
+
+        try {
+            userList = allUsers.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of users");
+        }
+
+        for (User postedUser : userList) {
+            Log.e("ALl usernames", postedUser.getUsername());
+            if (postedUser.getUsername().equals(user.getUsername())) {
+                break;
+            }
+            else {
+                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+                postUser.execute(user);
+            }
+        }
+        addTask();
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");

@@ -2,16 +2,20 @@ package com.example.android.funkytasks;
 
 import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
+
+import java.util.ArrayList;
 
 /**
  * Created by ${fc1} on 2018-03-15.
  */
 public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
     private Solo solo;
+    private User user;
 
     public MainMenuActivityTest(){
         super(com.example.android.funkytasks.LoginActivity.class);
@@ -27,7 +31,28 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
 
     public void login() throws Exception{
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
+        user = new User("qwerty123", "1234567890", "IT@ualbertac.ca");
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(); // grab all current users in the system
+        ArrayList<User> userList = new ArrayList<User>();
+
+        try {
+            userList = allUsers.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of users");
+        }
+
+        for (User postedUser : userList) {
+            Log.e("ALl usernames", postedUser.getUsername());
+            if (postedUser.getUsername().equals(user.getUsername())) {
+                break;
+            }
+            else {
+                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+                postUser.execute(user);
+            }
+        }
+        solo.enterText((EditText) solo.getView(R.id.editLoginName), user.getUsername());
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
