@@ -33,6 +33,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * This class displays the tasks and their bids to a requester. It allows the requester to
+ * view the details of the task as well as the details of the bids that were placed on the task.
+ * The requester can accept or decline tasks from this page.
+ */
 public class DashboardRequestedTask extends AppCompatActivity {
 
     private TextView titleValue;

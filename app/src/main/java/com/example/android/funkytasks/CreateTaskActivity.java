@@ -20,10 +20,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * This activity allows a task requester to create a new task and post it to the server.
+ */
 public class CreateTaskActivity extends AppCompatActivity {
 
-//    EditText title = (EditText)findViewById(R.id.AddTitle);
-//    EditText description = (EditText) findViewById(R.id.AddDescription);
+//    EditText title = findViewById(R.id.AddTitle);
+//    EditText description = findViewById(R.id.AddDescription);
     private String titleValue;
     private String descriptionValue;
     private String username;

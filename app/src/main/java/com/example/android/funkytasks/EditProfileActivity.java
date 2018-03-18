@@ -1,3 +1,13 @@
+/**
+ * This activity allows a user to edit their profile
+ *
+ * Version 1.0.0
+ *
+ * Created on March 8th by Funky Tasks
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.app.Activity;
@@ -12,15 +22,25 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+/**
+ * This activity allows a user to edit their profile information
+ */
 public class EditProfileActivity extends AppCompatActivity {
     private String username;
     private User user;
 
+    /**
+     * Overrides the built-in onCreate function and prepares the app for interaction.
+     * This function loads the proper view and locates all the text fields
+     * and buttons that are needed to interact with the activity.
+     *
+     * @param savedInstanceState a bundle holding the state the app was in last time it was open
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-        Button done = (Button) findViewById(R.id.doneEditProfile);
+        Button done = findViewById(R.id.doneEditProfile);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");

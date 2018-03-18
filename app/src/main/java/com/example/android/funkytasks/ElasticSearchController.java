@@ -1,8 +1,15 @@
-package com.example.android.funkytasks;
 
 /**
+ * This class holds our the Elastic Search functions used in our project.
+ *
+ * Version 1.0.0
+ *
  * Created by MonicaB on 2018-02-20.
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
  */
+
+package com.example.android.funkytasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -26,6 +33,9 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
+/**
+ * The controller for our Elastic Search functions for the project
+ */
 public class ElasticSearchController {
 
     private static JestDroidClient client;
@@ -36,6 +46,12 @@ public class ElasticSearchController {
     private static String bidType = "bid";
 
     public static class PostUser extends AsyncTask<User, Void, Void> { // add new user to database
+        /**
+         * Tells the elastic search what to do in the background
+         *
+         * @param newUser a User representing a new user to be added to the database
+         * @return returns null to indicate it's working
+         */
         @Override
         protected Void doInBackground(User... newUser) {
             verifySettings();
@@ -61,8 +77,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Posts a task to the server
+     */
     public static class PostTask extends AsyncTask<Task, Void, Task> { // adds new task for the user
 
+        /**
+         * Posts a task to the server. This process runs in the background of other processes
+         *
+         * @param params represents a task to be posted
+         * @return returns the task if it is successful, returns null otherwise
+         */
         @Override
         protected Task doInBackground(Task... params) {
             verifySettings();
@@ -90,8 +115,19 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * Gets the user from the server
+     */
     public static class GetUser extends AsyncTask<String, Void, User> { // grabs user from database
 
+        /**
+         * Performs these actions in the background while it's looking for the user
+         *
+         * @param search_parameters a string representing the parameters the elastic search
+         *                          should use when conducting its search
+         * @return returns the users it finds in the search; null if none are found, a user
+         *          if one or more are found
+         */
         @Override
         protected User doInBackground(String... search_parameters) {
             verifySettings();
@@ -108,16 +144,17 @@ public class ElasticSearchController {
                     "    }\n" +
                     "}";
 
-            Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(userType).build();
+            Search search = new Search.Builder(query).addIndex(indexType).addType(userType).build();
 
             try {
-                JestResult result = client.execute(search); // Use JestResult for one result and searchresult for all results to add to a list
+                /* Use JestResult for one result and search result for all results to add to a list */
+                JestResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     returnUser = result.getSourceAsObject(User.class);
-                    Log.e("returnUSer worksss",returnUser.getUsername());
+                    Log.e("returnUser works",returnUser.getUsername());
                     return returnUser;
                 } else {
-                    Log.e("Nothing", "Theres no user in database");
+                    Log.e("Nothing", "There's no user in database");
                 }
             } catch (Exception e) {
                 Log.e("Error", "Something went wrong with getting user!");
@@ -126,8 +163,19 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Returns all the users in the database
+     */
     public static class GetAllUsers extends AsyncTask<String, Void, ArrayList<User>> { // grabs user from database
 
+        /**
+         * This class performs these actions in the background while it searches for
+         * all the users in the database.
+         *
+         * @param search_parameters a string of search parameters that's fed to the elastic search
+         * @return returns the users that were found in the search; null if none were found,
+         *          an array list if one or more were found
+         */
         @Override
         protected ArrayList<User> doInBackground(String... search_parameters) {
             verifySettings();
@@ -160,9 +208,20 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Deletes a user from the database
+     */
     public static class deleteUser extends AsyncTask<String,Void,Void>{
         // Input a user's id to delete
         // Will output a log message if it is successful
+
+        /**
+         * Runs this operations in the background to find and delete a particular user
+         *
+         * @param givenUser a string representing the user the search controller needs to
+         *                  find and remove
+         * @return returns null
+         */
         @Override
         protected Void doInBackground(String... givenUser){
             verifySettings();
@@ -187,8 +246,20 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * This function searches for and returns a task
+     */
     public static class GetTask extends AsyncTask<String,Void,Task>{
         // grabs details of one specific task
+
+        /**
+         * Performed in the background, this function searches for and returns a task based
+         * on the given search parameters.
+         *
+         * @param search_parameters a string representing the parameters the search controller
+         *                          takes in to perform its search
+         * @return returns the task; null if nothing is found, a single task if it is found
+         */
         @Override
         protected Task doInBackground(String... search_parameters){
             verifySettings();
@@ -197,13 +268,13 @@ public class ElasticSearchController {
             String query = "{\n" +
                     "  \"query\": { \"term\": {\"_id\": \"" + search_parameters[0] + "\"} }\n" + "}";
 
-            Search search = (Search) new Search.Builder(query).addIndex(indexType).addType(taskType).build();
+            Search search = new Search.Builder(query).addIndex(indexType).addType(taskType).build();
 
             try {
                 JestResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     returnTask = result.getSourceAsObject(Task.class);
-                    Log.e("returntask works",returnTask.getTitle());
+                    Log.e("return task works",returnTask.getTitle());
                     return returnTask;
                 } else {
                     Log.e("Nothing", "Theres no task in database");
@@ -217,8 +288,17 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * Returns all the tasks in the server
+     */
     public static class GetAllTask extends AsyncTask<String, Void, ArrayList<Task>> {
 
+        /**
+         * Searches for and returns all the tasks in the server.
+         *
+         * @param search_parameters a string representing the parameters for the search
+         * @return returns null if no tasks are found, returns an array list if tasks are found
+         */
         @Override
         protected ArrayList<Task> doInBackground (String... search_parameters) {
             verifySettings();
@@ -259,10 +339,18 @@ public class ElasticSearchController {
     }
 
 
-
-
+    /**
+     * Returns all the users who are fulfilling a task
+     */
     public static class GetAllProviderTask extends AsyncTask<String, Void, ArrayList<Task>> {
 
+        /**
+         * This function searches for all the task providers in the database and returns them
+         * if they're found.
+         *
+         * @param search_parameters a string representing the parameters needed for the search
+         * @return returns null if no providers are found, returns an array list if they are found
+         */
         @Override
         protected ArrayList<Task> doInBackground (String... search_parameters) {
             verifySettings();
@@ -302,8 +390,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Locates and updates a user's information
+     */
     public static class updateUser extends AsyncTask<User,Void,Void>{ // update a user's contact info by passing in the user object
 
+        /**
+         * Replaces a user in the server with their updated user information.
+         *
+         * @param currentUser a user object that represents the user to be located and replaced
+         * @return returns null
+         */
         @Override
         protected Void doInBackground (User... currentUser) {
             verifySettings();
@@ -327,9 +424,18 @@ public class ElasticSearchController {
 
     }
 
-
+    /**
+     * Updates a task in the server
+     */
     public static class updateTask extends AsyncTask<Task,Void,Void>{ // update a user's task by passing in the user object
 
+        /**
+         * Called when a task provider changes the details of their task,
+         * this function searches for the task and replaces it with the updated version of itself
+         *
+         * @param currentTask a task object representing the task to be located and replaced
+         * @return returns null
+         */
         @Override
         protected Void doInBackground (Task... currentTask) {
             verifySettings();
@@ -357,9 +463,18 @@ public class ElasticSearchController {
         }
     }
 
-
+    /**
+     * Deletes a task from the server
+     */
     public static class deleteTask extends AsyncTask<String,Void,Void>{
         // Deletes task from global list by inputting the task id
+
+        /**
+         * This function searches for and deletes a task from the server.
+         *
+         * @param givenTask a string representing the task to be located and deleted
+         * @return returns null
+         */
         @Override
         protected Void doInBackground(String... givenTask){
             verifySettings();
@@ -383,8 +498,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Searches the database for a particular task
+     */
     public static class searchTask extends AsyncTask<String,Void,ArrayList<Task>> {
 
+        /**
+         * Searches for and returns tasks based on given search criteria
+         *
+         * @param searchParameters a string representing the parameters needed for the search
+         * @return returns the tasks if they are found, returns null otherwise
+         */
         @Override
         protected ArrayList<Task> doInBackground(String... searchParameters) {
             verifySettings();
@@ -436,8 +560,18 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     *  If a user doesn't know what to search for, it displays all tasks posted by other users
+     */
     public static class GetDefaultSearchTaskList extends AsyncTask<String,Void,ArrayList<Task>> {
 
+        /**
+         * This function displays all the tasks other users have posted if no search criteria
+         * are given. This function is not currently being implemented by our project.
+         * 
+         * @param searchParameters a string representing the parameters needed for the search
+         * @return returns tasks if they're found, returns null otherwise
+         */
         @Override
         protected ArrayList<Task> doInBackground(String... searchParameters) {
             verifySettings();
@@ -484,13 +618,22 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Posts a bid to the server
+     */
     public static class PlaceBid extends AsyncTask<Bid, Void, Bid> { // adds new bid for the user
 
+        /**
+         * Posts a bid to the server when someone posts a bid on a task
+         *
+         * @param params a bid object that is used to perform the search
+         * @return returns null
+         */
         @Override
         protected Bid doInBackground(Bid... params) {
             verifySettings();
 
-            Bid bid = (Bid) params[0];
+            Bid bid = params[0];
 
             // POSTING TASK TO ENTIRE BID DATABASE
             Index index = new Index.Builder(bid).index(indexType).type(bidType).build();
@@ -515,8 +658,18 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Locates and updates a bid in the server
+     */
     public static class updateBid extends AsyncTask<Bid,Void,Void>{
 
+        /**
+         * When a task provider changes their bid, this function searches for the bid
+         * and replaces it with the updated version of itself.
+         *
+         * @param currentBid a Bid object representing the bid to search for and replace
+         * @return returns null
+         */
         @Override
         protected Void doInBackground (Bid... currentBid) {
             verifySettings();
@@ -545,9 +698,18 @@ public class ElasticSearchController {
     }
 
 
-
+    /**
+     * Returns all the bids that one user has placed
+     */
     public static class GetBidsByBidder extends AsyncTask<String, Void, ArrayList<Bid>> {
 
+        /**
+         * This function returns all the bids that one user has placed on any and all tasks
+         * they have bidded on.
+         *
+         * @param search_parameters a string representing the parameters needed for the search
+         * @return returns bids if they exist, returns null otherwise
+         */
         @Override
         protected ArrayList<Bid> doInBackground (String... search_parameters) {
             verifySettings();
@@ -587,8 +749,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Returns all the bids placed on a certain task
+     */
     public static class GetBidsByTaskID extends AsyncTask<String, Void, ArrayList<Bid>> {
 
+        /**
+         * Returns all the bids placed on one task
+         *
+         * @param search_parameters a string representing the parameters needed for the search
+         * @return returns the bids if they exist, returns null otherwise
+         */
         @Override
         protected ArrayList<Bid> doInBackground (String... search_parameters) {
             verifySettings();
@@ -628,8 +799,17 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Returns the bids posted by one particular user
+     */
     public static class GetBidsByRequester extends AsyncTask<String, Void, ArrayList<Bid>> {
 
+        /**
+         * Returns all the bids one requester has posted.
+         *
+         * @param search_parameters a string representing the parameters needed for the search
+         * @return returns the bids if they exist, returns null otherwise
+         */
         @Override
         protected ArrayList<Bid> doInBackground (String... search_parameters) {
             verifySettings();
@@ -670,9 +850,19 @@ public class ElasticSearchController {
     }
 
 
+    /**
+     * Searches for and deletes a bid
+     */
     public static class deleteBid extends AsyncTask<String,Void,Void>{
         // Deletes one Bid (to delete more than one bid run this function on a array list)
         // Input the bid id
+
+        /**
+         * Deletes a bid from the database.
+         *
+         * @param givenBid a string representing the bid to be searched for
+         * @return returns null
+         */
         @Override
         protected Void doInBackground(String... givenBid){
             verifySettings();
@@ -696,6 +886,9 @@ public class ElasticSearchController {
         }
     }
 
+    /**
+     * Verifies the settings for the database and Elastic Search controller
+     */
     public static void verifySettings() {
         if (client == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder(database);

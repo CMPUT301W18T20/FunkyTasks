@@ -13,7 +13,11 @@ package com.example.android.funkytasks;
 
 import io.searchbox.annotations.JestId;
 
-
+/**
+ * This is a constructor for all the bids in the project.
+ * It stores a bid and its information to ensure each bid has the same format
+ * throughout the project.
+ */
 public class Bid {
 
     //title,bid amount,bidder
