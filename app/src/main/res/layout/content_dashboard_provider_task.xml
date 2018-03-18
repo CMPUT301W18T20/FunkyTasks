@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    app:layout_constraintBottom_toBottomOf="parent"
+
     android:padding="16dp"
     android:background="@drawable/rsz_bg">
 
@@ -96,6 +96,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
+        android:layout_marginBottom="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -106,64 +107,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100"
-        android:textStyle="bold"
         android:textColor="#ffffff"
         app:layout_constraintLeft_toRightOf="@+id/textBidprovider"
         app:layout_constraintBottom_toBottomOf="@id/textBidprovider"/>
 
 
     <TextView
-        android:id="@+id/myBidAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="10"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
-        app:layout_constraintLeft_toRightOf="@+id/TextView3"
-        app:layout_constraintBottom_toBottomOf="@id/TextView3"/>
-
-    <TextView
-        android:id="@+id/TextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="REQUESTED BY"
-        android:textColor="#ffffff"
-        android:layout_marginTop="40dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/myBidAmount" />
-    <TextView
-        android:id="@+id/taskRequesterUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ken"
-        android:textColor="#ffffff"
-        android:textSize="20dp"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TextView" />
-    <TextView
-        android:id="@+id/taskRequesterPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="7806660000"
-        android:textColor="#ffffff"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/taskRequesterUsername" />
-    <TextView
-        android:id="@+id/taskRequesterEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ken@gmail.com"
-        android:textColor="#ffffff"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/taskRequesterPhone" />
-
+    android:id="@+id/myBidAmount"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="10"
+    android:textColor="#ffffff"
+    app:layout_constraintLeft_toRightOf="@+id/TextView3"
+    app:layout_constraintBottom_toBottomOf="@id/TextView3"/>
 
 
 

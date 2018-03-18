@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  */
 public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestCase2<LoginActivity>{
         private Solo solo;
-
+        private Task newTask;
 
     public EditDashboardRequestedTaskTest(){
         super(LoginActivity.class);
@@ -27,7 +27,7 @@ public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestC
     }
 
     public void addTask(){
-        Task newTask = new Task("test1", "test description", "qwerty123", 0);
+        newTask = new Task("test1", "test description", "qwerty123");
         ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
         postTask.execute(newTask);
     }
@@ -68,7 +68,8 @@ public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestC
 
     @After
     public void tearDown() throws Exception {
-        solo.clickOnView(solo.getView(R.id.deleteActionBar));
+        ElasticSearchController.deleteTask DeTask = new ElasticSearchController.deleteTask();
+        DeTask.execute(newTask.getId());
         solo.finishOpenedActivities();
     }
 

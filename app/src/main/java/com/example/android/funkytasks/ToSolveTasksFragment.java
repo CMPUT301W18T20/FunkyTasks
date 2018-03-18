@@ -54,7 +54,7 @@ public class ToSolveTasksFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
-        String[] menuOptions = new String[]{"TASK STATUS", "BIDDED ON", "SOLVING", "SOLVED"};
+        String[] menuOptions = new String[]{"MY ASSOCIATED TASKS", "BIDDED ON", "SOLVING", "SOLVED"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, menuOptions);
         dropdown.setAdapter(arrayAdapter);
 

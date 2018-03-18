@@ -40,7 +40,7 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
     }
 
     public void addTask(){
-        Task newTask = new Task("Dummy task", "Testing for delete", "qwerty123", 0);
+        Task newTask = new Task("Dummy task", "Testing for delete", "qwerty123");
         ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
         postTask.execute(newTask);
     }

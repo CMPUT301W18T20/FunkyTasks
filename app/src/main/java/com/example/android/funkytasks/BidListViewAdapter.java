@@ -1,3 +1,13 @@
+/**
+ * A view adapter to properly display the bids
+ *
+ * Version 1.0.0
+ *
+ * Created by jimi on 2018-03-16.
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Context;
@@ -10,14 +20,21 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by jimi on 2018-03-16.
- */
+
 
 public class BidListViewAdapter extends ArrayAdapter<Bid> {
+
+    /**
+     * This is a view adapter to properly display all the bids.
+     *
+     * @param context the context of the app where the bids list will be displayed
+     * @param resource a context instantiation parameter needed for the super class constructor
+     * @param objects a list instantiation needed for the super class constructor
+     */
     public BidListViewAdapter(@NonNull Context context, int resource, @NonNull List objects) {
        super(context, resource, objects);
     }
+
     @Override
     public View getView(int position, View view, ViewGroup parent){
         Bid bid =getItem(position);
@@ -25,8 +42,8 @@ public class BidListViewAdapter extends ArrayAdapter<Bid> {
             view = LayoutInflater.from(getContext()).inflate(R.layout.bidlistviewitem, parent, false);
         }
 
-        TextView bidder = (TextView) view.findViewById(R.id.bidderTextView);
-        TextView amount = (TextView) view.findViewById(R.id.amountTextView);
+        TextView bidder = view.findViewById(R.id.bidderTextView);
+        TextView amount = view.findViewById(R.id.amountTextView);
 
 
         bidder.setText(bid.getBidder());
