@@ -63,12 +63,12 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
         solo.assertCurrentActivity("Wrong activity", SolveTaskActivity.class);
     }
 
-    public void testTaskDashboard() throws Exception{
+    public void testMyTask() throws Exception{
         login();
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
         solo.clickOnView(solo.getView(R.id.fab));
-        solo.waitForActivity("TaskDashboardActivity.class");
-        solo.assertCurrentActivity("Wrong activity", TaskDashboardActivity.class);
+        solo.waitForActivity("MyTasksActivity.class");
+        solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
     }
 
     @Override
