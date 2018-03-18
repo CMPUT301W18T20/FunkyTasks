@@ -37,6 +37,10 @@ public class DashboardProviderTask extends AppCompatActivity {
     private TextView descriptionValue;
     private TextView lowestBidValue;
     private TextView myBidValue;
+    private TextView requesterName;
+    private TextView requesterEmail;
+    private TextView requesterPhone;
+
 
     private TextView statusValue;
     private String id;
@@ -71,6 +75,9 @@ public class DashboardProviderTask extends AppCompatActivity {
         multiFunctionButton = findViewById(R.id.multiFunction);
         lowestBidValue = findViewById(R.id.lowestBidAmount);
         myBidValue = findViewById(R.id.myBidAmount);
+        requesterName = (TextView) findViewById(R.id.taskRequesterUsername);
+        requesterEmail = (TextView) findViewById(R.id.taskRequesterEmail);
+        requesterPhone = (TextView) findViewById(R.id.taskRequesterPhone);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
@@ -141,5 +148,19 @@ public class DashboardProviderTask extends AppCompatActivity {
                 break;
             }
         }
+        requesterName.setText(task.getRequester());
+        ElasticSearchController.GetUser getRequester= new ElasticSearchController.GetUser();
+        getRequester.execute(task.getRequester());
+        User requester=new User("","","");
+        try{
+            requester = getRequester.get();
+            Log.e("Return requester",requester.getUsername());
+        }
+        catch(Exception e){
+            Log.e("Requester name get","not workng");
+        }
+        requesterPhone.setText(requester.getPhonenumber());
+        requesterEmail.setText(requester.getEmail());
+
     }
 }
