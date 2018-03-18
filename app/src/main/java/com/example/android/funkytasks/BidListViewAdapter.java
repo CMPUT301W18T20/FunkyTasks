@@ -37,6 +37,14 @@ public class BidListViewAdapter extends ArrayAdapter<Bid> {
        super(context, resource, objects);
     }
 
+    /**
+     * Overrides the original getView function. Returns the view where the list should be displayed.
+     *
+     * @param position an integer representing the position of the list
+     * @param view a view object representing the view where the list is to be displayed
+     * @param parent a view group object that holds the parent view for this activity
+     * @return returns the desired view
+     */
     @Override
     public View getView(int position, View view, ViewGroup parent){
         Bid bid =getItem(position);

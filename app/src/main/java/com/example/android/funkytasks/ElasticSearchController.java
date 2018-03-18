@@ -568,7 +568,7 @@ public class ElasticSearchController {
         /**
          * This function displays all the tasks other users have posted if no search criteria
          * are given. This function is not currently being implemented by our project.
-         * 
+         *
          * @param searchParameters a string representing the parameters needed for the search
          * @return returns tasks if they're found, returns null otherwise
          */
