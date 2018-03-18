@@ -1,3 +1,13 @@
+/**
+ * This activity allows the user to create a task.
+ *
+ * Version 1.0.0
+ *
+ * Created on March 8th by Funky Tasks
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -61,7 +71,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                     return;
                 }
 
-                final Task task = new Task(titleValue,descriptionValue,username, 0);
+                final Task task = new Task(titleValue,descriptionValue,username);
 
                 intent.putExtra("username",username);
                 intent.putExtra("task",task);

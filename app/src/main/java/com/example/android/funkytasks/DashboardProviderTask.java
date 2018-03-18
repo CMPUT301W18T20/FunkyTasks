@@ -1,3 +1,13 @@
+/**
+ * This activity displays the provider's tasks and gives the activity_dashboard_provider_task
+ * view functionality.
+ *
+ * Version 1.0.0
+ *
+ * Created on March 8th by Funky Tasks
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
 package com.example.android.funkytasks;
 
 import android.app.AlertDialog;
@@ -40,7 +50,11 @@ public class DashboardProviderTask extends AppCompatActivity {
     ListViewAdapter listViewAdapter;
     ArrayList<Bid> bidList = new ArrayList<Bid>();
 
-
+    /**
+     * Overrides the onCreate super class and instantiates the proper view for this class
+     * 
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
