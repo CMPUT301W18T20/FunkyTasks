@@ -70,8 +70,8 @@ public class DashboardProviderTask extends AppCompatActivity {
         //Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardProviderTasktoolbar);
         //setSupportActionBar(myToolbar);
 
-        // set bids listview
 
+        // defining our views
         descriptionValue = findViewById(R.id.textDescriptionprovider);
         titleValue = findViewById(R.id.taskNamerequester);
         statusValue = findViewById(R.id.taskStatustext);
@@ -82,16 +82,16 @@ public class DashboardProviderTask extends AppCompatActivity {
         requesterPhone = (TextView) findViewById(R.id.taskRequesterPhone);
 
         final Intent intent = getIntent();
-        username = intent.getExtras().getString("username");
+        username = intent.getExtras().getString("username"); // username of the user who logged in
         username = LoginActivity.username;
         task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-        multiFunctionButton = findViewById(R.id.multiFunction);
+        multiFunctionButton = findViewById(R.id.multiFunction); // update bid button
 
 
-        if(task.getStatus().equals("bidded")){
+        if(task.getStatus().equals("bidded")){ // if the task status is bidded, show the bid button otherwise hide it
             Log.e("Provider task status",task.getStatus());
             multiFunctionButton.setText("UPDATE BID");
         }
@@ -100,14 +100,14 @@ public class DashboardProviderTask extends AppCompatActivity {
         }
 
 
-        setTaskDetails();
+        setTaskDetails(); // set task details for the activity
 
 
-        if(task.getStatus().equals("bidded")){
+        if(task.getStatus().equals("bidded")){ // if the task status is bidded, allow us to update our bid directly here
             multiFunctionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO implement this later
+
                     // If user has never placed a bid on the task yet:
                     ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
                     idBids.execute(id); // grab all current users in the system
@@ -147,8 +147,6 @@ public class DashboardProviderTask extends AppCompatActivity {
                         }
                     }
 
-
-
                 }
             });
         }
@@ -174,6 +172,7 @@ public class DashboardProviderTask extends AppCompatActivity {
 
 
     public void setTaskDetails(){
+        // set the task details of the activity with the requester's info and the lowest bid
 
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(id);

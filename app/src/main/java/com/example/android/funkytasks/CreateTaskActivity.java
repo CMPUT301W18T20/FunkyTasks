@@ -27,10 +27,9 @@ public class CreateTaskActivity extends AppCompatActivity {
 
 //    EditText title = findViewById(R.id.AddTitle);
 //    EditText description = findViewById(R.id.AddDescription);
-    private String titleValue;
-    private String descriptionValue;
-    private String username;
-    private User user;
+    private String titleValue; // value of the task title
+    private String descriptionValue; // value of the task description
+    private String username; // username of user who logged in
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +41,13 @@ public class CreateTaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        setTitle("Create a Task");
 
         final Intent intent = getIntent();
 
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
 
+        // defining our edit text views
         final EditText title = (EditText)findViewById(R.id.AddTitle);
         final EditText description = (EditText)findViewById(R.id.AddDescription);
 
@@ -56,12 +55,12 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() { // if user clicks on button, check if task input is validated
             @Override
             public void onClick(View view) {
 
                 titleValue = title.getText().toString();            // grab title from edit text input
-                if (titleValue.length() >= 30 || titleValue.length() <= 0) {                    // validating name input length
+                if (titleValue.length() >= 30 || titleValue.length() <= 0) {  // validating name input length
                     Toast.makeText(getApplicationContext(), "Title is invalid length. Must be between 1-29 characters. ", Toast.LENGTH_SHORT)
                             .show();
                     return;
@@ -77,7 +76,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                 final Task task = new Task(titleValue,descriptionValue,username);
 
                 intent.putExtra("username",username);
-                intent.putExtra("task",task);
+                intent.putExtra("task",task); // send task our to main activity to post to server
                 setResult(RESULT_OK,intent);
                 finish();
 
