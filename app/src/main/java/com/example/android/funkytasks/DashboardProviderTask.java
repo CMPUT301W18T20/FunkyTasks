@@ -82,65 +82,14 @@ public class DashboardProviderTask extends AppCompatActivity {
         setTaskDetails();
 
 
-//        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardProviderTask.this);
-//                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
-//                Builder.setView(View);
-//                final AlertDialog dialog=Builder.create();
-//                dialog.show();
-//
-//                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-//                TextView contactTextViewPhone =(TextView) View.findViewById(R.id.contactTextView);
-//                TextView contactTextViewEmail = (TextView) View.findViewById(R.id.contactTextViewEmail);
-//                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
-//                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
-//                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
-//
-//                //TODO get rating for user
-//                String biddername = bidList.get(i).getBidder();
-//                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-//                getUser.execute(biddername);
-//                User bidder;
-//                try{
-//                    bidder = getUser.get();
-//                    Log.e("Success",bidder.getUsername());
-//                    contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
-//                    contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
-//                }
-//                catch (Exception e){
-//                    Log.e("Error","Unable to get the bidder's username");
-//                }
-//
-//                bidderTextView.setText(biddername);
-//                Double bidAmount = bidList.get(i).getAmount();
-//                amountTextView.setText("$"+bidAmount.toString());
-//
-//
-//                final int target=i;
-//                //accept or decline bids
-//                acceptBTN.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        acceptBid(target);
-//                        dialog.dismiss();
-//                        statusValue.setText("assigned");
-//                        setAdapter();
-//                    }
-//                });
-//                declineBTN.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        declineBids(target);
-//                        dialog.dismiss();
-//                        setAdapter();
-//                    }
-//                });
-//
-//            }
-//
-//        });
+        if(task.getStatus().equals("bidded")){
+            multiFunctionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //todo implement this later
+                }
+            });
+        }
 
     }
 
