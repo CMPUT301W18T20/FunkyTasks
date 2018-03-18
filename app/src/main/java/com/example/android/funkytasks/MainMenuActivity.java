@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
 public class MainMenuActivity extends AppCompatActivity {
     public static ArrayList<Task> tasksArrayList = new ArrayList<Task>();
@@ -24,6 +25,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public static String username;
     final int ADD_CODE = 1;
     final int EDIT_CODE = 2;
+    private ArrayList<String> taskTitles;
 
 
     @Override
@@ -74,6 +76,57 @@ public class MainMenuActivity extends AppCompatActivity {
                 popup.getMenuInflater()
                         .inflate(R.menu.pop_up_notis, popup.getMenu());
                 notifyBidsChanged(popup);
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        Intent intent = new Intent(MainMenuActivity.this, EditDashboardRequestedTask.class);
+                        Integer taskIndex = item.getItemId();
+                        Log.e("Task index", taskIndex.toString());
+//                        String taskName = taskTitles.get(taskIndex + 1);
+//
+//                        ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
+//                        getAllTask.execute(username);
+//                        try {
+//                            ArrayList<Task> taskList = getAllTask.get();
+//                            Iterator itr = taskList.iterator();
+//                            while (itr.hasNext()) {
+//                                Task x = (Task) itr.next();
+//                                ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+//                                if (x.getTitle().equals(taskName) && x.getRequester().equals(username)) {
+//                                    String taskId = x.getId();
+//                                    intent.putExtra("username", username);
+//                                    intent.putExtra("id", taskId);
+//                                    startActivity(intent);
+//                                }
+//                            }
+//                        } catch (Exception e) {
+//                            Log.e("Error", "We aren't getting the list of tasks");
+//
+//                        }
+
+//                        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+//
+//                        getTask.execute(taskTitle);
+//                        try {
+//                            Task task = getTask.get();
+//                            Log.e("Task id", task.getId());
+////                            String taskId = task.getId();
+////                            intent.putExtra("username", username);
+////                            intent.putExtra("id", taskId);
+//                        } catch (InterruptedException e) {
+//                            Log.e("This did", "not work");
+//                        } catch (ExecutionException e) {
+//                            Log.e("This also", "did not work");
+//                        }
+
+//                        startActivity(intent);
+
+
+                        return true;
+                    }
+                });
+
                 popup.show();
 
             default:
@@ -166,8 +219,10 @@ public class MainMenuActivity extends AppCompatActivity {
                 idBids.execute(x.getId()); // grab all current users in the system
                 ArrayList<Bid> xBids = idBids.get();
                 if (x.getRequester().equals(username) && xBids.size() > 0) {
-                    popup.getMenu().add("You have " + xBids.size() +
-                            " new bids on task: " + x.getTitle());
+                    String displayString = "You have " + xBids.size() +
+                            " new bids on task: " + x.getTitle();
+                    popup.getMenu().add(displayString);
+                    taskTitles.add(x.getTitle());
                 }
             }
 

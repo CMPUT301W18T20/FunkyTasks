@@ -25,7 +25,6 @@ public class Task implements Serializable{
     private String provider;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
-    private Integer numberOfBids;
 
     @JestId
     private String id;
@@ -38,7 +37,6 @@ public class Task implements Serializable{
         this.requester = requester; // username of the user who requests the task
         this.provider = null; // username of user who is solving the task
         this.status = statuses[0];
-        this.numberOfBids = numberOfBids;
     }
 
     public void setId(String newId){
@@ -48,7 +46,7 @@ public class Task implements Serializable{
     public String getId(){
         return this.id;
     }
-  public String getProvider() {
+    public String getProvider() {
         return provider;
     }
 
@@ -87,8 +85,5 @@ public class Task implements Serializable{
         return this.requester;
     }
 
-    public void setNumberOfBids(Integer numberOfBids) { this.numberOfBids = numberOfBids; }
-
-    public Integer getNumberOfBids() { return this.numberOfBids; }
 
 }
