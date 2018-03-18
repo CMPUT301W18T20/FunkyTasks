@@ -271,6 +271,9 @@ public class MainMenuActivity extends AppCompatActivity {
      * @param popup a popup menu item that specifies which popup to load
      */
     public void loadNotificationItem(PopupMenu popup) {
+        if (taskIds.size() == 0) {
+            return;
+        }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
 
