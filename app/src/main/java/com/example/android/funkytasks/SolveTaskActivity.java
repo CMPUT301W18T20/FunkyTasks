@@ -85,6 +85,16 @@ public class SolveTaskActivity extends AppCompatActivity {
 
                 }
 
+                // filtering unwanted results out of search
+                for (int index = 0; index < taskList.size(); index++){
+                    if (taskList.get(index).getStatus().equals("assigned")){
+                        taskList.remove(index);
+                    }
+                    else if (taskList.get(index).getStatus().equals("done")){
+                        taskList.remove(index);
+                    }
+                }
+
                 searchListViewAdapter = new SearchListViewAdapter(SolveTaskActivity.this, R.layout.search_listviewitem, taskList);
 
                 taskView.setAdapter(searchListViewAdapter);

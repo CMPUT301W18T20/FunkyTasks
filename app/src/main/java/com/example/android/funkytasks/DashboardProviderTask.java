@@ -124,21 +124,21 @@ public class DashboardProviderTask extends AppCompatActivity {
 
                     if (bidsList.isEmpty()) {
                         DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                        placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
+                        placeBidFragment = newInstance(placeBidFragment, task.getRequester(), username, id);
                         placeBidFragment.show(getSupportFragmentManager(), "Bids");
 
                     } else {
 
                         for (Bid eachBid : bidsList) {
-                            if (eachBid.getBidder().equals(bidder)) {
+                            if (eachBid.getBidder().equals(username)) {
                                 DialogFragment updateBidFragment = new UpdateBidDialogFragment();
-                                updateBidFragment = newInstance(updateBidFragment, task.getRequester(), bidder, id);
+                                updateBidFragment = newInstance(updateBidFragment, task.getRequester(), username, id);
                                 updateBidFragment.show(getSupportFragmentManager(), "Bids");
                                 break;
                             }
                             if (i == sizeBidsList - 1) {
                                 DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                                placeBidFragment = newInstance(placeBidFragment, task.getRequester(), bidder, id);
+                                placeBidFragment = newInstance(placeBidFragment, task.getRequester(), username, id);
                                 placeBidFragment.show(getSupportFragmentManager(), "Bids");
                             }
 
@@ -153,6 +153,23 @@ public class DashboardProviderTask extends AppCompatActivity {
             });
         }
 
+    }
+
+    public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
+
+        // Supply num input as an argument.
+        Bundle bundle = new Bundle();
+        bundle.putString("requester", requester);
+        bundle.putString("bidder", bidder);
+        bundle.putString("id", id);
+
+
+        Log.e("requester / newInstance", requester);
+        Log.e("bidder in newInstance", bidder);
+        Log.e("id in new instance", id);
+        bidFragment.setArguments(bundle);
+
+        return bidFragment;
     }
 
 
