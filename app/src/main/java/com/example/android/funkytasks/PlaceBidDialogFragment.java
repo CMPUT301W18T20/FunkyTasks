@@ -1,3 +1,13 @@
+/**
+ * This is a fragment that loads a popup for a user to place a bid on a task
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 
@@ -18,6 +28,9 @@ import com.example.android.funkytasks.R;
 
 import java.util.ArrayList;
 
+/**
+ * This fragment allows a user to place a bid on a task
+ */
 public class PlaceBidDialogFragment extends DialogFragment {
 
     private Double bidAmount;
@@ -27,6 +40,12 @@ public class PlaceBidDialogFragment extends DialogFragment {
 
     Task task;
 
+    /**
+     * Creates a dialogue popup that loads when a user wants to place a bid on a task
+     *
+     * @param savedInstanceState a bundle representing the most recent state of the view
+     * @return returns a dialogue window
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -89,6 +108,12 @@ public class PlaceBidDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Loads the solve activity task view
+     *
+     * @param username the username of the user that has placed the bid, which is to be
+     *                 passed to the new intent
+     */
     public void sendToSolveTaskActivity(String username) {
         Intent intent = new Intent(getActivity(), SolveTaskActivity.class);
         intent.putExtra("username", username);

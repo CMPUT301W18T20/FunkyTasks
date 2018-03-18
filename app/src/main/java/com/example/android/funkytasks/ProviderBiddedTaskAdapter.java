@@ -1,3 +1,14 @@
+/**
+ * An adapter for the screen that displays when you are a task provider and select
+ * a task that you have bidded on in order to view its details.
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Context;
@@ -13,15 +24,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
+/**
+ * This adapter allows a provider to view all the tasks they have bidded on
+ */
 public class ProviderBiddedTaskAdapter extends ArrayAdapter<Task>{
 
     private String username = LoginActivity.username;
 
+    /**
+     * This is a view adapter to properly display the tasks a provider has bidded on
+     *
+     * @param context the context of the app where the bids list will be displayed
+     * @param resource a context instantiation parameter needed for the super class constructor
+     * @param objects a list instantiation needed for the super class constructor
+     */
     public ProviderBiddedTaskAdapter(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);
     }
 
+    /**
+     * Overrides the original getView function. Returns the view where the list should be displayed.
+     *
+     * @param position an integer representing the position of the list
+     * @param view a view object representing the view where the list is to be displayed
+     * @param parent a view group object that holds the parent view for this activity
+     * @return returns the desired view
+     */
     @Override
     public View getView(int position, View view, ViewGroup parent){
         // Get the data item for this position
@@ -36,7 +64,7 @@ public class ProviderBiddedTaskAdapter extends ArrayAdapter<Task>{
             return view;
         }
 
-        ArrayList<Bid> bids = new ArrayList<Bid>();
+        ArrayList<Bid> bids = new ArrayList<>();
         ElasticSearchController.GetBidsByTaskID getBidsByTaskID = new ElasticSearchController.GetBidsByTaskID();
         getBidsByTaskID.execute(task.getId());
         try{
@@ -50,11 +78,11 @@ public class ProviderBiddedTaskAdapter extends ArrayAdapter<Task>{
         // As a task provider, I want to view a list of tasks that I have bidded on, each with its task requester username,
         // title, status, lowest bid so far, and my bid.
 
-        TextView requesterUsername = (TextView) view.findViewById(R.id.requesterUsername);
-        TextView title = (TextView) view.findViewById(R.id.taskTitle);
-        TextView status = (TextView) view.findViewById(R.id.taskStatus);
-        TextView lowestbid = (TextView) view.findViewById(R.id.lowestBid);
-        TextView myBid = (TextView) view.findViewById(R.id.myBid);
+        TextView requesterUsername = view.findViewById(R.id.requesterUsername);
+        TextView title = view.findViewById(R.id.taskTitle);
+        TextView status = view.findViewById(R.id.taskStatus);
+        TextView lowestbid = view.findViewById(R.id.lowestBid);
+        TextView myBid = view.findViewById(R.id.myBid);
 
         Bid lowest = getLowestBid(bids);
         Bid mybid;
@@ -77,6 +105,12 @@ public class ProviderBiddedTaskAdapter extends ArrayAdapter<Task>{
     }
 
 
+    /**
+     * Returns the lowest bid that is currently placed on a task.
+     *
+     * @param bidsList an array list of all the bids currently placed on a task
+     * @return returns a double containing the lowest bid
+     */
     private static Bid getLowestBid(ArrayList<Bid> bidsList){
         int i = 0;
         Bid lowestBid = bidsList.get(i);
