@@ -13,6 +13,7 @@ package com.example.android.funkytasks;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -88,8 +89,6 @@ public class DashboardProviderTask extends AppCompatActivity {
         multiFunctionButton = findViewById(R.id.multiFunction);
 
 
-
-//         TODO implement each button function
         if(task.getStatus().equals("bidded")){
             Log.e("Provider task status",task.getStatus());
             multiFunctionButton.setText("UPDATE BID");
@@ -107,6 +106,47 @@ public class DashboardProviderTask extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //TODO implement this later
+                    // If user has never placed a bid on the task yet:
+                    ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+                    idBids.execute(id); // grab all current users in the system
+
+                    ArrayList<Bid> bidsList = new ArrayList<Bid>();
+                    try {
+                        bidsList = idBids.get();
+                    } catch (Exception e) {
+                        Log.e("Error", "Failed to get list of bidders");
+                    }
+
+                    int i = 0;
+                    int sizeBidsList = bidsList.size();
+
+                    if (bidsList.isEmpty()) {
+                        DialogFragment placeBidFragment = new PlaceBidDialogFragment();
+                        placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
+                        placeBidFragment.show(getSupportFragmentManager(), "Bids");
+
+                    } else {
+
+                        for (Bid eachBid : bidsList) {
+                            if (eachBid.getBidder().equals(bidder)) {
+                                DialogFragment updateBidFragment = new UpdateBidDialogFragment();
+                                updateBidFragment = newInstance(updateBidFragment, task.getRequester(), bidder, id);
+                                updateBidFragment.show(getSupportFragmentManager(), "Bids");
+                                break;
+                            }
+                            if (i == sizeBidsList - 1) {
+                                DialogFragment placeBidFragment = new PlaceBidDialogFragment();
+                                placeBidFragment = newInstance(placeBidFragment, task.getRequester(), bidder, id);
+                                placeBidFragment.show(getSupportFragmentManager(), "Bids");
+                            }
+
+                            i++;
+
+                        }
+                    }
+
+
+
                 }
             });
         }
