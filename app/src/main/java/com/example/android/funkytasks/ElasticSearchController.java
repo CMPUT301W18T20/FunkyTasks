@@ -1,6 +1,6 @@
 
 /**
- * This class holds our the Elastic Search functions used in our project.
+ * ElasticSearchController
  *
  * Version 1.0.0
  *

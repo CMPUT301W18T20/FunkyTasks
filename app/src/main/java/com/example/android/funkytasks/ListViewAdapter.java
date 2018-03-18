@@ -1,5 +1,5 @@
 /**
- * A list adapter for the list items.
+ * ListViewAdapter
  *
  * Version 1.0.0
  *

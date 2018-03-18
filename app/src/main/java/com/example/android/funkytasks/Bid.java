@@ -1,6 +1,5 @@
 /**
- * The Bid class is a template for storing all the bids in our project. Every bid
- * is instantiated using this class.
+ * Bid
  *
  * Version 1.0.0
  *
@@ -15,7 +14,7 @@ import io.searchbox.annotations.JestId;
 
 /**
  * This is a constructor for all the bids in the project.
- * It stores a bid and its information to ensure each bid has the same format
+ * It serves as a template for a bid and its information and ensures each bid has the same format
  * throughout the project.
  */
 public class Bid {

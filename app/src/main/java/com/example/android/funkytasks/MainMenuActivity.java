@@ -1,5 +1,5 @@
 /**
- * This is the main activity/home screen for the app.
+ * MainMenuActivity
  *
  * Version 1.0.0
  *

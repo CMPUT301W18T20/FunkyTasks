@@ -1,6 +1,5 @@
 /**
- * This activity displays the provider's tasks and gives the activity_dashboard_provider_task
- * view functionality.
+ * DashboardProviderTask
  *
  * Version 1.0.0
  *

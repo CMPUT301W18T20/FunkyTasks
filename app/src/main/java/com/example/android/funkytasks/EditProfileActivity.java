@@ -1,5 +1,5 @@
 /**
- * This activity allows a user to edit their profile
+ * EditProfileActivity
  *
  * Version 1.0.0
  *

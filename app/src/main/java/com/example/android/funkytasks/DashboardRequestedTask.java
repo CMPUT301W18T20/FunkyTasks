@@ -1,6 +1,5 @@
 /**
- * This activity displays the requester's tasks and gives the activity_dashboard_requested_task
- * view functionality.
+ * DashboardRequestedTask
  *
  * Version 1.0.0
  *

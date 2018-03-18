@@ -1,5 +1,5 @@
 /**
- * This activity allows the user to create a task.
+ * CreateTaskActivity
  *
  * Version 1.0.0
  *

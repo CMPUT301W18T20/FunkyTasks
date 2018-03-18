@@ -1,5 +1,5 @@
 /**
- * This activity is displayed to a new user of the app and allows them to create an account
+ * SignUpActivity
  *
  * Version 1.0.0
  *
@@ -23,7 +23,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
- * This activity allows a user to make an account for the app
+ * This activity allows a new user to make an account with the app for the first time
  */
 public class SignUpActivity extends AppCompatActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();

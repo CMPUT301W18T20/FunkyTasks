@@ -1,5 +1,5 @@
 /**
- * This activity allows a user to login to the app.
+ * LoginActivity
  *
  * Version 1.0.0
  *

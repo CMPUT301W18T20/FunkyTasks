@@ -1,6 +1,5 @@
 /**
- * An adapter for the screen that displays the tasks that are returned by searching
- * for tasks
+ * SearchListViewAdapter
  *
  * Version 1.0.0
  *

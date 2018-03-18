@@ -1,5 +1,5 @@
 /**
- * This activity displays a user's tasks
+ * MyTasksActivity
  *
  * Version 1.0.0
  *

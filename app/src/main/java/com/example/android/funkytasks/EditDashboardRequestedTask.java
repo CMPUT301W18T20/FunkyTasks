@@ -1,5 +1,5 @@
 /**
- * This activity allows a user to edit a task that has status "requested"
+ * EditDashboardRequestedTask
  *
  * Version 1.0.0
  *

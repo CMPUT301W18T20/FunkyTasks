@@ -1,6 +1,6 @@
 /**
  *
- * Task class
+ * Task
  *
  * Version 1.0.0
  *

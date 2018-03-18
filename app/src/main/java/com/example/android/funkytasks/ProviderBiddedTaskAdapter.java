@@ -1,6 +1,5 @@
 /**
- * An adapter for the screen that displays when you are a task provider and select
- * a task that you have bidded on in order to view its details.
+ * ProviderBiddedTaskAdapter
  *
  * Version 1.0.0
  *

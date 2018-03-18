@@ -1,3 +1,13 @@
+/**
+ * ToSolveTasksFragment
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -25,7 +35,9 @@ import java.util.ArrayList;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-
+/**
+ * This fragment displays all the tasks a user has been accepted for and must now solve.
+ */
 public class ToSolveTasksFragment extends Fragment {
 
     ArrayList<User> userArrayList = new ArrayList<User>();
@@ -42,6 +54,16 @@ public class ToSolveTasksFragment extends Fragment {
     User user;
 
 
+    /**
+     * Creates the view and allows the user to interact with it. This function also finds and
+     * displays all the tasks that a given user has to solve and states what happens
+     * when they select one of these tasks.
+     *
+     * @param inflater a layout inflator that helps the view display
+     * @param container a view group that states where the view should be displayed
+     * @param savedInstanceState a bundle representing the most recent save state of the app
+     * @return returns a view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -107,6 +129,12 @@ public class ToSolveTasksFragment extends Fragment {
     }
 
 
+    /**
+     * Sets the list view adapter to the proper adapter so that the objects can be displayed
+     * properly
+     *
+     * @param tasklist an array list holding all the tasks
+     */
     public void setListViewAdapter(ArrayList<Task> tasklist) {
         ProviderBiddedTaskAdapter adapter= new ProviderBiddedTaskAdapter(getActivity(), R.layout.listviewitem, tasklist);
         adapter.notifyDataSetChanged();
@@ -114,6 +142,10 @@ public class ToSolveTasksFragment extends Fragment {
 
     }
 
+    /**
+     * Adds the tasks that the user has bid on the the list of tasks so they can be accessed
+     * by the rest of the class
+     */
     public void getTask() {
         ArrayList<Bid> allBids;
 
@@ -165,6 +197,12 @@ public class ToSolveTasksFragment extends Fragment {
 
     }
 
+    /**
+     * States what happens when an item in the list is clicked on. The tasks details are loaded
+     * and a new intent is started.
+     *
+     * @param i an integer representing the index of the item in the list
+     */
     public void taskOnClick(int i) {
         Intent intent = new Intent(getActivity(), DashboardProviderTask.class);
         intent.putExtra("username", username);

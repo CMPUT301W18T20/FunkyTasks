@@ -1,5 +1,5 @@
 /**
- * A view adapter to properly display the bids
+ * BidListViewAdapter
  *
  * Version 1.0.0
  *

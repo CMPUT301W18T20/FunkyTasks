@@ -1,5 +1,5 @@
 /**
- * This is a fragment that loads the requested tasks for a particular view.
+ * MyRequestedTasksFragment
  *
  * Version 1.0.0
  *

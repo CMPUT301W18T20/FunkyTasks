@@ -1,6 +1,5 @@
 /**
- * This class holds global variables for the entire project. We are no longer using this class
- * but we haven't removed all instances of it so it's not yet safe to delete.
+ * GlobalVariables
  *
  * Version 1.0.0
  *
@@ -16,7 +15,8 @@ import android.app.Application;
 import java.util.ArrayList;
 
 /**
- * Global variables for the project
+ * This class holds global variables for the entire project. We are not currently using this class
+ * but we haven't removed all instances of it so it's not yet safe to delete.
  */
 public class GlobalVariables extends Application{
 

@@ -1,5 +1,5 @@
 /**
- * This is a fragment that loads a popup for a user to place a bid on a task
+ * PlaceBidDialogFragment
  *
  * Version 1.0.0
  *
