@@ -31,6 +31,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView statusValue;
     private ListView bidListView;
     private String id; // id of the detailed task
+    private TextView providerName;
+    private TextView providerEmail;
+    private TextView providerPhone;
+    private TextView provideByShow;
+
 
     private String username; // username of the person who logged in
     private Task task;
@@ -53,8 +58,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
         descriptionValue=(TextView)findViewById(R.id.textDescription);
         titleValue=(TextView) findViewById(R.id.taskName);
         statusValue = (TextView) findViewById(R.id.taskStatus);
-       // editBtn = (Button) findViewById(R.id.editTaskButton);
-
+        providerName = (TextView) findViewById(R.id.taskProviderUsername);
+        providerEmail = (TextView) findViewById(R.id.taskProviderEmail);
+        providerPhone = (TextView) findViewById(R.id.taskRequesterPhone);
+        provideByShow =(TextView) findViewById(R.id.TextView);
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
@@ -66,68 +73,68 @@ public class DashboardRequestedTask extends AppCompatActivity {
         setBids(); // grab the associated bids of the task
         setAdapter(); // set adapter ot the list view for bids
 
-        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            // if we click on a bid, create a pop up window to display bid details
+        if(task.getStatus().equals("bidded")){
+            bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                // if we click on a bid, create a pop up window to display bid details
 
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
-                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
-                Builder.setView(View);
-                final AlertDialog dialog=Builder.create();
-                dialog.show();
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    final AlertDialog.Builder Builder=new AlertDialog.Builder(DashboardRequestedTask.this);
+                    View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
+                    Builder.setView(View);
+                    final AlertDialog dialog=Builder.create();
+                    dialog.show();
 
-                TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
-                TextView contactTextViewPhone =(TextView) View.findViewById(R.id.contactTextView);
-                TextView contactTextViewEmail = (TextView) View.findViewById(R.id.contactTextViewEmail);
-                TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
-                Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
-                Button declineBTN=(Button) View.findViewById(R.id.declineButton);
+                    TextView bidderTextView =(TextView) View.findViewById(R.id.bidderTextView);
+                    TextView contactTextViewPhone =(TextView) View.findViewById(R.id.contactTextView);
+                    TextView contactTextViewEmail = (TextView) View.findViewById(R.id.contactTextViewEmail);
+                    TextView amountTextView =(TextView) View.findViewById(R.id.amountTextView);
+                    Button acceptBTN=(Button) View.findViewById(R.id.acceptButton);
+                    Button declineBTN=(Button) View.findViewById(R.id.declineButton);
 
-                //TODO get rating for provider
-                String biddername = bidList.get(i).getBidder();
-                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-                getUser.execute(biddername);
+                    //TODO get rating for provider
+                    String biddername = bidList.get(i).getBidder();
+                    ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+                    getUser.execute(biddername);
 
-                try{
-                    bidder = getUser.get();
-                    Log.e("Success",bidder.getUsername());
-                    contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
-                    contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
-                }
-                catch (Exception e){
-                    Log.e("Error","Unable to get the bidder's username");
-                }
-                // set the provider's contact info
-                bidderTextView.setText(biddername);
-                Double bidAmount = bidList.get(i).getAmount();
-                amountTextView.setText("$"+bidAmount.toString());
-
-
-                final int target=i;
-                //accept or decline bids
-                acceptBTN.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        acceptBid(target);
-                        dialog.dismiss();
-                        statusValue.setText("assigned");
-                        setAdapter();
+                    try{
+                        bidder = getUser.get();
+                        Log.e("Success",bidder.getUsername());
+                        contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
+                        contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
                     }
-                });
-                declineBTN.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        declineBids(target);
-                        dialog.dismiss();
-                        setAdapter();
+                    catch (Exception e){
+                        Log.e("Error","Unable to get the bidder's username");
                     }
-                });
+                    // set the provider's contact info
+                    bidderTextView.setText(biddername);
+                    Double bidAmount = bidList.get(i).getAmount();
+                    amountTextView.setText("$"+bidAmount.toString());
 
-            }
 
-        });
+                    final int target=i;
+                    //accept or decline bids
+                    acceptBTN.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            acceptBid(target);
+                            dialog.dismiss();
+                            statusValue.setText("assigned");
+                            setAdapter();
+                        }
+                    });
+                    declineBTN.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            declineBids(target);
+                            dialog.dismiss();
+                            setAdapter();
+                        }
+                    });
 
+                }
+            });
+        }
     }
 
     @Override
@@ -219,6 +226,25 @@ public class DashboardRequestedTask extends AppCompatActivity {
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
+
+        if(task.getStatus().equals("assigned")){
+
+            providerName.setText(task.getProvider());
+            ElasticSearchController.GetUser getProvider= new ElasticSearchController.GetUser();
+            getProvider.execute(task.getProvider());
+            User provider=new User("","","");
+            try{
+                provider = getProvider.get();
+                Log.e("Return requester",provider.getUsername());
+            }
+            catch(Exception e){
+                Log.e("Requester name get","not workng");
+            }
+            providerPhone.setText(provider.getPhonenumber());
+            providerEmail.setText(provider.getEmail());
+            provideByShow.setText("PROVIDE BY");
+        }
+
     }
 
     public void onDeleteTask(){
