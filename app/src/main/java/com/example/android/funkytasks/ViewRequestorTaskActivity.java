@@ -1,3 +1,13 @@
+/**
+ * ViewRequesterTaskActivity
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.app.Dialog;
@@ -18,6 +28,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * This activity allows a user to view the activities of a task that they have searched
+ * for and selected.
+ */
 public class ViewRequestorTaskActivity extends AppCompatActivity {
 
     private TextView titleValue;
@@ -38,19 +52,25 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private int index;
     private String cameFrom = "0";
 
+    /**
+     * Overrides the default onCreate function and prepares the app for interaction.
+     * This function also loads all the task information and displays it on screen.
+     *
+     * @param savedInstanceState a bundle holding the most recent save state of the app
+     */
     @Override
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_requestor_task);
 
 
-        descriptionValue = (TextView) findViewById(R.id.requestorTaskDescription);
-        titleValue = (TextView) findViewById(R.id.requestorTaskName);
-        statusValue = (TextView) findViewById(R.id.requestorTaskStatus);
-        usernameValue = (TextView) findViewById(R.id.requestorTaskUsername);
-        lowestBidValue = (TextView) findViewById(R.id.requestorTaskLowestBid);
-        phoneNumberValue = (TextView) findViewById(R.id.requestorPhoneNumber);
-        emailValue = (TextView) findViewById(R.id.requestorEmail);
+        descriptionValue = findViewById(R.id.requestorTaskDescription);
+        titleValue = findViewById(R.id.requestorTaskName);
+        statusValue = findViewById(R.id.requestorTaskStatus);
+        usernameValue = findViewById(R.id.requestorTaskUsername);
+        lowestBidValue = findViewById(R.id.requestorTaskLowestBid);
+        phoneNumberValue = findViewById(R.id.requestorPhoneNumber);
+        emailValue = findViewById(R.id.requestorEmail);
 
 
         final Intent intent = getIntent();
@@ -66,7 +86,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             task = getTask.get();
             Log.e("Return task title", task.getTitle());
         } catch (Exception e) {
-            Log.e("Task get", "not workng");
+            Log.e("Task get", "not working");
         }
 
         requester = task.getRequester();
@@ -79,7 +99,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
             user = getUser.get();
             Log.e("Return username", user.getUsername());
         } catch (Exception e) {
-            Log.e("User get", "not workng");
+            Log.e("User get", "not working");
         }
 
         email = user.getEmail();
@@ -115,7 +135,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         lowestBidValue.setText(lowestBidString);
 
 
-        Button bidButton = (Button) findViewById(R.id.bidButton);
+        Button bidButton =  findViewById(R.id.bidButton);
 
         bidButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +145,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
                 ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
                 idBids.execute(id); // grab all current users in the system
 
-                ArrayList<Bid> bidsList = new ArrayList<Bid>();
+                ArrayList<Bid> bidsList = new ArrayList<>();
                 try {
                     bidsList = idBids.get();
                 } catch (Exception e) {
@@ -166,12 +186,24 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * States what happens when the back button is pressed
+     */
     @Override
     public void onBackPressed() {
         setResult(RESULT_CANCELED);
         finish();
     }
 
+    /**
+     * Creates a new dialogue fragment to be displayed on screen
+     *
+     * @param bidFragment a dialogue fragment that holds the bid information
+     * @param requester a string that represents the task requester
+     * @param bidder a string representing the task bidder
+     * @param id a string representing the task ID
+     * @return returns a dialogue fragment to be displayed on screen
+     */
     public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
 
         // Supply num input as an argument.
@@ -190,6 +222,12 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         return bidFragment;
     }
 
+    /**
+     * Returns the lowest bid that is currently placed on a task
+     *
+     * @param bidsList an array list that holds all the bids that are currently placed on a task
+     * @return returns a double representing the lowest bid on a task
+     */
     public static Bid getLowestBid(ArrayList<Bid> bidsList){
         int i = 0;
         Bid lowestBid = bidsList.get(i);

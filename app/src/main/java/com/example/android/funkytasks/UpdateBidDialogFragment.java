@@ -1,3 +1,13 @@
+/**
+ * UpdateBidDialogueFragment
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.app.Dialog;
@@ -19,6 +29,10 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+
+/**
+ * This fragment allows a task provider to update a bid they have already made on a task.
+ */
 public class UpdateBidDialogFragment extends DialogFragment {
 
     private Double bidAmount;
@@ -30,6 +44,13 @@ public class UpdateBidDialogFragment extends DialogFragment {
 
     Bid bid;
 
+    /**
+     * This function creates the dialogue pop-up that allows the user to update their bid
+     * information. This function also updates the bid information.
+     *
+     * @param savedInstanceState a bundle representing the most recent state of the view
+     * @return returns the dialogue window
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -52,7 +73,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
         ElasticSearchController.GetBidsByBidder bidderBids = new ElasticSearchController.GetBidsByBidder();
         bidderBids.execute(bidder); // grab all current users in the system
 
-        ArrayList<Bid> bidList = new ArrayList<Bid>();
+        ArrayList<Bid> bidList = new ArrayList<>();
         try {
             bidList = bidderBids.get();
         } catch (Exception e) {
@@ -76,7 +97,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
 
         bid = bidList.get(i);
 
-        providerBidValue = (TextView) view.findViewById(R.id.taskProviderBid);
+        providerBidValue = view.findViewById(R.id.taskProviderBid);
         String bidAmountString = Double.toString(bid.getAmount());
         providerBidValue.setText(bidAmountString);
 
@@ -86,7 +107,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        EditText moneyPlaced = (EditText) view.findViewById(R.id.bidMoney);
+                        EditText moneyPlaced = view.findViewById(R.id.bidMoney);
                         bidAmount = Double.valueOf(moneyPlaced.getText().toString());
 
                         Log.e("bidder in fragment", bidder);
@@ -117,6 +138,11 @@ public class UpdateBidDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+    /**
+     * Loads a new view after editing the bid information
+     *
+     * @param username a string representing the task provider's username
+     */
     public void sendToSolveTaskActivity(String username) {
         // otherwise go back to search screen
         if (cameFrom.equals("0")){

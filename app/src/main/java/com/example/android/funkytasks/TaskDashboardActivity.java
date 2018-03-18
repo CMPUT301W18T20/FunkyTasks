@@ -1,3 +1,13 @@
+/**
+ * TaskDashboardActivity
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -12,7 +22,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-
+/**
+ * This activity is not currently being used, but it may be used in the future.
+ */
 public class TaskDashboardActivity extends AppCompatActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
@@ -34,7 +46,7 @@ public class TaskDashboardActivity extends AppCompatActivity {
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
 //        statusCheckbox=(CheckBox) findViewById(R.id.checkBox);
-        listView = (ListView) findViewById(R.id.myTasks);
+        listView = findViewById(R.id.myTasks);
 
         //Get tasks using E.S and display tassks
         getTask();
@@ -157,6 +169,5 @@ public class TaskDashboardActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }
