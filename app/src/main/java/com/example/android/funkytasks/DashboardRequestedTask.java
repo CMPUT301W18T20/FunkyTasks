@@ -109,6 +109,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 acceptBTN.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
+                            Toast.makeText(DashboardRequestedTask.this, "Already accepted the bid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         acceptBid(target);
                         dialog.dismiss();
                         statusValue.setText("assigned");
@@ -118,6 +122,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 declineBTN.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
+                            Toast.makeText(DashboardRequestedTask.this, "Cannot decline a bid with current task status", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                         declineBids(target);
                         dialog.dismiss();
                         setAdapter();
@@ -141,16 +149,12 @@ public class DashboardRequestedTask extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteActionBar: // if clicked on the delete button
-                if (task.getStatus().equals("requested")){
-                    Intent intent = getIntent();
-                    onDeleteTask(); // delete the task and any bids along with it
-                    intent.putExtra("id", id);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-                else{
-                    Toast.makeText(DashboardRequestedTask.this, "Task cannot be deleted", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = getIntent();
+                onDeleteTask(); // delete the task and any bids along with it
+                intent.putExtra("id", id);
+                setResult(RESULT_OK, intent);
+                finish();
+
                 break;
             case R.id.editRequestedTask: // if clicked on the edit button
                 if (task.getStatus().equals("requested")) {
@@ -240,10 +244,13 @@ public class DashboardRequestedTask extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e("Error", "With getting bids by task id");
             }
+            Toast.makeText(DashboardRequestedTask.this, "Deleted associated bids with task", Toast.LENGTH_SHORT).show();
+
         }
         ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
         deleteTask.execute(id);
         Log.e("deleted","task");
+
 
     }
 

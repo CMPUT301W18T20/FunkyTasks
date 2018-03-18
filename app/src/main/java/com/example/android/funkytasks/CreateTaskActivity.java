@@ -61,7 +61,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                     return;
                 }
 
-                final Task task = new Task(titleValue,descriptionValue,username, 0);
+                final Task task = new Task(titleValue,descriptionValue,username);
 
                 intent.putExtra("username",username);
                 intent.putExtra("task",task);
