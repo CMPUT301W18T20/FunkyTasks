@@ -1,3 +1,13 @@
+/**
+ * This activity displays a user's tasks
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -18,6 +28,9 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+/**
+ * This activity displays all of one user's tasks
+ */
 public class MyTasksActivity extends AppCompatActivity {
 
 
@@ -31,7 +44,7 @@ public class MyTasksActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_tasks);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
@@ -42,10 +55,10 @@ public class MyTasksActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -54,6 +67,12 @@ public class MyTasksActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Creates the options menu.
+     *
+     * @param menu a menu object speficying the menu to be instantiated
+     * @return returns true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -61,6 +80,12 @@ public class MyTasksActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * States what happens when an item in the menu is selected
+     *
+     * @param item a menu item specifying which item was selected
+     * @return returns a boolean stating whether or not it was successful
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -101,11 +126,20 @@ public class MyTasksActivity extends AppCompatActivity {
             return fragment;
         }
 
+        /**
+         * States what happens when the view is created and also how the view should be created
+         *
+         * @param inflater a layout inflater that helps the view display
+         * @param container a view group object that dictates where the view is displayed
+         * @param savedInstanceState a bundle representing the state of the app when it was
+         *                           last open
+         * @return returns the view
+         */
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_my_tasks, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            TextView textView = rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
@@ -121,6 +155,12 @@ public class MyTasksActivity extends AppCompatActivity {
             super(fm);
         }
 
+        /**
+         * A fragment that tells the app which page the user wants to view
+         *
+         * @param position an integer stating the position of the view
+         * @return returns the tab that should be displayed or null
+         */
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -135,11 +175,22 @@ public class MyTasksActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Returns the count
+         * @return returns 2
+         */
         @Override
         public int getCount() {
             // Show 2 total pages.
             return 2;
         }
+
+        /**
+         * Returns the page title
+         *
+         * @param position an integer that states which tab of the app that is currently in view
+         * @return returns the page title or null
+         */
         @Override
         public CharSequence getPageTitle(int position){
             switch (position){

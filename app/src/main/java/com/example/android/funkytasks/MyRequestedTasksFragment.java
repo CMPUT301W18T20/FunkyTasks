@@ -1,3 +1,13 @@
+/**
+ * This is a fragment that loads the requested tasks for a particular view.
+ *
+ * Version 1.0.0
+ *
+ * Create by Funky Tasks on March 8th
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -27,7 +37,9 @@ import java.util.ArrayList;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-
+/**
+ * This fragment displays the tasks one particular user has requested.
+ */
 public class MyRequestedTasksFragment extends Fragment {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
@@ -41,8 +53,14 @@ public class MyRequestedTasksFragment extends Fragment {
     ArrayList<Task> requestedTasks;
     User user;
 
-
-
+    /**
+     * This function overrides the default onCreateView function and dictates what happens
+     * when this view is instantiated
+     * @param inflater a layout inflater that helps the fragment display properly
+     * @param container a view group representing where the fragment should be displayed
+     * @param savedInstanceState a bundle representing the state of the view last time it was open
+     * @return returns a view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -53,7 +71,7 @@ public class MyRequestedTasksFragment extends Fragment {
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
 
-        listView = (ListView) rootView.findViewById(R.id.myTasks);
+        listView = rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
         String[] menuOptions = new String[]{"My Tasks","Bidded", "Assigned"};
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
@@ -98,7 +116,11 @@ public class MyRequestedTasksFragment extends Fragment {
 
     }
 
-
+    /**
+     * Sets the proper list view adapter for the list of tasks to be displayed.
+     *
+     * @param tasklist an array list of task to be treated by the list view adapter
+     */
     public void setListViewAdapter(ArrayList<Task> tasklist){
         listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listviewitem, tasklist);
         listViewAdapter.notifyDataSetChanged();
@@ -106,6 +128,9 @@ public class MyRequestedTasksFragment extends Fragment {
 
     }
 
+    /**
+     * This function gets all the tasks associated with one username
+     */
     public void getTask(){
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
@@ -148,6 +173,11 @@ public class MyRequestedTasksFragment extends Fragment {
 
     }
 
+    /**
+     * This function states what happens when a task is clicked on
+     *
+     * @param i an integer representing the index of the item that was cicked on
+     */
     public void taskOnClick(int i){
         Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
         intent.putExtra("username", username);
@@ -169,6 +199,14 @@ public class MyRequestedTasksFragment extends Fragment {
 
     }
 
+    /**
+     * States what happens when the activity runs
+     *
+     * @param requestCode an integer representing what action the activity should perform
+     * @param resultCode an integer returned by the activity stating whether or not the
+     *                   activity was carried out successfully
+     * @param intent an intent that states the environment in which the activity is carried out
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == DELETECODE) {
