@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -77,7 +78,17 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String newEmail = email.getText().toString();
+                String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                if (!newEmail.matches(emailPattern)){
+                    Toast.makeText(EditProfileActivity.this,"Invalid email address format",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String newPhone = phone.getText().toString();
+
+                if (newPhone.length() != 10){
+                    Toast.makeText(EditProfileActivity.this,"Invalid phone number length",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
                 getUser.execute(username);
