@@ -29,6 +29,11 @@ public class ListViewAdapter extends ArrayAdapter<Task>{
         if (view  == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.listviewitem, parent, false);
         }
+
+        // Check to see if task is null
+        if (task == null) {
+            return view;
+        }
         // Lookup view for data population
         TextView title = (TextView) view.findViewById(R.id.taskTitle);
         //TextView description = (TextView) view.findViewById(R.id.taskDescription);

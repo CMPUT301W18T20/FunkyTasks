@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -46,7 +47,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        notifyBidsChanged();
 
 
     }
@@ -73,6 +73,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 //Inflating the Popup using xml file
                 popup.getMenuInflater()
                         .inflate(R.menu.pop_up_notis, popup.getMenu());
+                notifyBidsChanged(popup);
                 popup.show();
 
             default:
@@ -84,7 +85,6 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        notifyBidsChanged();
     }
 
     @Override
@@ -151,13 +151,31 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    public void notifyBidsChanged() {
-        Log.e("notifyBidsChanged", "did start executing");
-        User user;
-        ArrayList<Task> userTasks;
-        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+    public void notifyBidsChanged(PopupMenu popup) {
+        ArrayList<Task> taskList;
+        ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
+        getAllTask.execute(username);
+        try {
+            taskList = getAllTask.get();
+            Log.e("Got the tasks ", taskList.toString());
+            Iterator itr = taskList.iterator();
+            while (itr.hasNext()) {
+                Log.e("In the itr loop", "we are");
+                Task x = (Task) itr.next();
+                ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
+                idBids.execute(x.getId()); // grab all current users in the system
+                ArrayList<Bid> xBids = idBids.get();
+                if (x.getRequester().equals(username) && xBids.size() > 0) {
+                    popup.getMenu().add("You have " + xBids.size() +
+                            " new bids on task: " + x.getTitle());
+                }
+            }
 
-        getUser.execute(username);
+        } catch (Exception e) {
+            Log.e("Error", "We arnt getting the list of tasks");
+            return;
+
+        }
 
     }
 }

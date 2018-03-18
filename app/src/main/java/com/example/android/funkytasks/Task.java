@@ -25,19 +25,20 @@ public class Task implements Serializable{
     private String provider;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
-    private Integer numberOfBids = 0;
+    private Integer numberOfBids;
 
     @JestId
     private String id;
 
 
-    Task(String title, String description, String requester){
+    Task(String title, String description, String requester, Integer numberOfBids){
         // constructor for task object
         this.title = title;
         this.description = description;
         this.requester = requester; // username of the user who requests the task
         this.provider = null; // username of user who is solving the task
         this.status = statuses[0];
+        this.numberOfBids = numberOfBids;
     }
 
     public void setId(String newId){

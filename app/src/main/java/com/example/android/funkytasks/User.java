@@ -19,7 +19,7 @@ public class User implements Serializable{
     private String phonenumber;
     private double rating;
 //    private ArrayList<Task> acceptedTasks;  // tasks the user has agreed to solve
-    private ArrayList<Task> requestedTasks; // tasks the user has put out
+    private ArrayList<String> requestedTasks; // tasks the user has put out
 //    private ArrayList<Task> biddedTasks;    // tasks user has currently bidded on
 
     @JestId
@@ -43,8 +43,8 @@ public class User implements Serializable{
         return this.id;
     }
 
-    public void addRequestedTask(Task newTask){
-        requestedTasks.add(newTask);
+    public void addRequestedTask(String newTaskID){
+        requestedTasks.add(newTaskID);
     }
 //
 //    public void addBiddedTask(Task newTask){
@@ -62,7 +62,7 @@ public class User implements Serializable{
 //        return this.acceptedTasks;
 //    }
 //
-    public ArrayList<Task> getRequestedTasks(){
+    public ArrayList<String> getRequestedTasks(){
         return this.requestedTasks;
     }
 

@@ -153,18 +153,13 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
                             placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
                             placeBidFragment.show(getSupportFragmentManager(), "Bids");
                         }
+
                         i++;
 
                     }
                 }
-                //Integer numBids = task.getNumberOfBids();
-                //numBids += 1;
-                //task.setNumberOfBids(numBids);
 
-                //Log.e("Current number of bids ", numBids.toString());
 
-                //Intent intent = new Intent(ViewRequestorTaskActivity.this, MainMenuActivity.class);
-                //startActivity(intent);
 
             }
         });
