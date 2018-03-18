@@ -48,15 +48,15 @@ public class CreateTaskActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 titleValue = title.getText().toString();            // grab title from edit text input
-                if (titleValue.length() >= 30) {                    // validating name input length
-                    Toast.makeText(getApplicationContext(), "Title must be at at max 30 characters long ", Toast.LENGTH_SHORT)
+                if (titleValue.length() >= 30 || titleValue.length() <= 0) {                    // validating name input length
+                    Toast.makeText(getApplicationContext(), "Title is invalid length. Must be between 1-29 characters. ", Toast.LENGTH_SHORT)
                             .show();
                     return;
                 }
 
                 descriptionValue = description.getText().toString(); // grab description from edit text input
                 if (descriptionValue.length() >= 300) {               // validating name input length
-                    Toast.makeText(getApplicationContext(), "Description  must be at max 300 characters long ", Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(), "Description is invalid length. Must be between 1-299 characters. ", Toast.LENGTH_SHORT)
                             .show();
                     return;
                 }
