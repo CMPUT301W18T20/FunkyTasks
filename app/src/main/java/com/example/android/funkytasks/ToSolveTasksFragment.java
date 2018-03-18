@@ -28,23 +28,23 @@ import static android.app.Activity.RESULT_OK;
 
 public class ToSolveTasksFragment extends Fragment {
 
+    ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
-    private int position;
+    private int position ;
     ListView listView;
     ListViewAdapter listViewAdapter;
-    ArrayList<Task> doneTaskList = new ArrayList<Task>();
-    ArrayList<Task> acceptedTaskList = new ArrayList<Task>();
+    ArrayList<Task> taskList = new ArrayList<Task>();
+    ArrayList<Task> assignedTaskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
-    ArrayList<Bid> allBids = new ArrayList<Bid>();
-    final int DETAILCODE = 0;
-
+    final int DELETECODE = 0;
+    ArrayList<Task> requestedTasks;
     User user;
 
-    private int whichList;
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.activity_task_dashboard, container, false);
 
         Intent intent = getActivity().getIntent();
@@ -54,7 +54,7 @@ public class ToSolveTasksFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
-        String[] menuOptions = new String[]{"Bidded for","Solving", "Solved"};
+        String[] menuOptions = new String[]{"My Tasks","Bidded", "Assigned"};
         ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
@@ -62,23 +62,19 @@ public class ToSolveTasksFragment extends Fragment {
         //Get tasks using Elastic search and display tasks
 
         getTask();
-        setListViewAdapter(biddedTaskList);
-        whichList = 0;
+        setListViewAdapter(taskList);
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(i==0){
-                    setListViewAdapter(biddedTaskList);
-                    whichList = 0;
+                    setListViewAdapter(taskList);
                 }
                 if(i==1){
-                    setListViewAdapter(acceptedTaskList);
-                    whichList = 1;
+                    setListViewAdapter(biddedTaskList);
                 }
                 if(i==2){
-                    setListViewAdapter(doneTaskList);
-                    whichList = 2;
+                    setListViewAdapter(assignedTaskList);
                 }
             }
 
@@ -97,90 +93,60 @@ public class ToSolveTasksFragment extends Fragment {
                 taskOnClick(i);
             }
         });
-
         return rootView;
+
     }
+
 
     public void setListViewAdapter(ArrayList<Task> tasklist){
         listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listviewitem, tasklist);
         listViewAdapter.notifyDataSetChanged();
         listView.setAdapter(listViewAdapter);
+
     }
 
     public void getTask(){
-        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute(username);
+        ArrayList<Bid> allBids;
+
+
+        ElasticSearchController.GetBidsByBidder getallBids=new ElasticSearchController.GetBidsByBidder();
+        getallBids.execute(username);
         try {
-            user = getUser.get();
-            Log.e("Got the username: ", user.getUsername());
+            allBids = getallBids.get();
+            Log.e("Got the task: ", getallBids.get().get(0).getTaskID().toString());
 
         } catch (Exception e) {
-            Log.e("Error", "We arnt getting the user");
+            Log.e("Error", "We arnt getting all the bids");
             return;
-
-        }
-
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-
-        // get all the tasks that the task provider has bidded on
-        // first get all the bids, then grab each task ID to get the task
-        ElasticSearchController.GetBidsByBidder getBids = new ElasticSearchController.GetBidsByBidder();
-        getBids.execute(username);
-        try{
-            allBids = getBids.get();
-            for (Bid bid: allBids){
-                getTask.execute(bid.getTaskID()); // get the task associated with the bidder's username;
-                try{
-                    biddedTaskList.add(getTask.get());
-                }
-                catch(Exception e){
-                    Log.e("Error","unable to get the bidded task");
-                }
-
-            }
-        }
-        catch(Exception e){
-            Log.e("Error","No bids with the user");
         }
 
 
-        ElasticSearchController.GetAllProviderTask getAllProviderTask = new ElasticSearchController.GetAllProviderTask();
-        getAllProviderTask.execute(username);
-        try{
-            acceptedTaskList = getAllProviderTask.get();
-        }
-        catch(Exception e){
-            Log.e("Error","unable to get the bidded task");
-        }
+        // Getting the all the tasks associated with the user
+        int size=allBids.size();
+        for(int index=0;index<size;index++){
+            Task task ;
+            ElasticSearchController.GetTask getTask=new ElasticSearchController.GetTask();
+            getTask.execute(allBids.get(index).getTaskID());
+            Log.e("Task id",allBids.get(index).getTaskID());
+            try{
+                task = getTask.get();
+                Log.e("Return task title",task.getTitle());}
+            catch(Exception e){
+                Log.e("Task get","not workng");
+                return;}
+            taskList.add(task);
+            Log.e("Success","loop");
 
-        if (acceptedTaskList != null || acceptedTaskList.size() >= 0){
-            int size = acceptedTaskList.size();
-            for(int i = 0 ; i < size ; i++){
-                if(acceptedTaskList.get(i).getStatus().equals("done")){
-                    acceptedTaskList.remove(i);
-                    doneTaskList.add(acceptedTaskList.get(i));
-                }
-            }
         }
 
     }
 
-    public void taskOnClick(int position){
-        Intent intent = new Intent(getActivity(), DashboardProviderTask.class);
+    public void taskOnClick(int i){
+        Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
         intent.putExtra("username", username);
         Task detailedTask;
 
-        // get the task depending on which list the user clicked on
-        if (whichList == 0){
-            detailedTask = biddedTaskList.get(position);
-        }
-        else if (whichList == 1){
-            detailedTask = acceptedTaskList.get(position);
-        }
-        else{
-            detailedTask = doneTaskList.get(position);
-        }
-
+        detailedTask = taskList.get(i);
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(detailedTask.getId());
         try {
@@ -190,29 +156,28 @@ public class ToSolveTasksFragment extends Fragment {
             Log.e("Error", "Task get not working");
         }
         intent.putExtra("task", detailedTask);
-        intent.putExtra("position", position);
+        intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
-        startActivityForResult(intent,DETAILCODE);
+        startActivityForResult(intent,DELETECODE);
 
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        if (requestCode == DELETECODE) {
-//            if (resultCode == RESULT_OK) {
-//                assignedTaskList.remove(taskList.get(position));
-//                biddedTaskList.remove(taskList.get(position));
-//                taskList.remove(position);
-//                setListViewAdapter(taskList);
-//
-//            }
-//            else if (resultCode == RESULT_CANCELED){
-//                getTask();
-//                setListViewAdapter(taskList);
-//            }
-//        }
-//
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == DELETECODE) {
+            if (resultCode == RESULT_OK) {
+                assignedTaskList.remove(taskList.get(position));
+                biddedTaskList.remove(taskList.get(position));
+                taskList.remove(position);
+                setListViewAdapter(taskList);
 
+            }
+            else if (resultCode == RESULT_CANCELED){
+                getTask();
+                setListViewAdapter(taskList);
+            }
+        }
+
+    }
 
 }
