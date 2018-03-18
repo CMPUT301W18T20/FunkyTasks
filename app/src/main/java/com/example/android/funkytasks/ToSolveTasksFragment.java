@@ -30,16 +30,15 @@ public class ToSolveTasksFragment extends Fragment {
 
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
-    private int position ;
+    private int position;
     ListView listView;
-    ListViewAdapter listViewAdapter;
+    ProviderBiddedTaskAdapter adapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
-    ArrayList<Task> assignedTaskList = new ArrayList<Task>();
+    ArrayList<Task> SolvedTaskList = new ArrayList<Task>();
+    ArrayList<Task> SolvingTaskList = new ArrayList<Task>();
     ArrayList<Task> biddedTaskList = new ArrayList<Task>();
     final int DELETECODE = 0;
-    ArrayList<Task> requestedTasks;
     User user;
-
 
 
     @Override
@@ -54,8 +53,8 @@ public class ToSolveTasksFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
-        String[] menuOptions = new String[]{"My Tasks","Bidded", "Assigned"};
-        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
+        String[] menuOptions = new String[]{"TASK STATUS", "BIDDED ON", "SOLVING", "SOLVED"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
 
@@ -67,14 +66,17 @@ public class ToSolveTasksFragment extends Fragment {
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==0){
+                if (i == 0) {
                     setListViewAdapter(taskList);
                 }
-                if(i==1){
+                if (i == 1) {
                     setListViewAdapter(biddedTaskList);
                 }
-                if(i==2){
-                    setListViewAdapter(assignedTaskList);
+                if (i == 2) {
+                    setListViewAdapter(SolvedTaskList);
+                }
+                if (i == 3) {
+                    setListViewAdapter(SolvingTaskList);
                 }
             }
 
@@ -89,7 +91,7 @@ public class ToSolveTasksFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                position=i;
+                position = i;
                 taskOnClick(i);
             }
         });
@@ -98,18 +100,18 @@ public class ToSolveTasksFragment extends Fragment {
     }
 
 
-    public void setListViewAdapter(ArrayList<Task> tasklist){
-        listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listviewitem, tasklist);
-        listViewAdapter.notifyDataSetChanged();
-        listView.setAdapter(listViewAdapter);
+    public void setListViewAdapter(ArrayList<Task> tasklist) {
+        ProviderBiddedTaskAdapter adapter= new ProviderBiddedTaskAdapter(getActivity(), R.layout.listviewitem, tasklist);
+        adapter.notifyDataSetChanged();
+        listView.setAdapter(adapter);
 
     }
 
-    public void getTask(){
+    public void getTask() {
         ArrayList<Bid> allBids;
 
 
-        ElasticSearchController.GetBidsByBidder getallBids=new ElasticSearchController.GetBidsByBidder();
+        ElasticSearchController.GetBidsByBidder getallBids = new ElasticSearchController.GetBidsByBidder();
         getallBids.execute(username);
         try {
             allBids = getallBids.get();
@@ -122,26 +124,41 @@ public class ToSolveTasksFragment extends Fragment {
 
 
         // Getting the all the tasks associated with the user
-        int size=allBids.size();
-        for(int index=0;index<size;index++){
-            Task task ;
-            ElasticSearchController.GetTask getTask=new ElasticSearchController.GetTask();
+        int size = allBids.size();
+        for (int index = 0; index < size; index++) {
+            Task task;
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
             getTask.execute(allBids.get(index).getTaskID());
-            Log.e("Task id",allBids.get(index).getTaskID());
-            try{
+            Log.e("Task id", allBids.get(index).getTaskID());
+            try {
                 task = getTask.get();
-                Log.e("Return task title",task.getTitle());}
-            catch(Exception e){
-                Log.e("Task get","not workng");
-                return;}
+                Log.e("Return task title", task.getTitle());
+            } catch (Exception e) {
+                Log.e("Task get", "not workng");
+                return;
+            }
             taskList.add(task);
-            Log.e("Success","loop");
+            Log.e("Success", "loop");
 
+        }
+        for(Task task: taskList){
+            if(task.getStatus().equals("bidded")){
+                Log.e("bidded task title",task.getTitle());
+                biddedTaskList.add(task);
+            }
+            if(task.getStatus().equals("assigned")){
+                Log.e("solving task title",task.getTitle());
+                SolvingTaskList.add(task);
+            }
+            if(task.getStatus().equals("done")){
+                Log.e("solved task title",task.getTitle());
+                SolvedTaskList.add(task);
+            }
         }
 
     }
 
-    public void taskOnClick(int i){
+    public void taskOnClick(int i) {
         Intent intent = new Intent(getActivity(), DashboardProviderTask.class);
         intent.putExtra("username", username);
         Task detailedTask;
@@ -159,25 +176,24 @@ public class ToSolveTasksFragment extends Fragment {
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
         startActivityForResult(intent,DELETECODE);
-
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == DELETECODE) {
-            if (resultCode == RESULT_OK) {
-                assignedTaskList.remove(taskList.get(position));
-                biddedTaskList.remove(taskList.get(position));
-                taskList.remove(position);
-                setListViewAdapter(taskList);
-
-            }
-            else if (resultCode == RESULT_CANCELED){
-                getTask();
-                setListViewAdapter(taskList);
-            }
-        }
-
-    }
-
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//        if (requestCode == DELETECODE) {
+//            if (resultCode == RESULT_OK) {
+//                assignedTaskList.remove(taskList.get(position));
+//                biddedTaskList.remove(taskList.get(position));
+//                taskList.remove(position);
+//                setListViewAdapter(taskList);
+//
+//            }
+//            else if (resultCode == RESULT_CANCELED){
+//                getTask();
+//                setListViewAdapter(taskList);
+//            }
+//        }
+//
+//    }
+//
 }

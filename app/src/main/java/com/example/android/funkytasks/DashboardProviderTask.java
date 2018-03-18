@@ -18,15 +18,19 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.android.funkytasks.SearchListViewAdapter.getLowestBid;
+
 
 public class DashboardProviderTask extends AppCompatActivity {
 
     private TextView titleValue;
     private TextView descriptionValue;
+    private TextView lowestBidValue;
+    private TextView myBidValue;
+
     private TextView statusValue;
-    private ListView bidListView;
     private String id;
-    private Button editBtn;
+    private Button multiFunctionButton;
 
     private String username;
     private Task task;
@@ -45,11 +49,13 @@ public class DashboardProviderTask extends AppCompatActivity {
         //setSupportActionBar(myToolbar);
 
         // set bids listview
-        bidListView=(ListView)findViewById(R.id.bidlistViewprovider);
+
         descriptionValue=(TextView)findViewById(R.id.textDescriptionprovider);
         titleValue=(TextView) findViewById(R.id.taskNamerequester);
         statusValue = (TextView) findViewById(R.id.taskStatustext);
-
+        multiFunctionButton=(Button) findViewById(R.id.multiFunction);
+        lowestBidValue = (TextView) findViewById(R.id.lowestBidAmount);
+        myBidValue = (TextView) findViewById(R.id.myBidAmount);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
@@ -58,9 +64,20 @@ public class DashboardProviderTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
+        //change button function
+        // TODO implement ench button function
+        if(task.getStatus().equals("bidded")){
+            multiFunctionButton.setText("UPDATE BID");
+        }
+
+        if(task.getStatus().equals("assigned")){
+            multiFunctionButton.setText("UPDATE STATUS");
+        }
+        if(task.getStatus().equals("done")){
+
+        }
+
         setTaskDetails();
-        setBids();
-        setAdapter();
 
 
 //        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,6 +160,8 @@ public class DashboardProviderTask extends AppCompatActivity {
     }
 
 */
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -154,26 +173,6 @@ public class DashboardProviderTask extends AppCompatActivity {
         }
     }
 
-
-    public void setAdapter(){
-        BidListViewAdapter adpater=new BidListViewAdapter(DashboardProviderTask.this, android.R.layout.simple_list_item_1, bidList) ;
-        adpater.notifyDataSetChanged();
-        bidListView.setAdapter(adpater);
-    }
-
-    public void setBids(){
-        ElasticSearchController.GetBidsByTaskID getBids = new ElasticSearchController.GetBidsByTaskID();
-        getBids.execute(id);
-        try{
-            bidList=getBids.get();
-            Log.e("Got bids",bidList.toString());
-
-        }
-        catch(Exception e){
-            Log.e("Bid get","not workng");
-        }
-
-    }
 
     public void setTaskDetails(){
 
@@ -190,6 +189,24 @@ public class DashboardProviderTask extends AppCompatActivity {
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
+        ArrayList<Bid> bids = new ArrayList<Bid>();
+        ElasticSearchController.GetBidsByTaskID getBidsByTaskID = new ElasticSearchController.GetBidsByTaskID();
+        getBidsByTaskID.execute(task.getId());
+        try{
+            bids = getBidsByTaskID.get();
+        }
+        catch(Exception e){
+            Log.e("Error","Something wrong with getting bids in adapter");
+        }
+        Double lowest = getLowestBid(bids).getAmount();
+        lowestBidValue.setText(lowest.toString());
+        for (Bid bid: bids){
+            if (bid.getBidder().equals(username)){
+                myBidValue.setText(String.valueOf(bid.getAmount()));
+                break;
+            }
+        }
+
     }
 
 
