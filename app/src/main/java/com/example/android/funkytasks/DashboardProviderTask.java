@@ -72,7 +72,6 @@ public class DashboardProviderTask extends AppCompatActivity {
         descriptionValue = findViewById(R.id.textDescriptionprovider);
         titleValue = findViewById(R.id.taskNamerequester);
         statusValue = findViewById(R.id.taskStatustext);
-        multiFunctionButton = findViewById(R.id.multiFunction);
         lowestBidValue = findViewById(R.id.lowestBidAmount);
         myBidValue = findViewById(R.id.myBidAmount);
         requesterName = (TextView) findViewById(R.id.taskRequesterUsername);
@@ -86,20 +85,19 @@ public class DashboardProviderTask extends AppCompatActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
+        multiFunctionButton = findViewById(R.id.multiFunction);
+
+
 
 //         TODO implement each button function
         if(task.getStatus().equals("bidded")){
             Log.e("Provider task status",task.getStatus());
             multiFunctionButton.setText("UPDATE BID");
         }
-
-        if(task.getStatus().equals("assigned")){
-            Log.e("Provider task status",task.getStatus());
-            multiFunctionButton.setText("UPDATE STATUS");
+        else{
+            multiFunctionButton.setVisibility(View.GONE);
         }
-        if(task.getStatus().equals("done")){
 
-        }
 
         setTaskDetails();
 
