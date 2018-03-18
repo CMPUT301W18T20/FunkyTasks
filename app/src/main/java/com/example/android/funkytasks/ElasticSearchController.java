@@ -259,6 +259,8 @@ public class ElasticSearchController {
     }
 
 
+
+
     public static class GetAllProviderTask extends AsyncTask<String, Void, ArrayList<Task>> {
 
         @Override
