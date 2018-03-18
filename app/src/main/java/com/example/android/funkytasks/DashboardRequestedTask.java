@@ -156,12 +156,15 @@ public class DashboardRequestedTask extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteActionBar:
-                Intent intent = getIntent();
-                onDeleteTask();
-                intent.putExtra("id",id);
-                setResult(RESULT_OK,intent);
-                finish();
-
+                if (task.getStatus().equals("requested")){
+                    Intent intent = getIntent();
+                    onDeleteTask();
+                    intent.putExtra("id", id);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+                Toast.makeText(DashboardRequestedTask.this, "Task cannot be deleted", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.editRequestedTask:
                 if (task.getStatus().equals("requested")) {
                     Intent editIntent = new Intent(DashboardRequestedTask.this, EditDashboardRequestedTask.class);
@@ -172,9 +175,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 else{
                     Toast.makeText(DashboardRequestedTask.this, "Task cannot be edited", Toast.LENGTH_SHORT).show();
                 }
+               break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        return true;
     }
 
 
