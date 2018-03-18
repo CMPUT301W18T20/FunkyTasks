@@ -29,7 +29,7 @@ public class Bid {
     @JestId
     private String id;
 
-    //constracutor for bid
+    //constructor for bid
 
     /**
      * The Bid class stores all the bids in our project and ensures they all have the same
