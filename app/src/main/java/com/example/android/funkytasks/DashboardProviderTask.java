@@ -30,7 +30,9 @@ import java.util.ArrayList;
 
 import static com.example.android.funkytasks.SearchListViewAdapter.getLowestBid;
 
-
+/**
+ * This activity displays the tasks to the task provider.
+ */
 public class DashboardProviderTask extends AppCompatActivity {
 
     private TextView titleValue;

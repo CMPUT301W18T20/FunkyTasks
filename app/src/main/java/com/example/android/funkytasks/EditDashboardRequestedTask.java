@@ -1,3 +1,13 @@
+/**
+ * This activity allows a user to edit a task that has status "requested"
+ *
+ * Version 1.0.0
+ *
+ * Created on March 8th by Funky Tasks
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -11,6 +21,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * This activity allows a user to edit a task
+ */
 public class EditDashboardRequestedTask extends AppCompatActivity {
     private String username;
     private String id;
@@ -23,14 +36,19 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     private String descriptionValue;
 
 
-
+    /**
+     * Overrides the onCreate function, loads the proper view, and sets up the app for interaction
+     *
+     * @param savedInstanceState a bundle that stores the state of the app the last time
+     *                           it was open
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_dashboard_requested_task);
-        editTitle=(EditText) findViewById(R.id.editTitle);
-        editDescription=(EditText) findViewById(R.id.editDescription);
-        saveBT = (Button)findViewById(R.id.buttonDone);
+        editTitle = findViewById(R.id.editTitle);
+        editDescription = findViewById(R.id.editDescription);
+        saveBT = findViewById(R.id.buttonDone);
 
         final Intent intent = getIntent();
 
@@ -45,7 +63,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
             Log.e("Got the task",task.getTitle());
 
         } catch (Exception e) {
-            Log.e("Error", "We arnt getting the task");
+            Log.e("Error", "We aren't getting the task");
             return;
         }
 
@@ -57,14 +75,16 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
             public void onClick(View view) {
                 titleValue = editTitle.getText().toString();            // grab title from edit text input
                 if (titleValue.length() >= 30) {                    // validating name input length
-                    Toast.makeText(getApplicationContext(), "Title must be at least 30 characters long ", Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(),
+                            "Title must be at least 30 characters long ", Toast.LENGTH_SHORT)
                             .show();
                     return;
                 }
 
                 descriptionValue = editDescription.getText().toString(); // grab description from edit text input
                 if (descriptionValue.length() >= 300) {               // validating name input length
-                    Toast.makeText(getApplicationContext(), "Description must be at least 300 characters long ", Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(),
+                            "Description must be at least 300 characters long ", Toast.LENGTH_SHORT)
                             .show();
                     return;
                 }
@@ -85,6 +105,5 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         });
 
     }
-
 
 }

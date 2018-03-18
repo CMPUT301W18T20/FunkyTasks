@@ -21,7 +21,9 @@ import android.widget.TextView;
 import java.util.List;
 
 
-
+/**
+ * This adapter dictates how the bids should be displayed on screen.
+ */
 public class BidListViewAdapter extends ArrayAdapter<Bid> {
 
     /**
