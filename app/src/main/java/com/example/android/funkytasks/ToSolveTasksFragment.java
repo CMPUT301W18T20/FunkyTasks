@@ -31,6 +31,7 @@ public class ToSolveTasksFragment extends Fragment {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
     private int position;
+    private int taskStatusState;
     ListView listView;
     ProviderBiddedTaskAdapter adapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
@@ -68,15 +69,21 @@ public class ToSolveTasksFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i == 0) {
                     setListViewAdapter(taskList);
+                    taskStatusState=0;
                 }
                 if (i == 1) {
                     setListViewAdapter(biddedTaskList);
+                    taskStatusState=1;
+
                 }
                 if (i == 2) {
                     setListViewAdapter(SolvingTaskList);
+                    taskStatusState=2;
                 }
                 if (i == 3) {
                     setListViewAdapter(SolvedTaskList);
+                    taskStatusState=3;
+
                 }
             }
 
@@ -163,7 +170,19 @@ public class ToSolveTasksFragment extends Fragment {
         intent.putExtra("username", username);
         Task detailedTask;
 
+
         detailedTask = taskList.get(i);
+
+        if(taskStatusState==1){
+            detailedTask = biddedTaskList.get(i);
+        }
+        if(taskStatusState==2){
+            detailedTask = SolvingTaskList.get(i);
+        }
+        if(taskStatusState==3){
+            detailedTask = SolvedTaskList.get(i);
+        }
+
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(detailedTask.getId());
         try {
