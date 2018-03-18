@@ -36,6 +36,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private Task task;
     private User user;
     private int index;
+    private String cameFrom = "0";
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -178,6 +179,7 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         bundle.putString("requester", requester);
         bundle.putString("bidder", bidder);
         bundle.putString("id", id);
+        bundle.putString("cameFrom",cameFrom);
 
 
         Log.e("requester / newInstance", requester);

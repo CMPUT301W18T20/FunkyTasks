@@ -400,4 +400,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MyTasksActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+
 }

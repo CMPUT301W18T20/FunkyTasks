@@ -26,6 +26,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
     private String bidder;
     private String taskID;
     private TextView providerBidValue;
+    private String cameFrom;
 
     Bid bid;
 
@@ -44,6 +45,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
         requester = getArguments().getString("requester");
         bidder = getArguments().getString("bidder");
         taskID = getArguments().getString("id");
+        cameFrom = getArguments().getString("cameFrom");
 
 
 
@@ -102,6 +104,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
 
                         Toast.makeText(getActivity(), "Successfully updated a bid", Toast.LENGTH_SHORT).show();
 
+
                         sendToSolveTaskActivity(bidder);
 
                     }
@@ -115,17 +118,17 @@ public class UpdateBidDialogFragment extends DialogFragment {
     }
 
     public void sendToSolveTaskActivity(String username) {
-        if (getActivity().toString().equals("com.example.android.funkytasks.DashboardProviderTask@103149")){
-            // go back to our task dashboard instead
+        // otherwise go back to search screen
+        if (cameFrom.equals("0")){
+            Intent intent = new Intent(getActivity(), SolveTaskActivity.class);
+            intent.putExtra("username", username);
+            startActivity(intent);
+        }
+        else if (cameFrom.equals("1")){
             Intent intent = new Intent(getActivity(), MyTasksActivity.class);
             intent.putExtra("username", username);
             startActivity(intent);
-            return;
         }
-        // otherwise go back to search screen
-        Intent intent = new Intent(getActivity(), SolveTaskActivity.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
     }
 
 }

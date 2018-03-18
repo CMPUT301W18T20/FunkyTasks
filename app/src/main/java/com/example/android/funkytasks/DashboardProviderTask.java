@@ -43,6 +43,7 @@ public class DashboardProviderTask extends AppCompatActivity {
     private TextView requesterName;
     private TextView requesterEmail;
     private TextView requesterPhone;
+    private String cameFrom = "1";
 
 
     private TextView statusValue;
@@ -156,10 +157,12 @@ public class DashboardProviderTask extends AppCompatActivity {
     public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
 
         // Supply num input as an argument.
+
         Bundle bundle = new Bundle();
         bundle.putString("requester", requester);
         bundle.putString("bidder", bidder);
         bundle.putString("id", id);
+        bundle.putString("cameFrom",cameFrom);
 
 
         Log.e("requester / newInstance", requester);
@@ -219,4 +222,12 @@ public class DashboardProviderTask extends AppCompatActivity {
         requesterEmail.setText(requester.getEmail());
 
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MyTasksActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+
 }

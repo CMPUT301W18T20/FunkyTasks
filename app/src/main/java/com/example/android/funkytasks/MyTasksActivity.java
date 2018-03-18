@@ -203,5 +203,12 @@ public class MyTasksActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        intent.putExtra("username", username);
+        startActivity(intent);
+    }
+
 
 }
