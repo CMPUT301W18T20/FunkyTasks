@@ -35,8 +35,6 @@ public class SolveTaskActivity extends AppCompatActivity {
     ArrayList<Task> taskList = new ArrayList<Task>();
     ListView taskView;
 
-    User user;
-
     /**
      * Instantiates the view and prepares it for the user. This function also takes in
      * a user's search criteria and searches for tasks they want to bid on.

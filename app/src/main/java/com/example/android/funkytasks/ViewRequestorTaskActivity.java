@@ -34,14 +34,6 @@ import java.util.ArrayList;
  */
 public class ViewRequestorTaskActivity extends AppCompatActivity {
 
-    private TextView titleValue;
-    private TextView descriptionValue;
-    private TextView statusValue;
-    private TextView usernameValue;
-    private TextView lowestBidValue;
-    private TextView phoneNumberValue;
-    private TextView emailValue;
-    private Double bidAmount;
     private String id;
     private String bidder;
     private String requester;
@@ -49,7 +41,6 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
     private String email;
     private Task task;
     private User user;
-    private int index;
     private String cameFrom = "0";
 
     /**
@@ -64,13 +55,13 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_requestor_task);
 
 
-        descriptionValue = findViewById(R.id.requestorTaskDescription);
-        titleValue = findViewById(R.id.requestorTaskName);
-        statusValue = findViewById(R.id.requestorTaskStatus);
-        usernameValue = findViewById(R.id.requestorTaskUsername);
-        lowestBidValue = findViewById(R.id.requestorTaskLowestBid);
-        phoneNumberValue = findViewById(R.id.requestorPhoneNumber);
-        emailValue = findViewById(R.id.requestorEmail);
+        TextView descriptionValue = findViewById(R.id.requestorTaskDescription);
+        TextView titleValue = findViewById(R.id.requestorTaskName);
+        TextView statusValue = findViewById(R.id.requestorTaskStatus);
+        TextView usernameValue = findViewById(R.id.requestorTaskUsername);
+        TextView lowestBidValue = findViewById(R.id.requestorTaskLowestBid);
+        TextView phoneNumberValue = findViewById(R.id.requestorPhoneNumber);
+        TextView emailValue = findViewById(R.id.requestorEmail);
 
 
         final Intent intent = getIntent();
@@ -155,28 +146,25 @@ public class ViewRequestorTaskActivity extends AppCompatActivity {
                 int i = 0;
                 int sizeBidsList = bidsList.size();
 
+                DialogFragment placeBidFragment = new PlaceBidDialogFragment();
+                placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
+
+                DialogFragment updateBidFragment = new UpdateBidDialogFragment();
+                updateBidFragment = newInstance(updateBidFragment, requester, bidder, id);
+
                 if (bidsList.isEmpty()) {
-                    DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                    placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
                     placeBidFragment.show(getSupportFragmentManager(), "Bids");
 
                 } else {
-
                     for (Bid eachBid : bidsList) {
                         if (eachBid.getBidder().equals(bidder)) {
-                            DialogFragment updateBidFragment = new UpdateBidDialogFragment();
-                            updateBidFragment = newInstance(updateBidFragment, requester, bidder, id);
                             updateBidFragment.show(getSupportFragmentManager(), "Bids");
                             break;
                         }
                         if (i == sizeBidsList - 1) {
-                            DialogFragment placeBidFragment = new PlaceBidDialogFragment();
-                            placeBidFragment = newInstance(placeBidFragment, requester, bidder, id);
                             placeBidFragment.show(getSupportFragmentManager(), "Bids");
                         }
-
                         i++;
-
                     }
                 }
 

@@ -37,8 +37,7 @@ public class PlaceBidDialogFragment extends DialogFragment {
     private String requester;
     private String bidder;
     private String taskID;
-
-    Task task;
+    private Task task;
 
     /**
      * Creates a dialogue popup that loads when a user wants to place a bid on a task

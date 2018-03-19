@@ -36,10 +36,8 @@ import java.util.ArrayList;
 public class UpdateBidDialogFragment extends DialogFragment {
 
     private Double bidAmount;
-    private String requester;
     private String bidder;
     private String taskID;
-    private TextView providerBidValue;
     private String cameFrom;
 
     Bid bid;
@@ -63,11 +61,9 @@ public class UpdateBidDialogFragment extends DialogFragment {
         // Pass null as the parent view because its going in the dialog layout
         final View view = inflater.inflate(R.layout.dialog_updatebid, null);
 
-        requester = getArguments().getString("requester");
         bidder = getArguments().getString("bidder");
         taskID = getArguments().getString("id");
         cameFrom = getArguments().getString("cameFrom");
-
 
 
         ElasticSearchController.GetBidsByBidder bidderBids = new ElasticSearchController.GetBidsByBidder();
@@ -97,7 +93,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
 
         bid = bidList.get(i);
 
-        providerBidValue = view.findViewById(R.id.taskProviderBid);
+        TextView providerBidValue = view.findViewById(R.id.taskProviderBid);
         String bidAmountString = Double.toString(bid.getAmount());
         providerBidValue.setText(bidAmountString);
 
