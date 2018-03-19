@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpActivity> {
     private Solo solo;
-    private User existUser;
+    private User user;
 
     private User testingUser = new User("IntentTesting", "it@gmail.com", "1112221111");
 
@@ -35,36 +35,34 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-    //signing up an existing user
-    public void testFailedSignUp(){
-        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-        //existing user "qwerty123"
-        existUser =  new User("SignUpTest","123@email.com", "2221112222");
-
-        //Post the user if the user doesnt exist
+    //checks if user exists, if it doesnt post the user
+    public void addUser(){
+        user = new User("qwerty123", "123@gmail.com", "1112221111");
         ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
         allUsers.execute(); // grab all current users in the system
         ArrayList<User> userList = new ArrayList<User>();
-
         try {
             userList = allUsers.get();
         } catch (Exception e) {
             Log.e("Error", "Failed to get list of users");
         }
-
         for (User postedUser : userList) {
             Log.e("ALl usernames", postedUser.getUsername());
-            if (postedUser.getUsername().equals(existUser.getUsername())) {
-                break;
-            }
-            else {
-                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
-                postUser.execute(existUser);
+            if (postedUser.getUsername().equals(user.getUsername())) {
+                return;
             }
         }
-        solo.enterText((EditText) solo.getView(R.id.editAddUsername), existUser.getUsername());
-        solo.enterText((EditText) solo.getView(R.id.editAddPhone), existUser.getPhonenumber());
-        solo.enterText((EditText) solo.getView(R.id.editAddEmail), existUser.getEmail());
+        ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+        postUser.execute(user);
+    }
+    //signing up an existing user
+    public void testFailedSignUp(){
+        solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
+        //existing user "qwerty123"
+        addUser();
+        solo.enterText((EditText) solo.getView(R.id.editAddUsername), user.getUsername());
+        solo.enterText((EditText) solo.getView(R.id.editAddPhone), user.getPhonenumber());
+        solo.enterText((EditText) solo.getView(R.id.editAddEmail), user.getEmail());
         View fab = getActivity().findViewById(R.id.fabSignUp);
         solo.clickOnView(fab);
         solo.waitForText("Username Taken");
@@ -88,7 +86,6 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
     public void tearDown() throws Exception{
         ElasticSearchController.deleteUser DeUser = new ElasticSearchController.deleteUser();
         DeUser.execute(testingUser.getId());
-        DeUser.execute(existUser.getId());
         solo.finishOpenedActivities();
 
     }

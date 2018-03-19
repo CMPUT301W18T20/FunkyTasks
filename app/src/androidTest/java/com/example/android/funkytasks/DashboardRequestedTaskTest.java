@@ -29,30 +29,30 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
-
-    public void goToDashboardRequested(){
-        solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
-        user = new User("qwerty123", "1234567890", "IT@ualbertac.ca");
+    public void addUser(){
+        user = new User("qwerty123", "123@gmail.com", "1112221111");
         ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
         allUsers.execute(); // grab all current users in the system
         ArrayList<User> userList = new ArrayList<User>();
-
         try {
             userList = allUsers.get();
         } catch (Exception e) {
             Log.e("Error", "Failed to get list of users");
         }
-
         for (User postedUser : userList) {
             Log.e("ALl usernames", postedUser.getUsername());
             if (postedUser.getUsername().equals(user.getUsername())) {
-                break;
-            }
-            else {
-                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
-                postUser.execute(user);
+                return;
             }
         }
+        ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+        postUser.execute(user);
+    }
+
+
+    public void goToDashboardRequested(){
+        solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
+        addUser();
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");

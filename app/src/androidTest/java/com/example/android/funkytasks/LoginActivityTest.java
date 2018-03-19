@@ -32,6 +32,29 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+
+    //checks if user exists, if it doesnt post the user
+    public void addUser(){
+        testingUser = new User("qwerty123", "123@gmail.com", "1112221111");
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(); // grab all current users in the system
+        ArrayList<User> userList = new ArrayList<User>();
+        try {
+            userList = allUsers.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of users");
+        }
+        for (User postedUser : userList) {
+            Log.e("ALl usernames", postedUser.getUsername());
+            if (postedUser.getUsername().equals(testingUser.getUsername())) {
+                return;
+            }
+        }
+        ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+        postUser.execute(testingUser);
+    }
+
+
     public void testFailedLogin(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "NonExistingUser");
@@ -44,28 +67,7 @@ public class LoginActivityTest extends ActivityInstrumentationTestCase2<LoginAct
 
     public void testLogin() throws Exception{
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
-        //existing user
-        testingUser = new User("IntentTesting", "1234567890", "IT@ualbertac.ca");
-        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
-        allUsers.execute(); // grab all current users in the system
-        ArrayList<User> userList = new ArrayList<User>();
-
-        try {
-            userList = allUsers.get();
-        } catch (Exception e) {
-            Log.e("Error", "Failed to get list of users");
-        }
-
-        for (User postedUser : userList) {
-            Log.e("ALl usernames", postedUser.getUsername());
-            if (postedUser.getUsername().equals(testingUser.getUsername())) {
-                break;
-            }
-            else {
-                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
-                postUser.execute(testingUser);
-            }
-        }
+        addUser();
         solo.enterText((EditText) solo.getView(R.id.editLoginName), testingUser.getUsername());
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");
