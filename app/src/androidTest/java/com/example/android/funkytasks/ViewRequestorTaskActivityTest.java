@@ -32,14 +32,14 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
 
     }
 
-    //Update bid
+    //cancel button bid
     public void testClickBidCancel(){
         goToViewRequeestedTask();
-        solo.enterText((EditText) solo.getView(R.id.search), "drink");
+        solo.enterText((EditText) solo.getView(R.id.search), "Solve");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("pureleaf");
+        solo.waitForText("SolveTask");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("pureleaf");
+        solo.clickOnText("SolveTask");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("Bid");
@@ -51,34 +51,38 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
     //Bid on task
     public void testClickOnBid(){
         goToViewRequeestedTask();
-        solo.enterText((EditText) solo.getView(R.id.search), "bid");
+        solo.enterText((EditText) solo.getView(R.id.search), "place");
         solo.clickOnView(solo.getView(R.id.searchButton));
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("bid");
+        solo.clickOnText("Place");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("Bid");
         assertTrue(solo.searchText("Place Bid"));
-        solo.clickOnButton("Cancel");
+        solo.enterText((EditText) solo.getView(R.id.bidMoney), "10.0");
+        solo.clickOnButton("Place Bid");
         assertFalse(solo.searchText("Place Bid"));
+        solo.waitForActivity("SolveTaskActivity.class");
+        solo.assertCurrentActivity("Wrong activity", SolveTaskActivity.class);
+
     }
 
-/*    public void testClickBidUpdate(){
+    public void testClickBidUpdate(){
         goToViewRequeestedTask();
-        solo.enterText((EditText) solo.getView(R.id.search), "juice");
+        solo.enterText((EditText) solo.getView(R.id.search), "update");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("test");
+        solo.waitForText("Update");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("test");
+        solo.clickOnText("Update");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("Bid");
         assertTrue(solo.searchText("Update Bid"));
-        solo.enterText((EditText) solo.getView(R.id.bidMoney), "1.0");
+        solo.enterText((EditText) solo.getView(R.id.bidMoney), "10.0");
         solo.clickOnButton("Update Bid");
         solo.waitForActivity("SolveTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", SolveTaskActivity.class);
-    }*/
+    }
 
 
     @Before

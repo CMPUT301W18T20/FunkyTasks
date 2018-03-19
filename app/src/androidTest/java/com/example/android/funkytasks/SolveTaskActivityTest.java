@@ -1,12 +1,16 @@
 package com.example.android.funkytasks;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -16,6 +20,7 @@ import static org.junit.Assert.*;
 public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
     private User user;
+    private User requester;
     private Task newTask;
 
 
@@ -28,23 +33,30 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
     public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
     }
-/*
-    public void addUser(){
-        //user = new User("SolveTaskTest","123@email.com", "1112221111");
-        //ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
-        //postUser.execute(user);
-    }
 
-    public void addTask(){
-        //newTask = new Task("Test Title", "pen", user.getUsername());
-        //ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-        //postTask.execute(newTask);
-    }*/
 
     public void goToSolveTask(){
-        //addUser();
-        //addTask();
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
+        user = new User("qwerty123", "1234567890", "IT@ualbertac.ca");
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(); // grab all current users in the system
+        ArrayList<User> userList = new ArrayList<User>();
+        try {
+            userList = allUsers.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of users");
+        }
+
+        for (User postedUser : userList) {
+            Log.e("ALl usernames", postedUser.getUsername());
+            if (postedUser.getUsername().equals(user.getUsername())) {
+                break;
+            }
+            else {
+                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+                postUser.execute(user);
+            }
+        }
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");
@@ -55,13 +67,14 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
     }
 
     public void testSolveTask(){
+        //Task title:SolveTask, description:  for solve task testing
         goToSolveTask();
         solo.assertCurrentActivity("Wrong activity",SolveTaskActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.search), "juice");
+        solo.enterText((EditText) solo.getView(R.id.search), "solve");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("test");
+        solo.waitForText("SolveTask");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("test");
+        solo.clickOnText("SolveTask");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
     }
@@ -69,12 +82,6 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
 
     @After
     public void tearDown() throws Exception {
-        //delete task
-        //ElasticSearchController.deleteTask DeTask = new ElasticSearchController.deleteTask();
-        //DeTask.execute(newTask.getId());
-        //delete user
-        //ElasticSearchController.deleteUser DeUser = new ElasticSearchController.deleteUser();
-        //DeUser.execute(user.getId());
         solo.finishOpenedActivities();
     }
 

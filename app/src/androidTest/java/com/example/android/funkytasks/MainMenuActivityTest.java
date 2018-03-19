@@ -35,7 +35,6 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
         ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
         allUsers.execute(); // grab all current users in the system
         ArrayList<User> userList = new ArrayList<User>();
-
         try {
             userList = allUsers.get();
         } catch (Exception e) {

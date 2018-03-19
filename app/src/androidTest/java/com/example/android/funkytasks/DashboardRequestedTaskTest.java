@@ -1,12 +1,15 @@
 package com.example.android.funkytasks;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.robotium.solo.Solo;
 
 import org.junit.After;
 import org.junit.Before;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -15,6 +18,8 @@ import static org.junit.Assert.*;
  */
 public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
+    private User user;
+    private Task newTask;
 
     public DashboardRequestedTaskTest(){
         super(LoginActivity.class);
@@ -27,6 +32,27 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
 
     public void goToDashboardRequested(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
+        user = new User("qwerty123", "1234567890", "IT@ualbertac.ca");
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(); // grab all current users in the system
+        ArrayList<User> userList = new ArrayList<User>();
+
+        try {
+            userList = allUsers.get();
+        } catch (Exception e) {
+            Log.e("Error", "Failed to get list of users");
+        }
+
+        for (User postedUser : userList) {
+            Log.e("ALl usernames", postedUser.getUsername());
+            if (postedUser.getUsername().equals(user.getUsername())) {
+                break;
+            }
+            else {
+                ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
+                postUser.execute(user);
+            }
+        }
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");
@@ -40,14 +66,15 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
     }
 
     public void addTask(){
-        Task newTask = new Task("Dummy task", "Testing for delete", "qwerty123");
+        newTask = new Task("Dummy task", "Testing", "qwerty123");
         ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
         postTask.execute(newTask);
     }
 
     public void testEdit(){
+        addTask();
         goToDashboardRequested();
-        solo.clickOnText("test");
+        solo.clickOnText(newTask.getTitle());
         solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
         solo.clickOnView(solo.getView(R.id.editRequestedTask));
         solo.waitForActivity("EditDashboardRequestedTask.class");
