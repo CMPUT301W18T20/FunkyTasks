@@ -75,6 +75,11 @@ public class TaskTest extends TestCase{
     }
 
     @Test
+    public void testSetRequested() throws Exception{
+        test.setRequested();
+        assertEquals("requested",test.getStatus());
+    }
+    @Test
     public void testSetDone() throws Exception {
 
         int input= 1;
@@ -119,6 +124,19 @@ public class TaskTest extends TestCase{
         assertEquals(null, test.getId());
         test.setId(ID);
         assertEquals(ID, test.getId());
+    }
+
+    @Test
+    public void testSetProvider(){
+        String newProv = "testing";
+        test.setProvider(newProv);
+        assertEquals(newProv, test.getProvider());
+    }
+
+    @Test
+    public void testGetProvider(){
+        test.setProvider("TEST");
+        assertEquals("TEST", test.getProvider());
     }
 
     //not needed anymore

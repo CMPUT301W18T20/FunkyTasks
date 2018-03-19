@@ -77,9 +77,9 @@ public class User implements Serializable{
      *
      * @param newTaskID a string holding the new tasks ID that is to be added to the list of tasks
      */
-    public void addRequestedTask(String newTaskID){
-        requestedTasks.add(newTaskID);
-    }
+//    public void addRequestedTask(String newTaskID){
+//        requestedTasks.add(newTaskID);
+//    }
 //
 //    public void addBiddedTask(Task newTask){
 //        biddedTasks.add(newTask);
@@ -102,9 +102,9 @@ public class User implements Serializable{
      *
      * @return an array list holding the requested tasks of one user
      */
-    public ArrayList<String> getRequestedTasks(){
-        return this.requestedTasks;
-    }
+//    public ArrayList<String> getRequestedTasks(){
+//        return this.requestedTasks;
+//    }
 
 
 //    // DO NOT WRITE TESTS FOR DELETE METHODS YET
