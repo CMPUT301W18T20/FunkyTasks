@@ -141,9 +141,7 @@ public class DashboardProviderTask extends AppCompatActivity {
                                 placeBidFragment = newInstance(placeBidFragment, task.getRequester(), username, id);
                                 placeBidFragment.show(getSupportFragmentManager(), "Bids");
                             }
-
                             i++;
-
                         }
                     }
 

@@ -47,7 +47,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private TextView providerEmail;
     private TextView providerPhone;
     private TextView provideByShow;
-    private String id; // id of the detailed task
+    private String id;// id of the detailed task
+    private Button updateStatus;
+    private Button reassign;
 
 
     private String username; // username of the person who logged in
@@ -81,6 +83,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
         providerEmail = (TextView) findViewById(R.id.taskProviderEmail);
         providerPhone = (TextView) findViewById(R.id.taskProviderPhone);
         provideByShow =(TextView) findViewById(R.id.TextView);
+        updateStatus=(Button) findViewById(R.id.setToDone);
+        reassign=(Button) findViewById(R.id.reasignTask);
 
 
         final Intent intent = getIntent();
@@ -93,7 +97,11 @@ public class DashboardRequestedTask extends AppCompatActivity {
         setTaskDetails(); // set the contents of the screen to the task details
         setBids(); // grab the associated bids of the task
         setAdapter(); // set adapter ot the list view for bids
-        if(task.getStatus().equals("bidded")){
+        setStatusDone();
+        ressignTask();
+
+
+
 
             bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 // if we click on a bid, create a pop up window to display bid details
@@ -135,6 +143,12 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
                     final int target=i;
                     //accept or decline bids
+
+                    if(!task.getStatus().equals("bidded")){
+                        acceptBTN.setVisibility(View.GONE);
+                        declineBTN.setVisibility(View.GONE);
+                    }
+
                     acceptBTN.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -169,9 +183,14 @@ public class DashboardRequestedTask extends AppCompatActivity {
             });
 
 
-        }
+
+
+
+
 
     }
+
+
 
     /**
      * Creates the options menu on a given screen using the provided menu
@@ -243,11 +262,67 @@ public class DashboardRequestedTask extends AppCompatActivity {
 
         }
     }
+    /**
+     *Reasign a task, clear all the bids placed and change status to requested.
+     */
 
+    public void ressignTask(){
+        if(task.getStatus().equals("assigned")){
+            reassign.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ElasticSearchController.deleteBid deleteBid=new ElasticSearchController.deleteBid();
+                    deleteBid.execute(bidList.get(0).getId());
+                    bidList.remove(0);
+                    setAdapter();
+                    task.setRequested();
+                    ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
+                    update.execute(task);
+                    statusValue.setText("requested");
+                    updateStatus.setVisibility(View.GONE);
+                    reassign.setVisibility(View.GONE);
+
+                }
+            });
+        }
+        else{
+            reassign.setVisibility(View.GONE);
+        }
+
+    }
+
+    /**
+     * Set the task status to "done"
+     */
+
+    public void setStatusDone(){
+        if(task.getStatus().equals("assigned")){
+            updateStatus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    task.setDone();
+                    ElasticSearchController.updateTask done=new ElasticSearchController.updateTask();
+                    done.execute(task);
+                    statusValue.setText("done");
+                    Toast.makeText(DashboardRequestedTask.this,
+                            "Task status: done", Toast.LENGTH_SHORT).show();
+                    updateStatus.setVisibility(View.GONE);
+                    reassign.setVisibility(View.GONE);
+                }
+            });
+
+
+        }
+        else{
+            updateStatus.setVisibility(View.GONE);
+        }
+
+    }
 
     /**
      * Set the proper adapter for the bid list view
      */
+
     public void setAdapter(){
         BidListViewAdapter adpater = new BidListViewAdapter(DashboardRequestedTask.this,
                 android.R.layout.simple_list_item_1, bidList) ;
@@ -307,7 +382,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
             }
             providerPhone.setText(provider.getPhonenumber());
             providerEmail.setText(provider.getEmail());
-            provideByShow.setText("PROVIDE BY");
+            provideByShow.setText("Provided By: ");
         }
     }
 
@@ -377,6 +452,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
         task.setProvider(bidder.getUsername());
         ElasticSearchController.updateTask assigned = new ElasticSearchController.updateTask();
         assigned.execute(task);
+        updateStatus.setVisibility(View.VISIBLE);
+        reassign.setVisibility(View.VISIBLE);
+        ressignTask();
+        setStatusDone();
         Toast.makeText(DashboardRequestedTask.this,
                 "Task has been assigned", Toast.LENGTH_SHORT).show();
     }
@@ -389,13 +468,21 @@ public class DashboardRequestedTask extends AppCompatActivity {
      *               treated by the method
      */
     public void declineBids(int target){
-        if (task.getStatus().equals("accepted")){
+        if (task.getStatus().equals("bidded")){
+            ElasticSearchController.deleteBid deleteBid=new ElasticSearchController.deleteBid();
+            deleteBid.execute(bidList.get(target).getId());
+            bidList.remove(target);
+            setAdapter();
+            if(bidList.size()==0){
+                task.setRequested();
+                statusValue.setText("requested");
+                ElasticSearchController.updateTask updateTask=new ElasticSearchController.updateTask();
+                updateTask.execute(task);
+            }
             Toast.makeText(DashboardRequestedTask.this,
-                    "Task has already been assigned", Toast.LENGTH_SHORT).show();
-            return;
+                    "Declined Bid", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(DashboardRequestedTask.this,
-                "Declined Bid", Toast.LENGTH_SHORT).show();
+
 
     }
 

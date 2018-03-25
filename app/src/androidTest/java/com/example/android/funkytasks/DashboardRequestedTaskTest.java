@@ -61,8 +61,6 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         solo.waitForActivity("MyTasksActivity.class");
         solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
         solo.clickOnActionBarItem(R.id.tabItem);
-
-
     }
 
     public void addTask(){

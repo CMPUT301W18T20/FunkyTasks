@@ -28,7 +28,8 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_dashboard_requested_task"/>
+    <include
+        layout="@layout/content_dashboard_requested_task" />
 
 </android.support.design.widget.CoordinatorLayout>
 

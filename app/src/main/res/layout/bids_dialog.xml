@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="5dp">
-
+    android:background="#ffffff"
+    android:padding="20dp">
 
     <!--<TextView-->
         <!--android:id="@+id/TextView1"-->
@@ -66,17 +66,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contactTextView" />
 
-
-
     <TextView
         android:id="@+id/amountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="0dp"
         android:text="100"
         android:textColor="@android:color/background_dark"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -85,20 +82,22 @@
         android:id="@+id/acceptButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:text="ACCEPT"
-        android:background="@drawable/buttonshape"
+        android:textColor="#009688"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/declineButton"
-        app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail"
+        android:background="@drawable/buttonshape2" />
 
     <Button
         android:id="@+id/declineButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
         android:text="DECLINE"
-        android:background="@drawable/buttonshape"
+        android:textColor="#009688"
+        android:background="@drawable/buttonshape2"
         app:layout_constraintLeft_toRightOf="@id/acceptButton"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail" />
