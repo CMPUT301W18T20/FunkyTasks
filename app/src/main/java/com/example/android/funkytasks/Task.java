@@ -12,6 +12,7 @@
 
 package com.example.android.funkytasks;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -36,6 +37,7 @@ public class Task implements Serializable{
     private String provider;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
+    private ArrayList<Bitmap> images;
 
     @JestId
     private String id;
@@ -58,6 +60,7 @@ public class Task implements Serializable{
         this.requester = requester; // username of the user who requests the task
         this.provider = null; // username of user who is solving the task
         this.status = statuses[0];
+        this.images = new ArrayList<Bitmap>();
     }
 
 
@@ -181,4 +184,30 @@ public class Task implements Serializable{
     }
 
 
+    /**
+     * Returns the array list of images associated with the task
+     *
+     * @return an arraylist bitmap containing the image attached to the task
+     */
+    public ArrayList<Bitmap> getImages() {
+        return images;
+    }
+
+    /**
+     * Adds the image of the task to the task's current list of photos
+     * @param image a new image to attach to the task's current list of images
+     */
+
+    public void addImage(Bitmap image) {
+        images.add(image);
+    }
+
+    /**
+     * Replaces the task's list of photos with a new list(newImages)
+     * @param newImages is a arraylist containing one or more images to associate with the task
+     */
+
+    public void setImagesList(ArrayList<Bitmap> newImages){
+        this.images = newImages;
+    }
 }
