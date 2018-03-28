@@ -181,16 +181,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
                 }
 
             });
-
-
-
-
-
-
-
     }
-
-
 
     /**
      * Creates the options menu on a given screen using the provided menu

@@ -169,7 +169,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
             Bundle extras = data.getExtras();
             Bitmap newImage = (Bitmap) extras.get("data");
-
+            newImages.add(newImage);
         }
     }
 

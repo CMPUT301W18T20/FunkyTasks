@@ -11,15 +11,24 @@
 package com.example.android.funkytasks;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * This activity allows a user to edit a task
@@ -34,6 +43,8 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     private int index;
     private String titleValue;
     private String descriptionValue;
+    private final int REQUEST_IMAGE_CAPTURE = 1;
+    private ArrayList<Bitmap> newImages;
 
 
     /**
@@ -51,6 +62,8 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         saveBT = findViewById(R.id.buttonDone);
 
         final Intent intent = getIntent();
+
+        newImages = new ArrayList<Bitmap>();
 
         index = intent.getExtras().getInt("index");
         id = intent.getExtras().getString("id");
@@ -73,23 +86,27 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         saveBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                titleValue = editTitle.getText().toString();            // grab title from edit text input
-                if (titleValue.length() >= 30) {                    // validating name input length
-                    Toast.makeText(getApplicationContext(),
-                            "Title must be at least 30 characters long ", Toast.LENGTH_SHORT)
+                boolean input = checkInput();
+                if (!input){
+                    return;
+                }
+
+                boolean check = checkImages();
+                if (!check) {
+                    Toast.makeText(getApplicationContext(), "Image size is too large", Toast.LENGTH_SHORT)
                             .show();
                     return;
                 }
 
-                descriptionValue = editDescription.getText().toString(); // grab description from edit text input
-                if (descriptionValue.length() >= 300) {               // validating name input length
-                    Toast.makeText(getApplicationContext(),
-                            "Description must be at least 300 characters long ", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
                 task.setDescription(descriptionValue);
                 task.setTitle(titleValue);
+
+                // If we have more than one image to add, add it to the current list of images
+                if (newImages.size() > 0){
+                    ArrayList<Bitmap> combined = task.getImages();
+                    combined.addAll(newImages);
+                    task.setImagesList(combined);
+                }
 
                 ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
                 updateTask.execute(task);
@@ -103,7 +120,82 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
 
             }
         });
-
     }
+
+    /**
+     * Checks if the title and description inputted is under the size constraint
+     * @return a boolean if the user input for title and description is under the size length
+     */
+
+    public boolean checkInput(){
+        titleValue = editTitle.getText().toString();            // grab title from edit text input
+        if (titleValue.length() >= 30 || titleValue.length() <= 0) {  // validating name input length
+            Toast.makeText(getApplicationContext(), "Title is invalid length. Must be between 1-29 characters. ", Toast.LENGTH_SHORT)
+                    .show();
+            return false;
+        }
+
+        descriptionValue = editDescription.getText().toString(); // grab description from edit text input
+        if (descriptionValue.length() >= 300) {               // validating name input length
+            Toast.makeText(getApplicationContext(), "Description is invalid length. Must be between 1-299 characters. ", Toast.LENGTH_SHORT)
+                    .show();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks the size of each image if its under the constraint
+     * @return a boolean if all the images were under the size constraint
+     */
+
+    public boolean checkImages() {
+        if (newImages.size() != 0) {
+            for (Bitmap image : newImages) {
+                int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
+                if (bitmapByteCount >= 65536) { // checking if image is over our wanted size constaint
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_task, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // https://stackoverflow.com/questions/2407565/bitmap-byte-size-after-decoding
+        // https://developer.android.com/training/camera/photobasics.html
+        switch (item.getItemId()) {
+            case R.id.camera:
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Bundle extras = data.getExtras();
+            Bitmap newImage = (Bitmap) extras.get("data");
+            newImages.add(newImage);
+        }
+    }
+
+
+
 
 }
