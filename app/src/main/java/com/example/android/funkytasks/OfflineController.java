@@ -33,11 +33,12 @@ public class OfflineController {
 
     public void saveInFile(Task task) {
         try {
+            taskQueue.add(task);
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
-            gson.toJson(task, out);
+            gson.toJson(taskQueue, out);
             out.flush();
 
         } catch (FileNotFoundException e) {
@@ -68,6 +69,23 @@ public class OfflineController {
         } catch (IOException e) {
 
             throw new RuntimeException();
+        }
+    }
+
+    public void deleteFromQueue(){
+        try {
+            taskQueue.remove();
+            FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(taskQueue, out);
+            out.flush();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
