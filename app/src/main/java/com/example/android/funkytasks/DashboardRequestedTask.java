@@ -112,8 +112,8 @@ public class DashboardRequestedTask extends AppCompatActivity {
         }
 
         //TODO fix this image showing up
-//        ArrayList<Bitmap> images = task.getImages();
-//
+        ArrayList<Bitmap> images = task.getImages();
+
 //        picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
 //        viewPager.setAdapter(picturePagerAdapter);
 

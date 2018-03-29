@@ -154,6 +154,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         if (newImages.size() != 0) {
             int index = 0;
             for (Bitmap image : newImages) {
+                //https://stackoverflow.com/a/25136550
                 image = getResizedBitmap(image, 100);
                 newImages.set(index,image);
                 int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
