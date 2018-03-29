@@ -56,19 +56,15 @@ public class OfflineController {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-
             Type dataType = new TypeToken<Queue<Task>>() {}.getType();
-
             taskQueue = gson.fromJson(in, dataType);
 
             return taskQueue;
 
         } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
-        } catch (IOException e) {
-
-            throw new RuntimeException();
         }
     }
 
