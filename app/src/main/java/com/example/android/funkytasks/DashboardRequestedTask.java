@@ -12,7 +12,9 @@ package com.example.android.funkytasks;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.ActionMenuItemView;
@@ -51,6 +53,9 @@ public class DashboardRequestedTask extends AppCompatActivity {
     private Button updateStatus;
     private Button reassign;
 
+    ViewPager viewPager;
+
+    PicturePagerAdapter picturePagerAdapter;
 
     private String username; // username of the person who logged in
     private Task task;
@@ -86,13 +91,31 @@ public class DashboardRequestedTask extends AppCompatActivity {
         updateStatus=(Button) findViewById(R.id.setToDone);
         reassign=(Button) findViewById(R.id.reasignTask);
 
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        task = (Task) intent.getSerializableExtra("task");
+        //task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
+
+
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(id);
+        try {
+            task = getTask.get();
+            Log.e("Return task title", task.getTitle());
+        } catch (Exception e) {
+            Log.e("Error", "Task get not working");
+        }
+
+        //TODO fix this image showing up
+//        ArrayList<Bitmap> images = task.getImages();
+//
+//        picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
+//        viewPager.setAdapter(picturePagerAdapter);
 
         setTaskDetails(); // set the contents of the screen to the task details
         setBids(); // grab the associated bids of the task

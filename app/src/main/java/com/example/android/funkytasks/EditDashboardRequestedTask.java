@@ -108,8 +108,14 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
                     task.setImagesList(combined);
                 }
 
-                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
-                updateTask.execute(task);
+                new Thread(new Runnable() {
+                    public void run() {
+                        // a potentially  time consuming task
+                        ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
+                        updateTask.execute(task);
+                    }
+                }).start();
+
 
                 Log.e("tasktitle edited",task.getTitle());
 
@@ -188,7 +194,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap newImage = (Bitmap) extras.get("data");
             newImages.add(newImage);

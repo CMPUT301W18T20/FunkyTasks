@@ -12,6 +12,8 @@ package com.example.android.funkytasks;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -28,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -44,6 +47,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private EditText title;
     private EditText description;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +89,29 @@ public class CreateTaskActivity extends AppCompatActivity {
                 }
 
                 task = new Task(titleValue, descriptionValue, username);
+
+
                 if (newImages.size() != 0) {
                     task.setImagesList(newImages);
                 }
 
+                new Thread(new Runnable() {
+                    public void run() {
+                        // a potentially  time consuming task
+                        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+                        postTask.execute(task);
+                        Log.e("ugh","ug1h");
+                        try {
+                            Task x = postTask.get();
+                            Log.e("newtask title", x.getTitle());
+                        } catch (Exception e) {
+                            Log.e("Error", "Task not posted");
+                        }
+                    }
+                }).start();
+
                 intent.putExtra("username", username);
-                intent.putExtra("task", task); // send task our to main activity to post to server
+                //intent.putExtra("task", task); // send task our to main activity to post to server
                 setResult(RESULT_OK, intent);
                 finish();
 
@@ -98,6 +119,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     /**
      * Checks if the title and description inputted is under the size constraint
@@ -129,14 +152,34 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     public boolean checkImages() {
         if (newImages.size() != 0) {
+            int index = 0;
             for (Bitmap image : newImages) {
+                image = getResizedBitmap(image, 100);
+                newImages.set(index,image);
                 int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
+                Log.e("byte size",String.valueOf(bitmapByteCount));
                 if (bitmapByteCount >= 65536) { // checking if image is over our wanted size constaint
                     return false;
                 }
+                index++;
             }
         }
         return true;
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     @Override
@@ -166,10 +209,12 @@ public class CreateTaskActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap newImage = (Bitmap) extras.get("data");
+            Log.e("newimage",newImage.toString());
             newImages.add(newImage);
+            Log.e("size",String.valueOf(newImages.size()));
         }
     }
 

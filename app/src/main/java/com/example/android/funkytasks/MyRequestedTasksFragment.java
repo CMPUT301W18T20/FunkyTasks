@@ -192,7 +192,7 @@ public class MyRequestedTasksFragment extends Fragment {
         } catch (Exception e) {
             Log.e("Error", "Task get not working");
         }
-        intent.putExtra("task", detailedTask);
+        //intent.putExtra("task", detailedTask);
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
         startActivityForResult(intent,DELETECODE);

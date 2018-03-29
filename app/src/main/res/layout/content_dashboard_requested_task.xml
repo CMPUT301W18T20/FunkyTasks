@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/rsz_bg"
+    android:padding="16dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.funkytasks.DashboardRequestedTask"
-    tools:showIn="@layout/activity_dashboard_requested_task"
-    android:padding="16dp"
-    android:background="@drawable/rsz_bg">
+    tools:showIn="@layout/activity_dashboard_requested_task">
 
 
     <TextView
@@ -19,15 +19,15 @@
         android:textColor="#ffffff"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="16dp"
         android:text="Status:  "
         android:textColor="#ffffff"
         android:textSize="17sp"
@@ -51,8 +51,8 @@
         android:layout_height="wrap_content"
         android:text="make ken happy"
         android:textColor="#ffffff"
-        android:textStyle="bold"
         android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/textView2"
         app:layout_constraintLeft_toRightOf="@id/textView2" />
 
@@ -60,9 +60,8 @@
         android:id="@+id/textBid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:textColor="#ffffff"
         android:text="Bid:  "
+        android:textColor="#ffffff"
         android:textSize="17sp"
         app:layout_constraintLeft_toLeftOf="@id/taskName"
         app:layout_constraintTop_toBottomOf="@id/taskProviderPhone" />
@@ -70,9 +69,9 @@
     <ListView
         android:id="@+id/bidlistView"
         android:layout_width="match_parent"
-        android:textColor="#ffffff"
-        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#ffffff"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textBid" />
 
@@ -81,45 +80,49 @@
         android:id="@+id/TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
         android:layout_marginTop="8dp"
+        android:textColor="#ffffff"
         android:textSize="17sp"
         app:layout_constraintLeft_toLeftOf="@id/textView3"
         app:layout_constraintTop_toBottomOf="@id/textView2" />
+
     <TextView
         android:id="@+id/taskStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:text="bidded"
-        android:textStyle="bold"
         android:layout_marginTop="20dp"
-       app:layout_constraintLeft_toRightOf="@+id/textView3"
-        app:layout_constraintBottom_toBottomOf="@id/textView3" />
+        android:text="bidded"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/textView3"
+        app:layout_constraintLeft_toRightOf="@+id/textView3" />
+
     <TextView
         android:id="@+id/taskProviderUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:textStyle="bold"
-        android:textSize="15sp"
         android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toRightOf="@id/TextView"
-        app:layout_constraintBottom_toBottomOf="@id/TextView" />
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/TextView"
+        app:layout_constraintLeft_toRightOf="@id/TextView" />
+
     <TextView
         android:id="@+id/taskProviderPhone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
         android:layout_marginTop="5dp"
+        android:textColor="#ffffff"
         app:layout_constraintLeft_toRightOf="@id/TextView"
         app:layout_constraintTop_toBottomOf="@id/taskProviderUsername" />
+
     <TextView
         android:id="@+id/taskProviderEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
         android:layout_marginTop="5dp"
+        android:textColor="#ffffff"
         app:layout_constraintLeft_toRightOf="@id/TextView"
         app:layout_constraintTop_toBottomOf="@id/taskProviderPhone" />
 
@@ -127,22 +130,31 @@
         android:id="@+id/setToDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FINISH TASK"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/buttonshape"
+        android:text="FINISH TASK"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginBottom="50dp" />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/reasignTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="REASIGN"
-        android:background="@drawable/buttonshape"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="50dp"
-        />
+        android:background="@drawable/buttonshape"
+        android:text="REASIGN"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="352dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bidlistView" />
 
 
 </android.support.constraint.ConstraintLayout>
