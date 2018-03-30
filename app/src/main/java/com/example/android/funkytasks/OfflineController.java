@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,16 +27,30 @@ public class OfflineController {
 
     private String FILENAME;
     private Context context;
-    private ArrayList<Task> taskList = new ArrayList<>();
+    private ArrayList<Task> taskList;
 
     public OfflineController(Context context, String userName) {
         this.context = context;
         this.FILENAME = userName + ".sav";
     }
 
+    public boolean isFileExist() {
+        File file = context.getFileStreamPath(FILENAME);
+        if(file.exists()){
+            taskList = loadFromFile();
+            Log.d("File", "File exist");
+            return true;
+        }else{
+            taskList = new ArrayList<>();
+            Log.d("File", "File does not exist");
+            return false;
+        }
+    }
+
     public void saveInFile(Task task) {
-        Log.d("Tasktitle in controller", task.getTitle());
+
         try {
+            isFileExist();
             taskList.add(task);
             FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
 
@@ -43,7 +58,7 @@ public class OfflineController {
             Gson gson = new Gson();
             gson.toJson(taskList, out);
             out.flush();
-
+            Log.d("Tasktitle in controller", task.getTitle());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -61,6 +76,7 @@ public class OfflineController {
             Gson gson = new Gson();
             Type dataType = new TypeToken<ArrayList<Task>>() {}.getType();
             taskList = gson.fromJson(in, dataType);
+            Log.d("size in controller", String.valueOf(taskList.size()));
 
             return taskList;
 
@@ -71,15 +87,18 @@ public class OfflineController {
         }
     }
 
-    public void deleteFromQueue(){
+    public void deleteFromQueue(int index){
         try {
-            taskList.remove(0);
+            isFileExist();
+            Task task = taskList.remove(index);
+            Log.d("task deleted", task.getTitle());
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
             gson.toJson(taskList, out);
             out.flush();
+            Log.d("Tasks size", String.valueOf(taskList.size()));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

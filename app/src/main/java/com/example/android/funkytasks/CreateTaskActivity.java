@@ -49,7 +49,8 @@ public class CreateTaskActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private EditText title;
     private EditText description;
-
+    private ArrayList<Task> tasks;
+    private Task taskTemp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,16 +100,28 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                 new Thread(new Runnable() {
                     public void run() {
-                        // a potentially  time consuming task
-                        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-                        postTask.execute(task);
-                        Log.e("ugh","ug1h");
-                        try {
-                            Task x = postTask.get();
-                            Log.e("newtask title", x.getTitle());
-                        } catch (Exception e) {
-                            Log.e("Error", "Task not posted");
+                        if (isNetworkAvailable()){
+                            // a potentially  time consuming task
+                            ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+                            postTask.execute(task);
+                            Log.e("ugh","ug1h");
+                            try {
+                                Task x = postTask.get();
+                                Log.e("newtask title", x.getTitle());
+                            } catch (Exception e) {
+                                Log.e("Error", "Task not posted");
+                            }
                         }
+                        else{
+                            OfflineController controller = new OfflineController(getApplicationContext(), username);
+                            controller.saveInFile(task);
+                            tasks = controller.loadFromFile();
+                            for (Task taskTemp: tasks){
+                                Log.d("Task loaded", taskTemp.getTitle());
+                            }
+
+                        }
+
                     }
                 }).start();
 
@@ -223,8 +236,9 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
     }
 
+
     //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
-    private boolean isNetworkAvailable() {
+    public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         boolean isAvailable = false;
