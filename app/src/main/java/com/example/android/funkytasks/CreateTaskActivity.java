@@ -52,6 +52,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private ArrayList<Task> tasks;
     private Task taskTemp;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,10 +116,6 @@ public class CreateTaskActivity extends AppCompatActivity {
                         else{
                             OfflineController controller = new OfflineController(getApplicationContext(), username);
                             controller.saveInFile(task);
-                            tasks = controller.loadFromFile();
-                            for (Task taskTemp: tasks){
-                                Log.d("Task loaded", taskTemp.getTitle());
-                            }
 
                         }
 
@@ -246,6 +243,31 @@ public class CreateTaskActivity extends AppCompatActivity {
             isAvailable = true;
         }
         return isAvailable;
+    }
+
+    public void LocalToElasticSearchController(){
+        if (isNetworkAvailable()){
+            OfflineController controller = new OfflineController(getApplicationContext(), username);
+            tasks = controller.loadFromFile();
+            int index = 0;
+            for (Task taskTemp: tasks) {
+                //if the task exists{
+                //index += 1
+            //}
+
+                ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+                postTask.execute(taskTemp);
+                Log.e("ugh","ug1h");
+                try {
+                    Task x = postTask.get();
+                    Log.e("newtask title", x.getTitle());
+                } catch (Exception e) {
+                    Log.e("Error", "Task not posted");
+                }
+                controller.deleteFromQueue(index);
+            }
+        }
+
     }
 
 }
