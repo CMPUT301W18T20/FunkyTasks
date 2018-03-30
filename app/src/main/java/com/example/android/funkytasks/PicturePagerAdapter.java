@@ -19,9 +19,9 @@ import java.util.ArrayList;
  */
 
 public class PicturePagerAdapter extends PagerAdapter{
-    Context context;
-    ArrayList<Bitmap> images;
-    LayoutInflater layoutInflater;
+    private Context context;
+    private ArrayList<Bitmap> images;
+    private LayoutInflater layoutInflater;
 
 
     public PicturePagerAdapter(Context context, ArrayList<Bitmap> images) {
@@ -45,15 +45,16 @@ public class PicturePagerAdapter extends PagerAdapter{
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View layout = layoutInflater.inflate(R.layout.imageitem, container, false);
+        View itemView = layoutInflater.inflate(R.layout.imageitem, container, false);
 
 
-        ImageView imageView = (ImageView) layout.findViewById(R.id.taskpicture);
-        imageView.setImageBitmap(images.get(position));
+        ImageView imageView = (ImageView) itemView.findViewById(R.id.taskpicture);
+        Bitmap image = images.get(position);
 
-        (container).addView(layout);
+        imageView.setImageBitmap(image);
+        (container).addView(itemView);
 
-        //listening to image click
+        //TODO leave this for testing
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,9 +62,8 @@ public class PicturePagerAdapter extends PagerAdapter{
             }
         });
 
-        return layout;
+        return itemView;
     }
-
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {

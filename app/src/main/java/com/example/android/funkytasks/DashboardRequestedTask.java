@@ -56,6 +56,7 @@ public class DashboardRequestedTask extends AppCompatActivity {
     ViewPager viewPager;
 
     PicturePagerAdapter picturePagerAdapter;
+    private ArrayList<Bitmap> images;
 
     private String username; // username of the person who logged in
     private Task task;
@@ -111,11 +112,10 @@ public class DashboardRequestedTask extends AppCompatActivity {
             Log.e("Error", "Task get not working");
         }
 
-        //TODO fix this image showing up
-        ArrayList<Bitmap> images = task.getImages();
+        images = task.getImages();
 
-//        picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
-//        viewPager.setAdapter(picturePagerAdapter);
+        picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
+        viewPager.setAdapter(picturePagerAdapter);
 
         setTaskDetails(); // set the contents of the screen to the task details
         setBids(); // grab the associated bids of the task
@@ -270,9 +270,27 @@ public class DashboardRequestedTask extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
-            task = (Task) intent.getSerializableExtra("updatedTask");
+            //task = (Task) intent.getSerializableExtra("updatedTask");
+
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            getTask.execute(id);
+            try{
+                task = getTask.get();
+                Log.e("Return task title",task.getTitle());
+
+            }
+            catch(Exception e){
+                Log.e("Task get","not workng");
+            }
+
+            images = task.getImages();
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
+
+            // update the images on screen
+            picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
+            picturePagerAdapter.notifyDataSetChanged();
+            viewPager.setAdapter(picturePagerAdapter);
 
         }
     }
