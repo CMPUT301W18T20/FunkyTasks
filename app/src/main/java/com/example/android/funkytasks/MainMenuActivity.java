@@ -33,7 +33,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * This is the main screen for the project
  */
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends BaseActivity {
     public static ArrayList<Task> tasksArrayList = new ArrayList<Task>();
     ArrayList<User> userArrayList = new ArrayList<User>();
     public static String username;

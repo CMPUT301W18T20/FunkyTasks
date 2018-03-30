@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * view the details of the task as well as the details of the bids that were placed on the task.
  * The requester can accept or decline tasks from this page.
  */
-public class DashboardRequestedTask extends AppCompatActivity {
+public class DashboardRequestedTask extends BaseActivity {
 
     private TextView titleValue;
     private TextView descriptionValue;

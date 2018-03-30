@@ -26,7 +26,7 @@ import org.w3c.dom.Text;
 /**
  * This activity allows a user to edit their profile information
  */
-public class EditProfileActivity extends AppCompatActivity {
+public class EditProfileActivity extends BaseActivity {
     private String username;
     private User user;
 

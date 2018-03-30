@@ -35,7 +35,7 @@ import java.util.ArrayList;
 /**
  * This activity allows a user to edit a task
  */
-public class EditDashboardRequestedTask extends AppCompatActivity {
+public class EditDashboardRequestedTask extends BaseActivity {
     private String username;
     private String id;
     private EditText editTitle;

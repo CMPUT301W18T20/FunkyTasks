@@ -102,21 +102,19 @@ public class CreateTaskActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     public void run() {
                         if (isNetworkAvailable()){
+                            Log.d("Network", "available");
                             // a potentially  time consuming task
                             ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
                             postTask.execute(task);
-                            Log.e("ugh","ug1h");
-                            try {
-                                Task x = postTask.get();
-                                Log.e("newtask title", x.getTitle());
-                            } catch (Exception e) {
-                                Log.e("Error", "Task not posted");
-                            }
                         }
                         else{
                             Log.d("Network", "unavailable");
                             OfflineController controller = new OfflineController(getApplicationContext(), username);
                             controller.saveInFile(task);
+                            tasks = controller.loadFromFile();
+                            for (Task taskTemp: tasks){
+                                Log.d("Task loaded", taskTemp.getTitle());
+                            }
 
                         }
 
@@ -244,42 +242,6 @@ public class CreateTaskActivity extends AppCompatActivity {
             isAvailable = true;
         }
         return isAvailable;
-    }
-
-    public void LocalToElasticSearchController(){
-        while (true){
-            if (isNetworkAvailable()){
-                OfflineController controller = new OfflineController(getApplicationContext(), username);
-                tasks = controller.loadFromFile();
-                int index = 0;
-                for (Task taskTemp: tasks) {
-                    ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-                    getTask.execute(taskTemp.getId());
-                    try {
-                        //if task exists, increment the index by 1
-                        Task x = getTask.get();
-                        index = index + 1;
-                    } catch (Exception e) {
-                        Log.e("Error", "Task get not working");
-                        //if task does not exist, post the task, and delete from local file
-                        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-                        postTask.execute(taskTemp);
-                        Log.e("ugh","ug1h");
-                        try {
-                            Task x = postTask.get();
-                            Log.e("newtask title", x.getTitle());
-                        } catch (Exception exception) {
-                            Log.e("Error", "Task not posted");
-                        }
-                        controller.deleteFromQueue(index);
-                    }
-
-
-                }
-            }
-        }
-
-
     }
 
 }

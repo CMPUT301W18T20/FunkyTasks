@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * This activity is not currently being used, but it may be used in the future.
  */
-public class TaskDashboardActivity extends AppCompatActivity {
+public class TaskDashboardActivity extends BaseActivity {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
     CheckBox statusCheckbox;

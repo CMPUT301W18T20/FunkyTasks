@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * This activity allows a user to view the activities of a task that they have searched
  * for and selected.
  */
-public class ViewRequestorTaskActivity extends AppCompatActivity {
+public class ViewRequestorTaskActivity extends BaseActivity {
 
     private String id;
     private String bidder;

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * This activity allows a user to search for a task to complete
  */
-public class SolveTaskActivity extends AppCompatActivity {
+public class SolveTaskActivity extends BaseActivity {
     private String searchText;
     private String username;
 

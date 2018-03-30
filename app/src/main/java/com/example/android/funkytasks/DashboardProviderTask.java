@@ -33,7 +33,7 @@ import static com.example.android.funkytasks.SearchListViewAdapter.getLowestBid;
 /**
  * This activity displays the tasks to the task provider.
  */
-public class DashboardProviderTask extends AppCompatActivity {
+public class DashboardProviderTask extends BaseActivity {
 
     private TextView titleValue;
     private TextView descriptionValue;

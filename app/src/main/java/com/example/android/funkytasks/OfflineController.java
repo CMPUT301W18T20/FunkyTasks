@@ -87,10 +87,10 @@ public class OfflineController {
         }
     }
 
-    public void deleteFromQueue(int index){
+    public void deleteFromArrayList(){
         try {
             isFileExist();
-            Task task = taskList.remove(index);
+            Task task = taskList.remove(0);
             Log.d("task deleted", task.getTitle());
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 

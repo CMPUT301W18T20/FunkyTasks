@@ -31,7 +31,7 @@ import android.widget.TextView;
 /**
  * This activity displays all of one user's tasks
  */
-public class MyTasksActivity extends AppCompatActivity {
+public class MyTasksActivity extends BaseActivity {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
