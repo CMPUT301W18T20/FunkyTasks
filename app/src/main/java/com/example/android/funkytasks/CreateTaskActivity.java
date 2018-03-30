@@ -247,27 +247,38 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     public void LocalToElasticSearchController(){
-        if (isNetworkAvailable()){
-            OfflineController controller = new OfflineController(getApplicationContext(), username);
-            tasks = controller.loadFromFile();
-            int index = 0;
-            for (Task taskTemp: tasks) {
-                //if the task exists{
-                //index += 1
-            //}
+        while (true){
+            if (isNetworkAvailable()){
+                OfflineController controller = new OfflineController(getApplicationContext(), username);
+                tasks = controller.loadFromFile();
+                int index = 0;
+                for (Task taskTemp: tasks) {
+                    ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+                    getTask.execute(taskTemp.getId());
+                    try {
+                        //if task exists, increment the index by 1
+                        Task x = getTask.get();
+                        index = index + 1;
+                    } catch (Exception e) {
+                        Log.e("Error", "Task get not working");
+                        //if task does not exist, post the task, and delete from local file
+                        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+                        postTask.execute(taskTemp);
+                        Log.e("ugh","ug1h");
+                        try {
+                            Task x = postTask.get();
+                            Log.e("newtask title", x.getTitle());
+                        } catch (Exception exception) {
+                            Log.e("Error", "Task not posted");
+                        }
+                        controller.deleteFromQueue(index);
+                    }
 
-                ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-                postTask.execute(taskTemp);
-                Log.e("ugh","ug1h");
-                try {
-                    Task x = postTask.get();
-                    Log.e("newtask title", x.getTitle());
-                } catch (Exception e) {
-                    Log.e("Error", "Task not posted");
+
                 }
-                controller.deleteFromQueue(index);
             }
         }
+
 
     }
 
