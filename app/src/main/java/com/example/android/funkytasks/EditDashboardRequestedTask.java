@@ -121,7 +121,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
 
                 setResult(RESULT_OK,intent);
                 intent.putExtra("id",id);
-                intent.putExtra("updatedTask",task);
+                //intent.putExtra("updatedTask",task);
                 finish();
 
             }
@@ -151,21 +151,37 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Checks the size of each image if its under the constraint
-     * @return a boolean if all the images were under the size constraint
-     */
-
     public boolean checkImages() {
         if (newImages.size() != 0) {
+            int index = 0;
             for (Bitmap image : newImages) {
+                //https://stackoverflow.com/a/25136550
+                image = getResizedBitmap(image, 100);
+                newImages.set(index,image);
                 int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
+                Log.e("byte size",String.valueOf(bitmapByteCount));
                 if (bitmapByteCount >= 65536) { // checking if image is over our wanted size constaint
                     return false;
                 }
+                index++;
             }
         }
         return true;
+    }
+
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
