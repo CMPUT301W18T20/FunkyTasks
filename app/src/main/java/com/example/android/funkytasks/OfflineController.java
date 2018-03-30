@@ -1,6 +1,7 @@
 package com.example.android.funkytasks;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,20 +26,22 @@ public class OfflineController {
 
     private String FILENAME;
     private Context context;
-    private Queue<Task> taskQueue;
+    private ArrayList<Task> taskList = new ArrayList<>();
 
-    public OfflineController(Context content, String userName) {
-        FILENAME = userName + ".sav";
+    public OfflineController(Context context, String userName) {
+        this.context = context;
+        this.FILENAME = userName + ".sav";
     }
 
     public void saveInFile(Task task) {
+        Log.d("Tasktitle in controller", task.getTitle());
         try {
-            taskQueue.add(task);
-            FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            taskList.add(task);
+            FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
-            gson.toJson(taskQueue, out);
+            gson.toJson(taskList, out);
             out.flush();
 
         } catch (FileNotFoundException e) {
@@ -49,17 +52,17 @@ public class OfflineController {
     }
 
 
-    public Queue<Task> loadFromFile() {
+    public ArrayList<Task> loadFromFile() {
 
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type dataType = new TypeToken<Queue<Task>>() {}.getType();
-            taskQueue = gson.fromJson(in, dataType);
+            Type dataType = new TypeToken<ArrayList<Task>>() {}.getType();
+            taskList = gson.fromJson(in, dataType);
 
-            return taskQueue;
+            return taskList;
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -70,12 +73,12 @@ public class OfflineController {
 
     public void deleteFromQueue(){
         try {
-            taskQueue.remove();
+            taskList.remove(0);
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
-            gson.toJson(taskQueue, out);
+            gson.toJson(taskList, out);
             out.flush();
 
         } catch (FileNotFoundException e) {
