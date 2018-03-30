@@ -12,6 +12,8 @@ package com.example.android.funkytasks;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.MediaStore;
 import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
     private String descriptionValue;
     private final int REQUEST_IMAGE_CAPTURE = 1;
     private ArrayList<Bitmap> newImages;
+    private ArrayList<Task> tasks;
 
 
     /**
@@ -110,9 +113,23 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
 
                 new Thread(new Runnable() {
                     public void run() {
-                        // a potentially  time consuming task
-                        ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
-                        updateTask.execute(task);
+                        if (isNetworkAvailable()){
+                            Log.d("Network", "available");
+                            // a potentially  time consuming task
+                            ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
+                            updateTask.execute(task);
+                        }
+                        else{
+                            Log.d("Network", "unavailable");
+                            OfflineController controller = new OfflineController(getApplicationContext(), username);
+                            controller.saveInFile(task);
+                            tasks = controller.loadFromFile();
+                            for (Task taskTemp: tasks){
+                                Log.d("Task loaded", taskTemp.getTitle());
+                            }
+
+                        }
+
                     }
                 }).start();
 
@@ -215,6 +232,17 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
             Bitmap newImage = (Bitmap) extras.get("data");
             newImages.add(newImage);
         }
+    }
+
+    //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
     }
 
 

@@ -114,6 +114,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                             }
                         }
                         else{
+                            Log.d("Network", "unavailable");
                             OfflineController controller = new OfflineController(getApplicationContext(), username);
                             controller.saveInFile(task);
 
