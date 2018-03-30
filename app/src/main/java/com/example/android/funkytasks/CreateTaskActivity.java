@@ -13,6 +13,8 @@ package com.example.android.funkytasks;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -109,6 +111,8 @@ public class CreateTaskActivity extends AppCompatActivity {
                         }
                     }
                 }).start();
+
+
 
                 intent.putExtra("username", username);
                 //intent.putExtra("task", task); // send task our to main activity to post to server
@@ -217,6 +221,17 @@ public class CreateTaskActivity extends AppCompatActivity {
             newImages.add(newImage);
             Log.e("size",String.valueOf(newImages.size()));
         }
+    }
+
+    //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+    private boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
     }
 
 }
