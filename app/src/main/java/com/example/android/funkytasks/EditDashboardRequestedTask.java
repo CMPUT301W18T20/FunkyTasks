@@ -156,7 +156,7 @@ public class EditDashboardRequestedTask extends AppCompatActivity {
             int index = 0;
             for (Bitmap image : newImages) {
                 //https://stackoverflow.com/a/25136550
-                image = getResizedBitmap(image, 100);
+                image = getResizedBitmap(image, 50);
                 newImages.set(index,image);
                 int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
                 Log.e("byte size",String.valueOf(bitmapByteCount));

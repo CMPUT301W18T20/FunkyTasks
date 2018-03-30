@@ -53,6 +53,8 @@ public class ToSolveTasksFragment extends Fragment {
     final int DELETECODE = 0;
     User user;
 
+    ArrayList<Bid> allBids;
+
 
     /**
      * Creates the view and allows the user to interact with it. This function also finds and
@@ -147,8 +149,6 @@ public class ToSolveTasksFragment extends Fragment {
      * by the rest of the class
      */
     public void getTask() {
-        ArrayList<Bid> allBids;
-
 
         ElasticSearchController.GetBidsByBidder getallBids = new ElasticSearchController.GetBidsByBidder();
         getallBids.execute(username);
@@ -161,39 +161,45 @@ public class ToSolveTasksFragment extends Fragment {
             return;
         }
 
+        new Thread(new Runnable() {
+            public void run() {
+                // Getting the all the tasks associated with the user
+                int size = allBids.size();
+                for (int index = 0; index < size; index++) {
+                    Task task;
+                    ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+                    getTask.execute(allBids.get(index).getTaskID());
+                    Log.e("Task id", allBids.get(index).getTaskID());
+                    try {
+                        task = getTask.get();
+                        Log.e("Return task title", task.getTitle());
+                    } catch (Exception e) {
+                        Log.e("Task get", "not workng");
+                        return;
+                    }
+                    taskList.add(task);
+                    Log.e("Success", "loop");
 
-        // Getting the all the tasks associated with the user
-        int size = allBids.size();
-        for (int index = 0; index < size; index++) {
-            Task task;
-            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(allBids.get(index).getTaskID());
-            Log.e("Task id", allBids.get(index).getTaskID());
-            try {
-                task = getTask.get();
-                Log.e("Return task title", task.getTitle());
-            } catch (Exception e) {
-                Log.e("Task get", "not workng");
-                return;
+                }
+                for(Task task: taskList){
+                    if(task.getStatus().equals("bidded")){
+                        Log.e("bidded task title",task.getTitle());
+                        biddedTaskList.add(task);
+                    }
+                    if(task.getStatus().equals("assigned")){
+                        Log.e("solving task title",task.getTitle());
+                        SolvingTaskList.add(task);
+                    }
+                    if(task.getStatus().equals("done")){
+                        Log.e("solved task title",task.getTitle());
+                        SolvedTaskList.add(task);
+                    }
+                }
             }
-            taskList.add(task);
-            Log.e("Success", "loop");
+        }).start();
 
-        }
-        for(Task task: taskList){
-            if(task.getStatus().equals("bidded")){
-                Log.e("bidded task title",task.getTitle());
-                biddedTaskList.add(task);
-            }
-            if(task.getStatus().equals("assigned")){
-                Log.e("solving task title",task.getTitle());
-                SolvingTaskList.add(task);
-            }
-            if(task.getStatus().equals("done")){
-                Log.e("solved task title",task.getTitle());
-                SolvedTaskList.add(task);
-            }
-        }
+
+
 
     }
 

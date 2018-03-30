@@ -144,32 +144,38 @@ public class MyRequestedTasksFragment extends Fragment {
 
         }
 
-        // Getting the all the tasks associated with the user
-        ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
-        getAllTask.execute(username);
-        try {
-            taskList = getAllTask.get();
-            Log.e("Got the tasks ", taskList.toString());
+        new Thread(new Runnable() {
+            public void run() {
+                // Getting the all the tasks associated with the user
+                ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
+                getAllTask.execute(username);
+                try {
+                    taskList = getAllTask.get();
+                    Log.e("Got the tasks ", taskList.toString());
 
-        } catch (Exception e) {
-            Log.e("Error", "We arnt getting the list of tasks");
-            return;
+                } catch (Exception e) {
+                    Log.e("Error", "We arnt getting the list of tasks");
+                    return;
 
-        }
+                }
 
-        int size=taskList.size();
-        for(int i=0;i<size;i++){
-            if(taskList.get(i).getStatus().equals("bidded")){
-                biddedTaskList.add(taskList.get(i));
+                int size=taskList.size();
+                for(int i=0;i<size;i++){
+                    if(taskList.get(i).getStatus().equals("bidded")){
+                        biddedTaskList.add(taskList.get(i));
+                    }
+                }
+
+
+                for(int i=0;i<size;i++){
+                    if(taskList.get(i).getStatus().equals("assigned")){
+                        assignedTaskList.add(taskList.get(i));
+                    }
+                }
             }
-        }
+        }).start();
 
 
-        for(int i=0;i<size;i++){
-            if(taskList.get(i).getStatus().equals("assigned")){
-                assignedTaskList.add(taskList.get(i));
-            }
-        }
 
     }
 
