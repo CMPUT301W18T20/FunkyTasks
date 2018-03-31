@@ -132,11 +132,4 @@ public class LocalRequestedTaskController {
         }
     }
 
-    public Task getRequestedTask(int index){
-        isFileExist();
-        Task task = taskList.get(index);
-        Log.d("task in controller", task.getTitle());
-        return task;
-
-    }
 }

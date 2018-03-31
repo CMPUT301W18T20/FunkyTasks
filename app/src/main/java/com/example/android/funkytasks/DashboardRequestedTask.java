@@ -104,19 +104,14 @@ public class DashboardRequestedTask extends BaseActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-
-
         setTaskDetails(task); // set the contents of the screen to the task details
 
         if (isNetworkAvailable()){
             setBids(); // grab the associated bids of the task
             setAdapter(); // set adapter ot the list view for bids
-            setStatusDone();
-            ressignTask();
         }
-
-
-
+        setStatusDone();
+        ressignTask();
 
 
             bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,6 +230,7 @@ public class DashboardRequestedTask extends BaseActivity {
                             EditDashboardRequestedTask.class);
                     editIntent.putExtra("username", username);
                     editIntent.putExtra("id", id);
+                    editIntent.putExtra("task", task);
                     startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }
                 else{
@@ -279,18 +275,7 @@ public class DashboardRequestedTask extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
-            //task = (Task) intent.getSerializableExtra("updatedTask");
-
-            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(id);
-            try{
-                task = getTask.get();
-                Log.e("Return task title",task.getTitle());
-
-            }
-            catch(Exception e){
-                Log.e("Task get","not workng");
-            }
+            task = (Task) intent.getSerializableExtra("updatedTask");
 
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());

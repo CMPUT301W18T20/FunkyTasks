@@ -73,22 +73,21 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
         index = intent.getExtras().getInt("index");
         id = intent.getExtras().getString("id");
-
-
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        try {
-            task = getTask.get();
-            Log.e("Got the task",task.getTitle());
-        } catch (Exception e) {
-            Log.e("Error", "We aren't getting the task");
-            return;
-        }
+        task = (Task) intent.getSerializableExtra("task");
+        username = intent.getExtras().getString("username");
 
 
 
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
+
+        OfflineController controller = new OfflineController(getApplicationContext(), username);
+        ArrayList<Task> taskL = controller.loadFromFile();
+        Log.d("User", username);
+        for (Task taskTemp: taskL){
+            Log.d("Task loaded", taskTemp.getTitle());
+            Log.d("Task desc loaded", taskTemp.getDescription());
+        }
 
         saveBT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +127,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                             tasks = controller.loadFromFile();
                             for (Task taskTemp: tasks){
                                 Log.d("Task loaded", taskTemp.getTitle());
+                                Log.d("Task desc loaded", taskTemp.getDescription());
                             }
 
                         }
@@ -136,11 +136,13 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 }).start();
 
 
+
+
                 Log.e("tasktitle edited",task.getTitle());
 
                 setResult(RESULT_OK,intent);
                 intent.putExtra("id",id);
-                //intent.putExtra("updatedTask",task);
+                intent.putExtra("updatedTask",task);
                 finish();
 
             }
