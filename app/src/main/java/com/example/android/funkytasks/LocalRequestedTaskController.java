@@ -35,7 +35,7 @@ public class LocalRequestedTaskController {
         this.username = userName;
     }
 
-    public boolean isFileExist() {
+    public boolean fileExists() {
         File file = context.getFileStreamPath(FILENAME);
         if(file.exists()){
             taskList = loadRequestedTask();
@@ -89,7 +89,7 @@ public class LocalRequestedTaskController {
 
     public void addOfflineTask(Task task){
         try {
-            isFileExist();
+            fileExists();
             taskList.add(task);
             for (Task eachtask : taskList) {
                 Log.d("task title base", eachtask.getTitle());

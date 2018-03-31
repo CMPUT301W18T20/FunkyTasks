@@ -34,7 +34,7 @@ public class OfflineController {
         this.FILENAME = userName + ".sav";
     }
 
-    public boolean isFileExist() {
+    public boolean fileExists() {
         File file = context.getFileStreamPath(FILENAME);
         if(file.exists()){
             taskList = loadFromFile();
@@ -50,7 +50,7 @@ public class OfflineController {
     public void saveInFile(Task task) {
 
         try {
-            isFileExist();
+            fileExists();
             taskList.add(task);
             FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
 
@@ -91,7 +91,7 @@ public class OfflineController {
 
     public void deleteFromArrayList(){
         try {
-            isFileExist();
+            fileExists();
             Task task = taskList.remove(0);
             Log.d("task deleted", task.getTitle());
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);

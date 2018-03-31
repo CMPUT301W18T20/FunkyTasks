@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
+// https://stackoverflow.com/questions/10350449/how-to-check-the-internet-connection-periodically-in-whole-application
+
 public class BaseActivity extends AppCompatActivity {
 
     private String username;
