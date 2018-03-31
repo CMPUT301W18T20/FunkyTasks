@@ -210,18 +210,34 @@ public class MyRequestedTasksFragment extends Fragment {
     public void taskOnClick(int i){
         Intent intent = new Intent(getActivity(), DashboardRequestedTask.class);
         intent.putExtra("username", username);
-        Task detailedTask;
+        final Task detailedTask;
 
         detailedTask = taskList.get(i);
-//        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-//        getTask.execute(detailedTask.getId());
-//        try {
-//            Task x = getTask.get();
-//            Log.e("Return task title", x.getTitle());
-//        } catch (Exception e) {
-//            Log.e("Error", "Task get not working");
-//        }
-        //intent.putExtra("task", detailedTask);
+
+        Log.d("task title base", detailedTask.getTitle());
+        Log.d("task description base", detailedTask.getDescription());
+
+        new Thread(new Runnable() {
+            public void run() {
+                if (isNetworkAvailable()){
+                    Log.d("Network", "available");
+                    ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+                    getTask.execute(detailedTask.getId());
+                    try {
+                        Task x = getTask.get();
+                        Log.e("Return task title", x.getTitle());
+                    } catch (Exception e) {
+                        Log.e("Error", "Task get not working");
+                    }
+                }
+
+
+            }
+        }).start();
+
+
+
+        intent.putExtra("task", detailedTask);
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
         startActivityForResult(intent,DELETECODE);

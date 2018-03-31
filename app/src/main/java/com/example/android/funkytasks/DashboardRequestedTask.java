@@ -13,6 +13,8 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 /**
  * This class displays the tasks and their bids to a requester. It allows the requester to
@@ -98,17 +102,21 @@ public class DashboardRequestedTask extends BaseActivity {
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        //task = (Task) intent.getSerializableExtra("task");
+        task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
 
 
-        setTaskDetails(); // set the contents of the screen to the task details
-        setBids(); // grab the associated bids of the task
-        setAdapter(); // set adapter ot the list view for bids
-        setStatusDone();
-        ressignTask();
+        setTaskDetails(task); // set the contents of the screen to the task details
+
+        if (isNetworkAvailable()){
+            setBids(); // grab the associated bids of the task
+            setAdapter(); // set adapter ot the list view for bids
+            setStatusDone();
+            ressignTask();
+        }
+
 
 
 
@@ -385,18 +393,9 @@ public class DashboardRequestedTask extends BaseActivity {
     /**
      * Retrieve the task details in order to be displayed by the activity
      */
-    public void setTaskDetails(){
+    public void setTaskDetails(Task task){
         // get the task details to place on screen
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        try{
-            task = getTask.get();
-            Log.e("Return task title",task.getTitle());
 
-        }
-        catch(Exception e){
-            Log.e("Task get","not workng");
-        }
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
@@ -527,4 +526,14 @@ public class DashboardRequestedTask extends BaseActivity {
         startActivity(intent);
     }
 
+    //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
+    }
 }
