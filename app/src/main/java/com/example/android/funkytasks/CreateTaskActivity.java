@@ -111,10 +111,12 @@ public class CreateTaskActivity extends AppCompatActivity {
                             Log.d("Network", "unavailable");
                             OfflineController controller = new OfflineController(getApplicationContext(), username);
                             controller.saveInFile(task);
-                            tasks = controller.loadFromFile();
-                            for (Task taskTemp: tasks){
-                                Log.d("Task loaded", taskTemp.getTitle());
-                            }
+                            LocalRequestedTaskController requestedController = new LocalRequestedTaskController(getApplicationContext(), username);
+                            requestedController.addOfflineTask(task);
+//                            tasks = controller.loadFromFile();
+//                            for (Task taskTemp: tasks){
+//                                Log.d("Task loaded", taskTemp.getTitle());
+//                            }
 
                         }
 

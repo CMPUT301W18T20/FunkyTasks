@@ -117,9 +117,7 @@ public class LocalRequestedTaskController {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
             Gson gson = new Gson();
             Type dataType = new TypeToken<ArrayList<Task>>() {}.getType();
-            Log.d("size in controllerrrrr", "herree");
             taskList = gson.fromJson(in, dataType);
-            Log.d("size in controllerrrrr", String.valueOf(taskList.size()));
             return taskList;
 
         } catch (FileNotFoundException e) {
