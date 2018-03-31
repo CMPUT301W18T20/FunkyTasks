@@ -81,13 +81,6 @@ public class EditDashboardRequestedTask extends BaseActivity {
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
 
-        OfflineController controller = new OfflineController(getApplicationContext(), username);
-        ArrayList<Task> taskL = controller.loadFromFile();
-        Log.d("User", username);
-        for (Task taskTemp: taskL){
-            Log.d("Task loaded", taskTemp.getTitle());
-            Log.d("Task desc loaded", taskTemp.getDescription());
-        }
 
         saveBT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,8 +127,6 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                     }
                 }).start();
-
-
 
 
                 Log.e("tasktitle edited",task.getTitle());
