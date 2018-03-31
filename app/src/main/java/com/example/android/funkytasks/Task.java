@@ -35,6 +35,7 @@ public class Task implements Serializable{
     private String description;
     private String requester;
     private String provider;
+    private String offlineID;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
     private ArrayList<String> images;
@@ -81,6 +82,10 @@ public class Task implements Serializable{
     public String getId(){
         return this.id;
     }
+
+    public void setOfflineId(String newId){this.offlineID = newId;}
+
+    public String getOfflineId() {return this.offlineID;}
 
     /**
      * Returns the string name of the user who will complete the task

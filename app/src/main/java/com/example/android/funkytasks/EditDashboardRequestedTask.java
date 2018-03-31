@@ -116,12 +116,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
                         }
                         else{
                             Log.d("Network", "unavailable");
-                            OfflineController controller = new OfflineController(getApplicationContext(), username);
-                            controller.saveInFile(task);
-                            tasks = controller.loadFromFile();
-                            for (Task taskTemp: tasks){
-                                Log.d("Task loaded", taskTemp.getTitle());
-                                Log.d("Task desc loaded", taskTemp.getDescription());
+                            if (task.getId()== null) {
+                                OfflineController controller = new OfflineController(getApplicationContext(), username);
+                                controller.updateInFile(task);
+                            } else {
+                                OfflineController controller = new OfflineController(getApplicationContext(), username);
+                                controller.saveInFile(task);
                             }
 
                         }
@@ -131,6 +131,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 LocalRequestedTaskController requestedTaskController = new LocalRequestedTaskController(getApplicationContext(), username);
                 requestedTaskController.updateRequestedTask(task, index);
+
 
 
 

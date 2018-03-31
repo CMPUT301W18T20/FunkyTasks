@@ -66,6 +66,37 @@ public class OfflineController {
         }
     }
 
+    public void updateInFile(Task task) {
+        String offlineId = task.getOfflineId();
+        taskList = loadFromFile();
+        for (Task eachTask: taskList){
+            if (offlineId != null) {
+                if (offlineId.equals(eachTask.getOfflineId())) {
+                    Log.d("Title before", eachTask.getTitle());
+                    eachTask.setTitle(task.getTitle());
+                    Log.d("Title after", eachTask.getTitle());
+                    Log.d("Desc before", eachTask.getDescription());
+                    eachTask.setDescription(task.getDescription());
+                    Log.d("Title after", eachTask.getDescription());
+                    eachTask.setImagesList(task.getImages());
+                }
+            }
+        }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(taskList, out);
+            Log.e("Got the tasks ", taskList.toString());
+            out.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public ArrayList<Task> loadFromFile() {
 

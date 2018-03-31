@@ -48,6 +48,7 @@ public class BaseActivity extends AppCompatActivity {
                     Log.d("task title base", eachtask.getTitle());
                     Log.d("task description base", eachtask.getDescription());
                     if (eachtask.getId() == null) {
+                        eachtask.setOfflineId(null);
                         ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
                         postTask.execute(eachtask);
                         try {

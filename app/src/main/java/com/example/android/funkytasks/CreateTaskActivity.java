@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * This activity allows a task requester to create a new task and post it to the server.
@@ -111,6 +112,8 @@ public class CreateTaskActivity extends AppCompatActivity {
                         }
                         else{
                             Log.d("Network", "unavailable");
+                            String offlineID = UUID.randomUUID().toString();
+                            task.setOfflineId(offlineID);
                             OfflineController controller = new OfflineController(getApplicationContext(), username);
                             controller.saveInFile(task);
                             LocalRequestedTaskController requestedController = new LocalRequestedTaskController(getApplicationContext(), username);
