@@ -37,7 +37,7 @@ public class Task implements Serializable{
     private String provider;
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
-    private ArrayList<Bitmap> images;
+    private ArrayList<String> images;
 
     @JestId
     private String id;
@@ -60,7 +60,7 @@ public class Task implements Serializable{
         this.requester = requester; // username of the user who requests the task
         this.provider = null; // username of user who is solving the task
         this.status = statuses[0];
-        this.images = new ArrayList<Bitmap>();
+        this.images = new ArrayList<String>();
     }
 
 
@@ -189,7 +189,7 @@ public class Task implements Serializable{
      *
      * @return an arraylist bitmap containing the image attached to the task
      */
-    public ArrayList<Bitmap> getImages() {
+    public ArrayList<String> getImages() {
         return images;
     }
 
@@ -198,7 +198,7 @@ public class Task implements Serializable{
      * @param image a new image to attach to the task's current list of images
      */
 
-    public void addImage(Bitmap image) {
+    public void addImage(String image) {
         images.add(image);
     }
 
@@ -207,7 +207,7 @@ public class Task implements Serializable{
      * @param newImages is a arraylist containing one or more images to associate with the task
      */
 
-    public void setImagesList(ArrayList<Bitmap> newImages){
+    public void setImagesList(ArrayList<String> newImages){
         this.images = newImages;
     }
 }

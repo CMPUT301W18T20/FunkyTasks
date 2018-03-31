@@ -44,13 +44,14 @@ public class CreateTaskActivity extends AppCompatActivity {
     private String titleValue; // value of the task title
     private String descriptionValue; // value of the task description
     private String username; // username of user who logged in
-    private ArrayList<Bitmap> newImages;
+    private ArrayList<String> newImages;
     private Task task;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private EditText title;
     private EditText description;
     private ArrayList<Task> tasks;
     private Task taskTemp;
+    ImageConverterController imageConvert;
 
 
     @Override
@@ -65,6 +66,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
 
         final Intent intent = getIntent();
+        imageConvert = new ImageConverterController();
 
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
@@ -72,7 +74,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         // defining our edit text views
         title = (EditText) findViewById(R.id.AddTitle);
         description = (EditText) findViewById(R.id.AddDescription);
-        newImages = new ArrayList<Bitmap>();
+        newImages = new ArrayList<String>();
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -85,17 +87,15 @@ public class CreateTaskActivity extends AppCompatActivity {
                     return;
                 }
 
-                boolean check = checkImages();
-                if (!check) {
-                    Toast.makeText(getApplicationContext(), "Image size is too large", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-
                 task = new Task(titleValue, descriptionValue, username);
 
-
                 if (newImages.size() != 0) {
+                    boolean check = imageConvert.checkImages(newImages);
+                    if (!check) {
+                        Toast.makeText(getApplicationContext(), "Image size is too large", Toast.LENGTH_SHORT)
+                                .show();
+                        return;
+                    }
                     task.setImagesList(newImages);
                 }
 
@@ -122,6 +122,9 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                     }
                 }).start();
+
+
+
 
 
 
@@ -160,43 +163,6 @@ public class CreateTaskActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Checks the size of each image if its under the constraint
-     * @return a boolean if all the images were under the size constraint
-     */
-
-    public boolean checkImages() {
-        if (newImages.size() != 0) {
-            int index = 0;
-            for (Bitmap image : newImages) {
-                //https://stackoverflow.com/a/25136550
-                image = getResizedBitmap(image, 100);
-                newImages.set(index,image);
-                int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
-                Log.e("byte size",String.valueOf(bitmapByteCount));
-                if (bitmapByteCount >= 65536) { // checking if image is over our wanted size constaint
-                    return false;
-                }
-                index++;
-            }
-        }
-        return true;
-    }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -226,11 +192,17 @@ public class CreateTaskActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap newImage = (Bitmap) extras.get("data");
+//            Log.e("newimage",newImage.toString());
+//            newImages.add(newImage);
+//            Log.e("size",String.valueOf(newImages.size()));
+
             Bundle extras = data.getExtras();
             Bitmap newImage = (Bitmap) extras.get("data");
             Log.e("newimage",newImage.toString());
-            newImages.add(newImage);
-            Log.e("size",String.valueOf(newImages.size()));
+            newImages.add(imageConvert.convertToString(newImage));
+
         }
     }
 

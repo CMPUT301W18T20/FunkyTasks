@@ -46,8 +46,10 @@ public class EditDashboardRequestedTask extends BaseActivity {
     private String titleValue;
     private String descriptionValue;
     private final int REQUEST_IMAGE_CAPTURE = 1;
-    private ArrayList<Bitmap> newImages;
+    private ArrayList<String> newImages;
     private ArrayList<Task> tasks;
+
+    private ImageConverterController imageConvert;
 
 
     /**
@@ -65,8 +67,9 @@ public class EditDashboardRequestedTask extends BaseActivity {
         saveBT = findViewById(R.id.buttonDone);
 
         final Intent intent = getIntent();
+        imageConvert = new ImageConverterController();
 
-        newImages = new ArrayList<Bitmap>();
+        newImages = new ArrayList<String>();
 
         index = intent.getExtras().getInt("index");
         id = intent.getExtras().getString("id");
@@ -94,19 +97,17 @@ public class EditDashboardRequestedTask extends BaseActivity {
                     return;
                 }
 
-                boolean check = checkImages();
-                if (!check) {
-                    Toast.makeText(getApplicationContext(), "Image size is too large", Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-
                 task.setDescription(descriptionValue);
                 task.setTitle(titleValue);
 
-                // If we have more than one image to add, add it to the current list of images
-                if (newImages.size() > 0){
-                    ArrayList<Bitmap> combined = task.getImages();
+                if (newImages.size() > 0) {
+                    boolean check = imageConvert.checkImages(newImages);
+                    if (!check) {
+                        Toast.makeText(getApplicationContext(), "Image size is too large", Toast.LENGTH_SHORT)
+                                .show();
+                        return;
+                    }
+                    ArrayList<String> combined = task.getImages();
                     combined.addAll(newImages);
                     task.setImagesList(combined);
                 }
@@ -168,38 +169,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
         return true;
     }
 
-    public boolean checkImages() {
-        if (newImages.size() != 0) {
-            int index = 0;
-            for (Bitmap image : newImages) {
-                //https://stackoverflow.com/a/25136550
-                image = getResizedBitmap(image, 50);
-                newImages.set(index,image);
-                int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
-                Log.e("byte size",String.valueOf(bitmapByteCount));
-                if (bitmapByteCount >= 65536) { // checking if image is over our wanted size constaint
-                    return false;
-                }
-                index++;
-            }
-        }
-        return true;
-    }
 
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -230,7 +200,9 @@ public class EditDashboardRequestedTask extends BaseActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap newImage = (Bitmap) extras.get("data");
-            newImages.add(newImage);
+            Log.e("newimage",newImage.toString());
+            newImages.add(imageConvert.convertToString(newImage));
+
         }
     }
 

@@ -293,14 +293,14 @@ public class DashboardRequestedTask extends BaseActivity {
                 Log.e("Task get","not workng");
             }
 
-            images = task.getImages();
+            //images = task.getImages();
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
 
-            // update the images on screen
-            picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
-            picturePagerAdapter.notifyDataSetChanged();
-            viewPager.setAdapter(picturePagerAdapter);
+//            // update the images on screen
+//            picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
+//            picturePagerAdapter.notifyDataSetChanged();
+//            viewPager.setAdapter(picturePagerAdapter);
 
         }
     }

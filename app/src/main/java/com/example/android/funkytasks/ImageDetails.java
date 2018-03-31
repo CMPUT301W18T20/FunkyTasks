@@ -35,12 +35,15 @@ public class ImageDetails extends BaseActivity {
 
     ViewPager viewPager;
     PicturePagerAdapter picturePagerAdapter;
-    private ArrayList<Bitmap> images;
+    private ArrayList<String> images;
+    private ArrayList<Bitmap> imageBitmaps;
 
     private String username; // username of the person who logged in
     private Task task;
     private String id;
     private String code;
+
+    private ImageConverterController imageConverter;
 
 
     /**
@@ -71,9 +74,10 @@ public class ImageDetails extends BaseActivity {
             Log.e("Error", "Task get not working");
         }
 
-        images = task.getImages();
+        imageBitmaps = imageConverter.stringToImageList(task.getImages());
 
-        picturePagerAdapter = new PicturePagerAdapter(ImageDetails.this, images);
+
+        picturePagerAdapter = new PicturePagerAdapter(ImageDetails.this, imageBitmaps);
         viewPager.setAdapter(picturePagerAdapter);
     }
 
