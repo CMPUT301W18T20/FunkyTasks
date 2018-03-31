@@ -5,10 +5,9 @@
 
     <item
         android:id="@+id/camera"
-        android:icon="@drawable/camera"
-        android:title="Camera"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title=""
         app:showAsAction="always" />
-
 
 
 </menu>

@@ -92,7 +92,7 @@ public class DashboardRequestedTask extends BaseActivity {
         updateStatus=(Button) findViewById(R.id.setToDone);
         reassign=(Button) findViewById(R.id.reasignTask);
 
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
+//        viewPager = (ViewPager)findViewById(R.id.viewPager);
 
 
         final Intent intent = getIntent();
@@ -103,19 +103,6 @@ public class DashboardRequestedTask extends BaseActivity {
         id = intent.getExtras().getString("id");
 
 
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        try {
-            task = getTask.get();
-            Log.e("Return task title", task.getTitle());
-        } catch (Exception e) {
-            Log.e("Error", "Task get not working");
-        }
-
-        images = task.getImages();
-
-        picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
-        viewPager.setAdapter(picturePagerAdapter);
 
         setTaskDetails(); // set the contents of the screen to the task details
         setBids(); // grab the associated bids of the task
@@ -248,7 +235,22 @@ public class DashboardRequestedTask extends BaseActivity {
                     Toast.makeText(DashboardRequestedTask.this,
                             "Task cannot be edited", Toast.LENGTH_SHORT).show();
                 }
-               break;
+                break;
+
+            case R.id.picdetails:
+                if (task.getImages().size() > 0){
+                    String code = "requestDetails";
+                    Intent picIntent = new Intent(DashboardRequestedTask.this,ImageDetails.class);
+                    picIntent.putExtra("username", username);
+                    picIntent.putExtra("id", id);
+                    picIntent.putExtra("code",code);
+                    startActivity(picIntent);
+                }
+                else{
+                    Toast.makeText(DashboardRequestedTask.this,
+                            "No images to show", Toast.LENGTH_SHORT).show();
+                }
+                break;
 
             default:
                 return super.onOptionsItemSelected(item);

@@ -54,6 +54,10 @@
         <activity
             android:name=".MyTasksActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ImageDetails"
+            android:label="ImageDetails"
+            />
         <activity android:name=".SolveTaskActivity" />
         <activity android:name=".ViewRequestorTaskActivity" />
         <activity android:name=".BaseActivity"></activity>
