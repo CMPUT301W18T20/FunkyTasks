@@ -19,10 +19,12 @@
             app:toolbarId="@android:drawable/ic_menu_delete">
 
 
+
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_dashboard_provider_task"/>
+
 
 </android.support.design.widget.CoordinatorLayout>
 

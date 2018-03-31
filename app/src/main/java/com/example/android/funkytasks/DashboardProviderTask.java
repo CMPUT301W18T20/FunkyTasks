@@ -67,8 +67,9 @@ public class DashboardProviderTask extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard_provider_task);
-        //Toolbar myToolbar = (Toolbar) findViewById(R.id.DashboardProviderTasktoolbar);
-        //setSupportActionBar(myToolbar);
+        // TODO set toolbar for photos
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.dashboard_provider);
+//        setSupportActionBar(myToolbar);
 
 
         // defining our views
@@ -101,6 +102,22 @@ public class DashboardProviderTask extends BaseActivity {
 
 
         setTaskDetails(); // set task details for the activity
+
+        Button photobtn = findViewById(R.id.viewphoto);
+        photobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (task.getImages().size() > 0) {
+                    Intent photoIntent = new Intent(DashboardProviderTask.this, ImageDetails.class);
+                    photoIntent.putExtra("id", id);
+                    startActivity(photoIntent);
+                }
+                else{
+                    Toast.makeText(DashboardProviderTask.this, "No photos to show", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        });
 
 
         if(task.getStatus().equals("bidded")){ // if the task status is bidded, allow us to update our bid directly here

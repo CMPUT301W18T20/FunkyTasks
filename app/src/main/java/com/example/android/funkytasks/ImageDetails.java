@@ -56,14 +56,16 @@ public class ImageDetails extends BaseActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photo_details);
+        setTitle("Funky Tasks");
 
         Intent intent = getIntent();
         viewPager = (ViewPager)findViewById(R.id.viewPager);
 
+        imageConverter = new ImageConverterController();
+
         username = LoginActivity.username;
 
         id = intent.getExtras().getString("id");
-        code = intent.getExtras().getString("code");
 
         ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
         getTask.execute(id);
