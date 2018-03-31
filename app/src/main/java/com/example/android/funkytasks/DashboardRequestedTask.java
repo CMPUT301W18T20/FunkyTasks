@@ -230,6 +230,7 @@ public class DashboardRequestedTask extends BaseActivity {
                             EditDashboardRequestedTask.class);
                     editIntent.putExtra("username", username);
                     editIntent.putExtra("id", id);
+                    editIntent.putExtra("index", index);
                     editIntent.putExtra("task", task);
                     startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }

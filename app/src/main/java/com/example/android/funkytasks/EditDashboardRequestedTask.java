@@ -72,6 +72,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
         newImages = new ArrayList<String>();
 
         index = intent.getExtras().getInt("index");
+        Log.e("index", String.valueOf(index));
         id = intent.getExtras().getString("id");
         task = (Task) intent.getSerializableExtra("task");
         username = intent.getExtras().getString("username");
@@ -129,7 +130,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 }).start();
 
                 LocalRequestedTaskController requestedTaskController = new LocalRequestedTaskController(getApplicationContext(), username);
-                requestedTaskController.updateRequestedTask(task);
+                requestedTaskController.updateRequestedTask(task, index);
 
 
 

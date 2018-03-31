@@ -129,20 +129,25 @@ public class LocalRequestedTaskController {
         }
     }
 
-    public void updateRequestedTask(Task task){
-        String taskID = task.getId();
+    public void updateRequestedTask(Task task, int index){
+
+//        String taskID = task.getId();
         taskList = loadRequestedTask();
-        for (Task eachTask: taskList){
-            if (taskID.equals(eachTask.getId())){
-                Log.d("Title before", eachTask.getTitle());
-                eachTask.setTitle(task.getTitle());
-                Log.d("Title after", eachTask.getTitle());
-                Log.d("Desc before", eachTask.getDescription());
-                eachTask.setDescription(task.getDescription());
-                Log.d("Title after", eachTask.getDescription());
-                eachTask.setImagesList(task.getImages());
-            }
-        }
+        Task updateTask = taskList.get(index);
+        updateTask.setTitle(task.getTitle());
+        updateTask.setDescription(task.getDescription());
+        updateTask.setImagesList(task.getImages());
+//        for (Task eachTask: taskList){
+//            if (taskID.equals(eachTask.getId())){
+//                Log.d("Title before", eachTask.getTitle());
+//                eachTask.setTitle(task.getTitle());
+//                Log.d("Title after", eachTask.getTitle());
+//                Log.d("Desc before", eachTask.getDescription());
+//                eachTask.setDescription(task.getDescription());
+//                Log.d("Title after", eachTask.getDescription());
+//                eachTask.setImagesList(task.getImages());
+//            }
+//        }
 
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
