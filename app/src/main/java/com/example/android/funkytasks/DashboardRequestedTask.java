@@ -57,9 +57,6 @@ public class DashboardRequestedTask extends BaseActivity {
     private Button updateStatus;
     private Button reassign;
 
-    ViewPager viewPager;
-
-    PicturePagerAdapter picturePagerAdapter;
     private ArrayList<Bitmap> images;
 
     private String username; // username of the person who logged in
@@ -69,6 +66,8 @@ public class DashboardRequestedTask extends BaseActivity {
     private User bidder;
     ListViewAdapter listViewAdapter;
     ArrayList<Bid> bidList = new ArrayList<Bid>();
+
+    private int photoLength;
 
 
     /**
@@ -96,7 +95,6 @@ public class DashboardRequestedTask extends BaseActivity {
         updateStatus=(Button) findViewById(R.id.setToDone);
         reassign=(Button) findViewById(R.id.reasignTask);
 
-//        viewPager = (ViewPager)findViewById(R.id.viewPager);
 
 
         final Intent intent = getIntent();
@@ -246,7 +244,8 @@ public class DashboardRequestedTask extends BaseActivity {
                 break;
 
             case R.id.picdetails:
-                if (task.getImages().size() > 0){
+                photoLength = task.getImages().size();
+                if (photoLength > 0){
                     String code = "requestDetails";
                     Intent picIntent = new Intent(DashboardRequestedTask.this,ImageDetails.class);
                     picIntent.putExtra("username", username);
@@ -293,14 +292,9 @@ public class DashboardRequestedTask extends BaseActivity {
                 Log.e("Task get","not workng");
             }
 
-            //images = task.getImages();
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
-
-//            // update the images on screen
-//            picturePagerAdapter = new PicturePagerAdapter(DashboardRequestedTask.this, images);
-//            picturePagerAdapter.notifyDataSetChanged();
-//            viewPager.setAdapter(picturePagerAdapter);
+            photoLength = task.getImages().size();
 
         }
     }

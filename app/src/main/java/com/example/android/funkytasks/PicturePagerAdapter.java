@@ -54,13 +54,6 @@ public class PicturePagerAdapter extends PagerAdapter{
         imageView.setImageBitmap(image);
         (container).addView(itemView);
 
-        //TODO leave this for testing
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "you clicked image " + (position + 1), Toast.LENGTH_LONG).show();
-            }
-        });
 
         return itemView;
     }

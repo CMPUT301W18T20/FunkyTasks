@@ -14,9 +14,7 @@ import java.util.ArrayList;
  */
 
 public class ImageConverterController {
-    //https://stackoverflow.com/questions/4837110/how-to-convert-a-base64-string-into-a-bitmap-image-to-show-it-in-a-imageview
-    //https://stackoverflow.com/questions/13562429/how-many-ways-to-convert-bitmap-to-string-and-vice-versa
-    //https://stackoverflow.com/questions/477572/strange-out-of-memory-issue-while-loading-an-image-to-a-bitmap-object/823966#823966
+
     static final int QUALITY= 50;
     static final int MAX_SIZE = 140;
 
@@ -69,30 +67,6 @@ public class ImageConverterController {
         return images;
     }
 
-    //    /**
-//     * Checks the size of each image if its under the constraint
-//     * @return a boolean if all the images were under the size constraint
-//     */
-//
-//    public boolean checkImages(ArrayList<String> newImages) {
-//        if (newImages.size() != 0) {
-//            int index = 0;
-//            for (String image : newImages) {
-//                //https://stackoverflow.com/a/25136550
-//                Bitmap bitmap = convertToImage(image);
-//                bitmap = getResizedBitmap(bitmap, 100);
-//
-//                int bitmapByteCount = BitmapCompat.getAllocationByteCount(image);
-//                Log.e("byte size",String.valueOf(bitmapByteCount));
-//                if (bitmapByteCount >= 65536) { // checking if image is over our wanted size constaint
-//                    return false;
-//                }
-//                index++;
-//            }
-//        }
-//        return true;
-//    }
-//
     public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
         int height = image.getHeight();

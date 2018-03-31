@@ -181,8 +181,6 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // https://stackoverflow.com/questions/2407565/bitmap-byte-size-after-decoding
-        // https://developer.android.com/training/camera/photobasics.html
         switch (item.getItemId()) {
             case R.id.camera:
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

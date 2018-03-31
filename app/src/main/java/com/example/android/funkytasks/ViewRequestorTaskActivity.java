@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,7 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         TextView lowestBidValue = findViewById(R.id.requestorTaskLowestBid);
         TextView phoneNumberValue = findViewById(R.id.requestorPhoneNumber);
         TextView emailValue = findViewById(R.id.requestorEmail);
+        Button photobtn = findViewById(R.id.viewphoto);
 
 
         final Intent intent = getIntent();
@@ -171,6 +173,22 @@ public class ViewRequestorTaskActivity extends BaseActivity {
 
 
             }
+        });
+
+
+        photobtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (task.getImages().size() > 0) {
+                    Intent photoIntent = new Intent(ViewRequestorTaskActivity.this, ImageDetails.class);
+                    photoIntent.putExtra("id", id);
+                    startActivity(photoIntent);
+                }
+                else{
+                    Toast.makeText(ViewRequestorTaskActivity.this, "No photos to show", Toast.LENGTH_LONG).show();
+                }
+            }
+
         });
     }
 
