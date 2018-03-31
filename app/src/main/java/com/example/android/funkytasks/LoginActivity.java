@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 //TODO check if intent is for result or not
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity{
      *
      * @param view a view object representing the view to be loaded
      */
-    public void sendToMainMenu(View view){
+    public void sendToMainMenu(View view) throws IOException {
 
         EditText inputUsername = findViewById(R.id.editLoginName);
         username = inputUsername.getText().toString();
@@ -87,7 +88,7 @@ public class LoginActivity extends AppCompatActivity{
      * @param checkUsername a string representing the username that was entered and needs
      *                      to be validated
      */
-    public void checkUserName(String checkUsername){
+    public void checkUserName(String checkUsername) throws IOException {
 
         ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
         allUsers.execute(""); // grab all current users in the system
@@ -110,6 +111,8 @@ public class LoginActivity extends AppCompatActivity{
                 Intent intent = new Intent(this, MainMenuActivity.class);
                 username = checkUsername;
                 intent.putExtra("username", postedUser.getUsername());
+                LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(), username);
+                localController.SaveRequestedTask();
                 startActivity(intent);
                 finish();
             }
