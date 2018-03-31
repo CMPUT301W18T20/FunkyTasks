@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Queue;
 
 /**
- * Created by fc1, Ivy on 2018-03-29.
+ * Created by fc1, eivenlour on 2018-03-29.
  */
 
 public class OfflineController {
@@ -76,14 +76,16 @@ public class OfflineController {
             Gson gson = new Gson();
             Type dataType = new TypeToken<ArrayList<Task>>() {}.getType();
             taskList = gson.fromJson(in, dataType);
+
             Log.d("size in controller", String.valueOf(taskList.size()));
 
             return taskList;
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+            taskList = new ArrayList<>();
+            return taskList;
+
         }
     }
 
