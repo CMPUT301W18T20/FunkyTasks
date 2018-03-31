@@ -12,6 +12,8 @@ package com.example.android.funkytasks;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -43,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 public class MyRequestedTasksFragment extends Fragment {
     ArrayList<User> userArrayList = new ArrayList<User>();
     private String username;
-    private int position ;
+    private int position;
     ListView listView;
     ListViewAdapter listViewAdapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
@@ -56,8 +58,9 @@ public class MyRequestedTasksFragment extends Fragment {
     /**
      * This function overrides the default onCreateView function and dictates what happens
      * when this view is instantiated
-     * @param inflater a layout inflater that helps the fragment display properly
-     * @param container a view group representing where the fragment should be displayed
+     *
+     * @param inflater           a layout inflater that helps the fragment display properly
+     * @param container          a view group representing where the fragment should be displayed
      * @param savedInstanceState a bundle representing the state of the view last time it was open
      * @return returns a view
      */
@@ -73,8 +76,8 @@ public class MyRequestedTasksFragment extends Fragment {
 
         listView = rootView.findViewById(R.id.myTasks);
         Spinner dropdown = rootView.findViewById(R.id.yourPostMenu);
-        String[] menuOptions = new String[]{"My Tasks","Bidded", "Assigned"};
-        ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(getActivity(),R.layout.support_simple_spinner_dropdown_item,menuOptions);
+        String[] menuOptions = new String[]{"My Tasks", "Bidded", "Assigned"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
 
@@ -86,13 +89,13 @@ public class MyRequestedTasksFragment extends Fragment {
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i==0){
+                if (i == 0) {
                     setListViewAdapter(taskList);
                 }
-                if(i==1){
+                if (i == 1) {
                     setListViewAdapter(biddedTaskList);
                 }
-                if(i==2){
+                if (i == 2) {
                     setListViewAdapter(assignedTaskList);
                 }
             }
@@ -108,7 +111,7 @@ public class MyRequestedTasksFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                position=i;
+                position = i;
                 taskOnClick(i);
             }
         });
@@ -121,7 +124,7 @@ public class MyRequestedTasksFragment extends Fragment {
      *
      * @param tasklist an array list of task to be treated by the list view adapter
      */
-    public void setListViewAdapter(ArrayList<Task> tasklist){
+    public void setListViewAdapter(ArrayList<Task> tasklist) {
         listViewAdapter = new ListViewAdapter(getActivity(), R.layout.listviewitem, tasklist);
         listViewAdapter.notifyDataSetChanged();
         listView.setAdapter(listViewAdapter);
@@ -131,53 +134,73 @@ public class MyRequestedTasksFragment extends Fragment {
     /**
      * This function gets all the tasks associated with one username
      */
-    public void getTask(){
-        ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-        getUser.execute(username);
-        try {
-            user = getUser.get();
-            Log.e("Got the username: ", user.getUsername());
-
-        } catch (Exception e) {
-            Log.e("Error", "We arnt getting the user");
-            return;
-
-        }
-
-        new Thread(new Runnable() {
-            public void run() {
-                // Getting the all the tasks associated with the user
-                ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
-                getAllTask.execute(username);
-                try {
-                    taskList = getAllTask.get();
-                    Log.e("Got the tasks ", taskList.toString());
-
-                } catch (Exception e) {
-                    Log.e("Error", "We arnt getting the list of tasks");
-                    return;
-
-                }
-
-                int size=taskList.size();
-                for(int i=0;i<size;i++){
-                    if(taskList.get(i).getStatus().equals("bidded")){
-                        biddedTaskList.add(taskList.get(i));
-                    }
-                }
+    public void getTask() {
 
 
-                for(int i=0;i<size;i++){
-                    if(taskList.get(i).getStatus().equals("assigned")){
-                        assignedTaskList.add(taskList.get(i));
-                    }
-                }
+        if (isNetworkAvailable()) {
+            ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+            getUser.execute(username);
+            try {
+                user = getUser.get();
+                Log.e("Got the username: ", user.getUsername());
+
+            } catch (Exception e) {
+                Log.e("Error", "We arnt getting the user");
+                return;
+
             }
-        }).start();
 
+            new Thread(new Runnable() {
+                public void run() {
+                    // Getting the all the tasks associated with the user
+                    ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
+                    getAllTask.execute(username);
+                    try {
+                        taskList = getAllTask.get();
+                        Log.e("Got the tasks ", taskList.toString());
 
+                    } catch (Exception e) {
+                        Log.e("Error", "We arnt getting the list of tasks");
+                        return;
 
+                    }
+
+                    int size = taskList.size();
+                    for (int i = 0; i < size; i++) {
+                        if (taskList.get(i).getStatus().equals("bidded")) {
+                            biddedTaskList.add(taskList.get(i));
+                        }
+                    }
+                    for (int i = 0; i < size; i++) {
+                        if (taskList.get(i).getStatus().equals("assigned")) {
+                            assignedTaskList.add(taskList.get(i));
+                        }
+                    }
+                }
+            }).start();
+        }else{
+            new Thread(new Runnable() {
+                public void run() {
+                    LocalRequestedTaskController requestedTaskController = new LocalRequestedTaskController(getContext(), username);
+                    taskList = requestedTaskController.loadRequestedTask();
+                    Log.d("size in controller", String.valueOf(taskList.size()));
+                    int size = taskList.size();
+                    for (int i = 0; i < size; i++) {
+                        if (taskList.get(i).getStatus().equals("bidded")) {
+                            biddedTaskList.add(taskList.get(i));
+                        }
+                    }
+
+                    for (int i = 0; i < size; i++) {
+                        if (taskList.get(i).getStatus().equals("assigned")) {
+                            assignedTaskList.add(taskList.get(i));
+                        }
+                    }
+                }
+            }).start();
+        }
     }
+
 
     /**
      * This function states what happens when a task is clicked on
@@ -190,14 +213,14 @@ public class MyRequestedTasksFragment extends Fragment {
         Task detailedTask;
 
         detailedTask = taskList.get(i);
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(detailedTask.getId());
-        try {
-            Task x = getTask.get();
-            Log.e("Return task title", x.getTitle());
-        } catch (Exception e) {
-            Log.e("Error", "Task get not working");
-        }
+//        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+//        getTask.execute(detailedTask.getId());
+//        try {
+//            Task x = getTask.get();
+//            Log.e("Return task title", x.getTitle());
+//        } catch (Exception e) {
+//            Log.e("Error", "Task get not working");
+//        }
         //intent.putExtra("task", detailedTask);
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
@@ -229,6 +252,17 @@ public class MyRequestedTasksFragment extends Fragment {
             }
         }
 
+    }
+
+    //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(getContext().CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
     }
 
 }
