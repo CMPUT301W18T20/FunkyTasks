@@ -94,6 +94,10 @@ public class LocalRequestedTaskController {
         try {
             isFileExist();
             taskList.add(task);
+            for (Task eachtask : taskList) {
+                Log.d("task title base", eachtask.getTitle());
+                Log.d("task description base", eachtask.getDescription());
+            }
             FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
 
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
@@ -126,5 +130,13 @@ public class LocalRequestedTaskController {
             return taskList;
 
         }
+    }
+
+    public Task getRequestedTask(int index){
+        isFileExist();
+        Task task = taskList.get(index);
+        Log.d("task in controller", task.getTitle());
+        return task;
+
     }
 }

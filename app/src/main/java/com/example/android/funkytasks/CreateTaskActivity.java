@@ -106,6 +106,8 @@ public class CreateTaskActivity extends AppCompatActivity {
                             // a potentially  time consuming task
                             ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
                             postTask.execute(task);
+                            LocalRequestedTaskController requestedController = new LocalRequestedTaskController(getApplicationContext(), username);
+                            requestedController.addOfflineTask(task);
                         }
                         else{
                             Log.d("Network", "unavailable");

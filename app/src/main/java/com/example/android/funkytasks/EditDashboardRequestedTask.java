@@ -80,11 +80,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
         try {
             task = getTask.get();
             Log.e("Got the task",task.getTitle());
-
         } catch (Exception e) {
             Log.e("Error", "We aren't getting the task");
             return;
         }
+
+
 
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
