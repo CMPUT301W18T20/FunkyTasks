@@ -128,6 +128,10 @@ public class EditDashboardRequestedTask extends BaseActivity {
                     }
                 }).start();
 
+                LocalRequestedTaskController requestedTaskController = new LocalRequestedTaskController(getApplicationContext(), username);
+                requestedTaskController.updateRequestedTask(task);
+
+
 
                 Log.e("tasktitle edited",task.getTitle());
 

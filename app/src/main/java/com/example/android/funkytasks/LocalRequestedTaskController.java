@@ -85,9 +85,6 @@ public class LocalRequestedTaskController {
         Log.e("Got the tasks ", taskList.toString());
         out.flush();
 
-
-
-
     }
 
     public void addOfflineTask(Task task){
@@ -129,6 +126,35 @@ public class LocalRequestedTaskController {
             taskList = new ArrayList<>();
             return taskList;
 
+        }
+    }
+
+    public void updateRequestedTask(Task task){
+        String taskID = task.getId();
+        taskList = loadRequestedTask();
+        for (Task eachTask: taskList){
+            if (taskID.equals(eachTask.getId())){
+                Log.d("Title before", eachTask.getTitle());
+                eachTask.setTitle(task.getTitle());
+                Log.d("Title after", eachTask.getTitle());
+                Log.d("Desc before", eachTask.getDescription());
+                eachTask.setDescription(task.getDescription());
+                Log.d("Title after", eachTask.getDescription());
+                eachTask.setImagesList(task.getImages());
+            }
+        }
+
+        try {
+            FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(taskList, out);
+            Log.e("Got the tasks ", taskList.toString());
+            out.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
