@@ -188,6 +188,9 @@ public class DashboardProviderTask extends BaseActivity {
     }
 
 
+    /**
+     * Sets the task details screen of the provider
+     */
     public void setTaskDetails(){
         // set the task details of the activity with the requester's info and the lowest bid
 
@@ -236,6 +239,10 @@ public class DashboardProviderTask extends BaseActivity {
         requesterEmail.setText(requester.getEmail());
 
     }
+
+    /**
+     * Goes back to My Tasks activity dashboard screen
+     */
 
     @Override
     public void onBackPressed() {

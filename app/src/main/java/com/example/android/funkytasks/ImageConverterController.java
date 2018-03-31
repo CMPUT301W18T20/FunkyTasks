@@ -1,3 +1,12 @@
+/**
+ * ImageConverterController
+ *
+ * Version 1.0.0
+ *
+ * Created by FunkyTasks on 2018-03-29.
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
 package com.example.android.funkytasks;
 
 import android.graphics.Bitmap;
@@ -10,15 +19,17 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
- * Created by MonicaB on 2018-03-30.
+ * Image controller allows system to convert a bitmap image to a string and vice versa.
+ * Gives flexibility for image storage and its memory when we compress it.
  */
 
 public class ImageConverterController {
 
-    static final int QUALITY= 50;
-    static final int MAX_SIZE = 140;
+    static final int QUALITY= 100;
+    static final int MAX_SIZE = 145;
 
     /**
+     * Converts a string to a bitmap
      * @param bitmapString String representation of Bitmap
      * @return Image representation of bitmap
      */
@@ -29,8 +40,9 @@ public class ImageConverterController {
     }
 
     /**
+     * Converts a bitmap to a string
      * @param image Bitmap representation of picture
-     * @return String of Bitmap
+     * @return String of Compressed bitmap
      */
     public static String convertToString (Bitmap image) {
         String encodedImage;
@@ -44,6 +56,11 @@ public class ImageConverterController {
         return encodedImage;
     }
 
+    /**
+     * Validates the size of the images
+     * @param bitmapStrings a list of strings represented as images
+     * @return a validated list of bitmaps
+     */
 
     public static boolean checkImages (ArrayList<String> bitmapStrings){
         ArrayList<Bitmap> images = stringToImageList(bitmapStrings);
@@ -59,6 +76,12 @@ public class ImageConverterController {
         return true;
     }
 
+    /**
+     * Converts a list of bitmap strings to a list of bitmaps
+     * @param strings a list of string containing their bitmap values
+     * @return a converted array list of bitmaps
+     */
+
     public static ArrayList<Bitmap> stringToImageList(ArrayList<String> strings){
         ArrayList<Bitmap> images = new ArrayList<Bitmap>();
         for (String string: strings){
@@ -67,6 +90,12 @@ public class ImageConverterController {
         return images;
     }
 
+    /**
+     * Scales down the size of an image
+     * @param image a bitmap for the image we want to scale
+     * @param maxSize a integer representing how large we want the image to be
+     * @return
+     */
     public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
         int height = image.getHeight();

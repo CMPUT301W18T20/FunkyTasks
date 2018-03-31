@@ -1,5 +1,5 @@
 /**
- * DashboardRequestedTask
+ * Image Details
  *
  * Version 1.0.0
  *
@@ -29,7 +29,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 /**
- *
+ * Displays the images the task may have
  */
 public class ImageDetails extends BaseActivity {
 
