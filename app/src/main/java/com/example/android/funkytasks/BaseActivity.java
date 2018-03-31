@@ -45,6 +45,19 @@ public class BaseActivity extends AppCompatActivity {
                     if (eachtask.getId() == null) {
                         ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
                         postTask.execute(eachtask);
+                        try {
+                            Task t = postTask.get();
+                            while (t == null) {
+                                ElasticSearchController.PostTask postTaskAgain = new ElasticSearchController.PostTask();
+                                postTaskAgain.execute(eachtask);
+                                t = postTaskAgain.get();
+                            }
+
+                        } catch (Exception e) {
+                            Log.e("Error", "We are not able to sync task to the online database");
+                            return;
+
+                        }
                         controller.deleteFromArrayList();
                     } else {
                         Log.d("task ID base", eachtask.getId());
