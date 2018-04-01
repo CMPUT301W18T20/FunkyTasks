@@ -111,6 +111,7 @@ public class UpdateBidDialogFragment extends DialogFragment {
                         Log.e("amount in fragment", moneyPlaced.getText().toString());
 
                         bid.setAmount(bidAmount);
+                        bid.setStatus();
 
                         Log.e("New amount", Double.toString(bid.getAmount()));
 
@@ -120,6 +121,21 @@ public class UpdateBidDialogFragment extends DialogFragment {
                         Log.e("New amount", Double.toString(bid.getAmount()));
 
                         Toast.makeText(getActivity(), "Successfully updated a bid", Toast.LENGTH_SHORT).show();
+
+                        ElasticSearchController.GetTask getTask=new ElasticSearchController.GetTask();
+                        getTask.execute(taskID);
+                        Task task;
+                        try {
+                            task = getTask.get();
+                            Log.e("Return task title", task.getTitle());
+                        } catch (Exception e) {
+                            Log.e("Task get", "not workng");
+                            return;
+                        }
+                        task.setBidded();
+                        ElasticSearchController.updateTask updateTask= new ElasticSearchController.updateTask();
+                        updateTask.execute(task);
+
 
 
                         sendToSolveTaskActivity(bidder);
