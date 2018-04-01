@@ -80,7 +80,6 @@ public class MyRequestedTasksFragment extends Fragment {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.support_simple_spinner_dropdown_item, menuOptions);
         dropdown.setAdapter(arrayAdapter);
 
-
         //Get tasks using Elastic search and display tasks
 
         getTask();

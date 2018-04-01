@@ -104,6 +104,7 @@ public class DashboardRequestedTask extends BaseActivity {
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
+
         setTaskDetails(task); // set the contents of the screen to the task details
 
         if (isNetworkAvailable()){
