@@ -159,6 +159,10 @@ public class DashboardRequestedTask extends BaseActivity {
                         acceptBTN.setVisibility(View.GONE);
                         declineBTN.setVisibility(View.GONE);
                     }
+                    if(!bidList.get(i).getStatus().equals("")){
+                        acceptBTN.setVisibility(View.GONE);
+                        declineBTN.setVisibility(View.GONE);
+                    }
 
                     acceptBTN.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -277,7 +281,6 @@ public class DashboardRequestedTask extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
             task = (Task) intent.getSerializableExtra("updatedTask");
-
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
             photoLength = task.getImages().size();
@@ -293,14 +296,26 @@ public class DashboardRequestedTask extends BaseActivity {
             reassign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ElasticSearchController.deleteBid deleteBid=new ElasticSearchController.deleteBid();
-                    deleteBid.execute(bidList.get(0).getId());
-                    bidList.remove(0);
+
+                    if(bidList.size()>=2){
+                        task.setBidded();
+                        ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
+                        update.execute(task);
+                        statusValue.setText("bidded");
+                    }
+                    if(bidList.size()==1){
+                        task.setRequested();
+                        ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
+                        update.execute(task);
+                    }
+                    for (int index = 0; index < bidList.size(); index++) {
+                        ElasticSearchController.updateBid updateBid= new ElasticSearchController.updateBid();
+                        Bid toUpdate=bidList.get(index);
+                        toUpdate.setStatus();
+                        updateBid.execute(toUpdate);
+                        statusValue.setText("requested");
+                    }
                     setAdapter();
-                    task.setRequested();
-                    ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
-                    update.execute(task);
-                    statusValue.setText("requested");
                     updateStatus.setVisibility(View.GONE);
                     reassign.setVisibility(View.GONE);
 
@@ -348,8 +363,9 @@ public class DashboardRequestedTask extends BaseActivity {
     public void setAdapter(){
         BidListViewAdapter adpater = new BidListViewAdapter(DashboardRequestedTask.this,
                 android.R.layout.simple_list_item_1, bidList) ;
-        adpater.notifyDataSetChanged();
+
         bidListView.setAdapter(adpater);
+        adpater.notifyDataSetChanged();
     }
 
     /**
@@ -442,23 +458,30 @@ public class DashboardRequestedTask extends BaseActivity {
      *               by the activity
      */
     public void acceptBid(int target){
-        //deleting all bids except the accepted bid, and update the task's provider and status
+        //accpet a bid by changing the status of the bid to accepted and declining all other bids;
         if (task.getStatus().equals("accepted")){
             Toast.makeText(DashboardRequestedTask.this,
                     "Task has already been assigned", Toast.LENGTH_SHORT).show();
             return;
         }
         Bid acceptedBid = bidList.get(target);
-        ElasticSearchController.deleteBid deleteAllBids = new ElasticSearchController.deleteBid();
+        acceptedBid.setAccepted();
+        ElasticSearchController.updateBid bid= new ElasticSearchController.updateBid();
+        bid.execute(acceptedBid);
+        Log.e("Accept bid","success");
+
+
+        //decline all other bids by setting their status to declined;
+
         for (int index = 0; index < bidList.size(); index++) {
             if(!acceptedBid.getId().equals(bidList.get(index).getId())){
-                deleteAllBids.execute(bidList.get(index).getId());
+                ElasticSearchController.updateBid declineAllBids = new ElasticSearchController.updateBid();
+                Bid declined=bidList.get(index);
+                declined.setDeclined();
+                declineAllBids.execute(declined);
             }
         }
 
-        //update local bidList
-        bidList.clear();
-        bidList.add(acceptedBid);
 
         //change task status to assigned and set provider field of the task to the bidder
         task.setAssigned();
@@ -474,26 +497,18 @@ public class DashboardRequestedTask extends BaseActivity {
     }
 
     /**
-     * Declines a bid placed on a task. This should delete the bid from the bids list but not
-     * delete the task and all other bids from the server.
+     * Declines a bid placed on a task. This will change the status of the bid to declined;
      *
      * @param target an integer representing which list item was selected and should be
      *               treated by the method
      */
     public void declineBids(int target){
         if (task.getStatus().equals("bidded")){
-            ElasticSearchController.deleteBid deleteBid=new ElasticSearchController.deleteBid();
-            deleteBid.execute(bidList.get(target).getId());
-            bidList.remove(target);
+            ElasticSearchController.updateBid updateBid=new ElasticSearchController.updateBid();
+            Bid toUpdate=bidList.get(target);
+            toUpdate.setDeclined();
+            updateBid.execute(toUpdate);
             setAdapter();
-            if(bidList.size()==0){
-                task.setRequested();
-                statusValue.setText("requested");
-                ElasticSearchController.updateTask updateTask=new ElasticSearchController.updateTask();
-                updateTask.execute(task);
-            }
-            Toast.makeText(DashboardRequestedTask.this,
-                    "Declined Bid", Toast.LENGTH_SHORT).show();
         }
 
 

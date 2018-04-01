@@ -54,10 +54,11 @@ public class BidListViewAdapter extends ArrayAdapter<Bid> {
 
         TextView bidder = view.findViewById(R.id.bidderTextView);
         TextView amount = view.findViewById(R.id.amountTextView);
+        TextView status = view.findViewById(R.id.bidStatus);
 
 
         bidder.setText(bid.getBidder());
-
+        status.setText(bid.getStatus());
         Double amountValue=(bid.getAmount());
         amount.setText(amountValue.toString());
 

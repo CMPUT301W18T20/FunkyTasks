@@ -24,6 +24,8 @@ public class Bid {
     private String requester;
     private double amount;
     private String taskID;
+    private String status;
+    private String[] statuses={"","accepted","declined"};
 
 
     @JestId
@@ -46,6 +48,7 @@ public class Bid {
         this.requester = requester;
         this.amount = amount;
         this.taskID = taskID;
+        this.status = statuses[0];
     }
 
     /**
@@ -138,6 +141,24 @@ public class Bid {
      */
     public void setRequester(String requester) {
         this.requester = requester;
+    }
+    /**
+     * Sets the Bid of a task to "accepted", which indicates that the task has been assigned.
+     */
+    public void setAccepted(){
+        this.status=statuses[1];
+    }
+    /**
+     * Sets the Bid of a task to "declined".
+     */
+    public void setDeclined(){
+        this.status=statuses[2];
+    }
+    public String getStatus(){
+        return this.status;
+    }
+    public void setStatus(){
+        this.status=statuses[0];
     }
 
 
