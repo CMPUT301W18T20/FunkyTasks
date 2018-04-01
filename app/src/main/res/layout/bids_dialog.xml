@@ -2,10 +2,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#ffffff"
-    android:padding="20dp">
+    android:background="#ffffff">
 
     <!--<TextView-->
         <!--android:id="@+id/TextView1"-->
@@ -37,7 +36,7 @@
         android:id="@+id/TextView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="By"
+        android:text="PLACED BY"
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/amountTextView"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -50,7 +49,7 @@
         android:layout_height="wrap_content"
         android:text="1356678"
         android:textSize="15sp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintTop_toBottomOf="@+id/bidderTextView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
@@ -60,17 +59,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:paddingBottom="10dp"
         android:text="XXX@YYY.com"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contactTextView" />
-
     <TextView
         android:id="@+id/amountTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
+        android:layout_marginTop="10dp"
         android:text="100"
         android:textColor="@android:color/background_dark"
         android:textSize="30sp"
@@ -82,24 +81,24 @@
         android:id="@+id/acceptButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:text="ACCEPT"
         android:textColor="#009688"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/declineButton"
         app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:background="@drawable/buttonshape2" />
 
     <Button
         android:id="@+id/declineButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:text="DECLINE"
         android:textColor="#009688"
         android:background="@drawable/buttonshape2"
         app:layout_constraintLeft_toRightOf="@id/acceptButton"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contactTextViewEmail" />
 
 

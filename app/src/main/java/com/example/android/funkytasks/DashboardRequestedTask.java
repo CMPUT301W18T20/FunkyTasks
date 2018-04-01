@@ -307,13 +307,13 @@ public class DashboardRequestedTask extends BaseActivity {
                         task.setRequested();
                         ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
                         update.execute(task);
+                        statusValue.setText("requested");
                     }
                     for (int index = 0; index < bidList.size(); index++) {
                         ElasticSearchController.updateBid updateBid= new ElasticSearchController.updateBid();
                         Bid toUpdate=bidList.get(index);
-                        toUpdate.setStatus();
+                        toUpdate.setDeclined();
                         updateBid.execute(toUpdate);
-                        statusValue.setText("requested");
                     }
                     setAdapter();
                     updateStatus.setVisibility(View.GONE);
