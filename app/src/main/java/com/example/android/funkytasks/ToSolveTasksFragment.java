@@ -154,7 +154,7 @@ public class ToSolveTasksFragment extends Fragment {
         getallBids.execute(username);
         try {
             allBids = getallBids.get();
-            Log.e("Got the task: ", getallBids.get().get(0).getTaskID().toString());
+            Log.e("Got the related tasks: ", getallBids.get().get(0).getTaskID().toString());
 
         } catch (Exception e) {
             Log.e("Error", "We arnt getting all the bids");
@@ -165,19 +165,21 @@ public class ToSolveTasksFragment extends Fragment {
             public void run() {
                 // Getting the all the tasks associated with the user
                 int size = allBids.size();
+
+
                 for (int index = 0; index < size; index++) {
-                    Task task;
-                    ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+                    Task atask;
+                    ElasticSearchController.GetTask getTask=new ElasticSearchController.GetTask();
                     getTask.execute(allBids.get(index).getTaskID());
                     Log.e("Task id", allBids.get(index).getTaskID());
                     try {
-                        task = getTask.get();
-                        Log.e("Return task title", task.getTitle());
+                        atask = getTask.get();
+                        Log.e("Return task title", atask.getTitle());
                     } catch (Exception e) {
                         Log.e("Task get", "not workng");
                         return;
                     }
-                    taskList.add(task);
+                    taskList.add(atask);
                     Log.e("Success", "loop");
 
                 }
