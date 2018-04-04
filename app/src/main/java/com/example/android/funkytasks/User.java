@@ -15,6 +15,7 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import io.searchbox.annotations.JestId;
 
@@ -28,7 +29,8 @@ public class User implements Serializable{
     private String username;
     private String email;
     private String phonenumber;
-    private double rating;
+    private float averagerating;
+    private List<Float> ratingList = new ArrayList<Float>();
 
 
     @JestId
@@ -45,7 +47,7 @@ public class User implements Serializable{
         this.username = username;
         this.email = email;
         this.phonenumber = phonenumber;
-        this.rating = 3;
+        this.averagerating = 3;
 
     }
 
@@ -128,16 +130,38 @@ public class User implements Serializable{
      * @return a double representing the user's rating
      */
     public double getRating(){
-        return this.rating;
+        return this.averagerating;
     }
 
     /**
-     * Sets the user's rating to the double provided
-     *
-     * @param newRating a double representing the new rating for the user
+     * Sets the user's rating to the double provided after calculation
      */
-    public void setRating(double newRating){
-        this.rating = newRating;
+    public void setRating(){
+        calculateAverageRating(ratingList);
+    }
+
+    /**
+     * adds a new rating to the ratingList, which is used to calculate the average rating
+     * @param newRating input rating from client
+     */
+
+    public void addRatingToList(float newRating){
+        this.ratingList.add(newRating);
+    }
+
+    /**
+     * calculates a straight average of ratings given to the user.
+     * @param ratingList a list of ratings given to the user from clients
+     */
+
+    private void calculateAverageRating(List<Float> ratingList){
+        int i = 0;
+        float sum = 0;
+        for(float rating : ratingList){
+            sum = sum + rating;
+            i = i + 1;
+        }
+        this.averagerating = sum/i;
     }
 
 }
