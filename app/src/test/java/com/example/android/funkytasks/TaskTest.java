@@ -17,9 +17,6 @@ public class TaskTest extends TestCase{
     private String inputDescription = "make Ken happy";
     private String inputStatus = "requested";
     private String inputRequester ="Ken";
-//    private User bidder1 =new User("Jimi", "jimi@ualberta.ca", "7806668889");
-//    private User bidder2 = new User ("Jim", "jim@ualberta.ca", "1112220000");
-//    private ArrayList<Bid> bids = new ArrayList<Bid>();
     private Task test=new Task(inputTitle,inputDescription,inputRequester);
 
 
@@ -139,37 +136,21 @@ public class TaskTest extends TestCase{
         assertEquals("TEST", test.getProvider());
     }
 
-    //not needed anymore
-/*
     @Test
-    public void testGetBids() throws Exception{
-        Bid newBid=new Bid(bidder1,10.0);
-        test.addBid(newBid);
-        bids.add(newBid);
-        assertEquals(test.getBids(),bids);
-
-    }
-
-
-    @Test
-    public void testAddBids() throws Exception{
-
-        Bid newBid=new Bid(bidder1,10.0);
-        bids.add(newBid);
-        test.addBid(newBid);
-        assertEquals(test.getBids(),bids);
-
-
+    public void testSetOfflineID(){
+        String id = "123";
+        test.setOfflineId(id);
+        assertEquals(id, test.getOfflineId());
+        String id2 = "222";
+        test.setOfflineId(id2);
+        assertEquals(id2, test.getOfflineId());
     }
 
     @Test
-    public void testGetLowestBid() throws  Exception{
-        Bid bid1 = new Bid(bidder1, 10.0);
-        Bid bid2 = new Bid(bidder2, 3.0);
-        test.addBid(bid1);
-        test.addBid(bid2);
-        assertEquals(bid2.getAmount(),test.getLowestBid());
+    public void testGetOfflineID(){
+        String id = "123";
+        test.setOfflineId(id);
+        assertEquals(id, test.getOfflineId());
     }
-*/
 
 }

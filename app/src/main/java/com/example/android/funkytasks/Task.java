@@ -83,8 +83,18 @@ public class Task implements Serializable{
         return this.id;
     }
 
+    /**
+     * This function sets a new offlineID for a given task.
+     *
+     * @param newId a string representing the OfflineID of a given task
+     */
     public void setOfflineId(String newId){this.offlineID = newId;}
 
+    /**
+     * Returns the OfflineID of a given task
+     *
+     * @return the OfflineID of the task
+     */
     public String getOfflineId() {return this.offlineID;}
 
     /**

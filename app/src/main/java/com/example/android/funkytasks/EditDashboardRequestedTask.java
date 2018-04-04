@@ -205,6 +205,10 @@ public class EditDashboardRequestedTask extends BaseActivity {
     }
 
     //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+    /**
+     * This fucntion checks for connectivity, returns true if the device is connected to the internet, false if the device is not.
+     * @return a boolean indicating connectivity to the internet
+     */
     public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();

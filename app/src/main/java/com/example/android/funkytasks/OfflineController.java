@@ -34,6 +34,12 @@ public class OfflineController {
         this.FILENAME = userName + ".sav";
     }
 
+    /**
+     * Checks if the file exists, if it does, assign taskList to the list from the file;
+     * if it doesn't, set the taskList to be an empty list, then returns a boolean
+     *
+     * @return Boolean indicating if the file exists or not
+     */
     public boolean fileExists() {
         File file = context.getFileStreamPath(FILENAME);
         if(file.exists()){
@@ -47,6 +53,10 @@ public class OfflineController {
         }
     }
 
+    /**
+     * appends the task to taskList and write the new taskList into the local file
+     * @param task task to be added to the local file
+     */
     public void saveInFile(Task task) {
 
         try {
@@ -66,6 +76,10 @@ public class OfflineController {
         }
     }
 
+    /**
+     * This function updates a task in the local file
+     * @param task task to be updated
+     */
     public void updateInFile(Task task) {
         String offlineId = task.getOfflineId();
         taskList = loadFromFile();
@@ -98,6 +112,10 @@ public class OfflineController {
     }
 
 
+    /**
+     * This function reads in the list stored in the file and assign it to taskList
+     * @return taskList which is a list of tasks stored in the local file
+     */
     public ArrayList<Task> loadFromFile() {
 
         try {
@@ -120,6 +138,9 @@ public class OfflineController {
         }
     }
 
+    /**
+     * This function deletes the first element in the list and stores the new taskList back to the local file
+     */
     public void deleteFromArrayList(){
         try {
             fileExists();

@@ -29,12 +29,23 @@ public class LocalRequestedTaskController {
     private String username;
     private User user;
 
+    /**
+     *
+     * @param context context of the application
+     * @param userName the userName of the user
+     */
     public LocalRequestedTaskController(Context context, String userName) {
         this.context = context;
         this.FILENAME = userName + "Requested.sav";
         this.username = userName;
     }
 
+    /**
+     * Checks if the file exists, if it does, assign taskList to the list from the file;
+     * if it doesn't, set the taskList to be an empty list, then returns a boolean
+     *
+     * @return Boolean indicating if the file exists or not
+     */
     public boolean fileExists() {
         File file = context.getFileStreamPath(FILENAME);
         if(file.exists()){
@@ -48,6 +59,10 @@ public class LocalRequestedTaskController {
         }
     }
 
+    /**
+     * Get all the requested tasks of the user from Elastic Search and store them in a local file
+     * @throws IOException
+     */
     public void SaveRequestedTask() throws IOException {
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
@@ -87,6 +102,10 @@ public class LocalRequestedTaskController {
 
     }
 
+    /**
+     * Add a task given to the local file
+     * @param task task to be added to the local file
+     */
     public void addOfflineTask(Task task){
         try {
             fileExists();
@@ -111,6 +130,10 @@ public class LocalRequestedTaskController {
     }
 
 
+    /**
+     * This function reads in the list stored in the file and assign it to taskList
+     * @return taskList which is a list of all the tasks stored in the file
+     */
     public ArrayList<Task> loadRequestedTask() {
 
         try {
@@ -122,13 +145,17 @@ public class LocalRequestedTaskController {
             return taskList;
 
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             taskList = new ArrayList<>();
             return taskList;
 
         }
     }
 
+    /**
+     * This function updates a task that is stored in the local file
+     * @param task task to be updated
+     * @param index index of the task in the list
+     */
     public void updateRequestedTask(Task task, int index){
 
         taskList = loadRequestedTask();
