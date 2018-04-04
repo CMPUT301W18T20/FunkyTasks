@@ -40,7 +40,7 @@ public class RateActivity extends AppCompatActivity {
         rateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String rating = "Rating :: " + ratingBar.getRating();
+                float newrating = ratingBar.getRating();
 
                 // Getting the solver user
                 ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
@@ -53,9 +53,9 @@ public class RateActivity extends AppCompatActivity {
                     return;
                 }
 
-                float rating_double = Float.parseFloat(rating);
+                //float rating_double = Float.parseFloat(rating);
 
-                solver.addRatingToList(rating_double);
+                solver.addRatingToList(newrating);
                 solver.setRating();
 
                 // Updating the elasticsearch user
