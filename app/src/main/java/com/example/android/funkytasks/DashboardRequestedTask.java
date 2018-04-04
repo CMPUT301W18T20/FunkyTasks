@@ -10,6 +10,8 @@
 package com.example.android.funkytasks;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -64,6 +66,7 @@ public class DashboardRequestedTask extends BaseActivity {
     private int index;
     private int EDIT_CODE = 1;
     private User bidder;
+    private User requester;
     ListViewAdapter listViewAdapter;
     ArrayList<Bid> bidList = new ArrayList<Bid>();
 
@@ -338,6 +341,11 @@ public class DashboardRequestedTask extends BaseActivity {
             updateStatus.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Beginning of rating testing
+                    DialogFragment rateDialog = new RatingDialog();
+
+                    rateDialog.show(getFragmentManager(), "Rate");
+                    // Edn of rating testing
                     task.setDone();
                     ElasticSearchController.updateTask done=new ElasticSearchController.updateTask();
                     done.execute(task);
