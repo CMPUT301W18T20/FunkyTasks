@@ -342,7 +342,9 @@ public class DashboardRequestedTask extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     // Beginning of rating testing
-                    
+                    Intent intent = new Intent(DashboardRequestedTask.this, RateActivity.class);
+                    intent.putExtra("bidder", bidder);
+                    startActivity(intent);
 
                     // Enn of rating testing
 

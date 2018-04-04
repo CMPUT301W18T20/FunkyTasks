@@ -128,21 +128,26 @@
 
     <Button
         android:id="@+id/setToDone"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginLeft="-2dp"
         android:background="@drawable/buttonshape"
         android:text="FINISH TASK"
+        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/reasignTask"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/reasignTask"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
+        android:textColor="#ffffff"
         android:background="@drawable/buttonshape"
-        android:text="REASIGN"
+        android:text="Reassign"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
