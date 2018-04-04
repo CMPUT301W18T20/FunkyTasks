@@ -342,10 +342,10 @@ public class DashboardRequestedTask extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     // Beginning of rating testing
-                    DialogFragment rateDialog = new RatingDialog();
+                    
 
-                    rateDialog.show(getFragmentManager(), "Rate");
-                    // Edn of rating testing
+                    // Enn of rating testing
+
                     task.setDone();
                     ElasticSearchController.updateTask done=new ElasticSearchController.updateTask();
                     done.execute(task);

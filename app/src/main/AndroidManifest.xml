@@ -17,9 +17,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:screenOrientation="portrait">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
             android:theme="@style/FunkyTrial1">
@@ -57,11 +57,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ImageDetails"
-            android:label="ImageDetails"
-            />
+            android:label="ImageDetails" />
         <activity android:name=".SolveTaskActivity" />
         <activity android:name=".ViewRequestorTaskActivity" />
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".RateActivity"></activity>
     </application>
 
 </manifest>
