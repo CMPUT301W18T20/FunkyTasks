@@ -343,7 +343,8 @@ public class DashboardRequestedTask extends BaseActivity {
                 public void onClick(View v) {
                     // Beginning of rating testing
                     Intent intent = new Intent(DashboardRequestedTask.this, RateActivity.class);
-                    intent.putExtra("bidder", bidder);
+                    String uname = bidder.getUsername();
+                    intent.putExtra("username", uname);
                     startActivity(intent);
 
                     // Enn of rating testing
