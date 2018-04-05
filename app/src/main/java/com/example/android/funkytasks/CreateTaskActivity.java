@@ -10,15 +10,19 @@
 
 package com.example.android.funkytasks;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v4.graphics.BitmapCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -33,7 +37,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -53,6 +61,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private ArrayList<Task> tasks;
     private Task taskTemp;
     ImageConverterController imageConvert;
+    Uri photoURI;
 
 
     @Override
@@ -155,7 +164,7 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
 
         descriptionValue = description.getText().toString(); // grab description from edit text input
-        if (descriptionValue.length() >= 300) {               // validating name input length
+        if (descriptionValue.length() >= 300 || descriptionValue.length() <= 0) {               // validating name input length
             Toast.makeText(getApplicationContext(), "Description is invalid length. Must be between 1-299 characters. ", Toast.LENGTH_SHORT)
                     .show();
             return false;
@@ -179,7 +188,23 @@ public class CreateTaskActivity extends AppCompatActivity {
             case R.id.camera:
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                        //photoFile = createTemporaryFile("picture", ".jpg");
+                    } catch (Exception e) {
+                        // Error occurred while creating the File
+                        Log.e("ugh","ugh");
+                        return false;
+                    }
+                    // Continue only if the File was successfully created
+                    takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    photoURI = FileProvider.getUriForFile(this,
+                            "com.example.android.funkytasks",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
                 }
 
             default:
@@ -187,20 +212,42 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
     }
 
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpeg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap newImage = (Bitmap) extras.get("data");
-//            Log.e("newimage",newImage.toString());
-//            newImages.add(newImage);
-//            Log.e("size",String.valueOf(newImages.size()));
+            this.getContentResolver().notifyChange(photoURI, null);
+            ContentResolver cr = this.getContentResolver();
 
-            Bundle extras = data.getExtras();
-            Bitmap newImage = (Bitmap) extras.get("data");
-            Log.e("newimage",newImage.toString());
-            newImages.add(imageConvert.convertToString(newImage));
+            Bitmap bitmap;
+            try {
+                bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, photoURI);
+            }
+            catch (Exception e) {
+                Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            newImages.add(imageConvert.convertToString(bitmap));
 
         }
     }

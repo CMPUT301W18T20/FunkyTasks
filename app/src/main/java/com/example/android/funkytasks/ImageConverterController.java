@@ -25,8 +25,8 @@ import java.util.ArrayList;
 
 public class ImageConverterController {
 
-    static final int QUALITY= 100;
-    static final int MAX_SIZE = 145;
+    private static final int QUALITY= 100;
+    private static final int MAX_SIZE = 140;
 
     /**
      * Converts a string to a bitmap
@@ -50,7 +50,7 @@ public class ImageConverterController {
         image = getResizedBitmap(image,MAX_SIZE);
 
         ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.PNG, QUALITY, byteArrayBitmapStream);
+        image.compress(Bitmap.CompressFormat.JPEG, QUALITY, byteArrayBitmapStream);
         byte[] b = byteArrayBitmapStream.toByteArray();
         encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
         return encodedImage;
