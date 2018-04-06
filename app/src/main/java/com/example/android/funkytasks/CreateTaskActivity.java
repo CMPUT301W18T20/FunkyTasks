@@ -19,6 +19,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -36,6 +37,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +58,7 @@ import java.util.UUID;
 /**
  * This activity allows a task requester to create a new task and post it to the server.
  */
-public class CreateTaskActivity extends AppCompatActivity {
+public class CreateTaskActivity extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private String titleValue; // value of the task title
@@ -60,6 +71,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private EditText description;
     private ArrayList<Task> tasks;
     private Task taskTemp;
+    private GoogleMap mMap;
     ImageConverterController imageConvert;
     Uri photoURI;
 
@@ -69,9 +81,22 @@ public class CreateTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        try {
+            MapsInitializer.initialize(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assert mapFragment != null;
+        mapFragment.getMapAsync( this);
+
+//        prepareMap();
+
         setTitle("Create a Task");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -82,12 +107,12 @@ public class CreateTaskActivity extends AppCompatActivity {
         username = LoginActivity.username;
 
         // defining our edit text views
-        title = (EditText) findViewById(R.id.AddTitle);
-        description = (EditText) findViewById(R.id.AddDescription);
-        newImages = new ArrayList<String>();
+        title = findViewById(R.id.AddTitle);
+        description = findViewById(R.id.AddDescription);
+        newImages = new ArrayList<>();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() { // if user clicks on button, check if task input is validated
             @Override
@@ -172,6 +197,71 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         return true;
     }
+
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     *
+     * @param googleMap the map fragment that stores the map
+     */
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        LatLng location;
+        try {
+            location = task.getLocation();
+        } catch (Exception e) {
+            location = new LatLng(53.68, -113.52);  // default load to Edmonton
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+        UiSettings mapUiSettings = mMap.getUiSettings();
+        mapUiSettings.setZoomControlsEnabled(true);
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+                // TODO Auto-generated method stub
+                task.setLocation(point);
+                mMap.clear();
+                mMap.addMarker(new MarkerOptions()
+                        .position(point)
+                        .draggable(true));
+
+            }
+        });
+
+
+    }
+
+
+    /**
+     * This method prepares the map fragment for displays and locates it within the window
+     * so the rest of the class can properly use it
+     */
+//    public void prepareMap () {
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+//        try {
+//            MapsInitializer.initialize(this);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        assert mapFragment != null;
+//        mapFragment.getMapAsync( this);
+//
+//
+//    }
 
 
     @Override

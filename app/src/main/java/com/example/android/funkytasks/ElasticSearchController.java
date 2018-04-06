@@ -92,7 +92,7 @@ public class ElasticSearchController {
         protected Task doInBackground(Task... params) {
             verifySettings();
 
-            Task task = (Task) params[0];
+            Task task = params[0];
 
             // POSTING TASK TO ENTIRE TASK DATABASE
             Index index = new Index.Builder(task).index(indexType).type(taskType).build();

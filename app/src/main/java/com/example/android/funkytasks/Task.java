@@ -15,6 +15,8 @@ package com.example.android.funkytasks;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +41,7 @@ public class Task implements Serializable{
     private String status;
     private String[] statuses={"requested","bidded","assigned","done"};
     private ArrayList<String> images;
+    private LatLng location;
 
     @JestId
     private String id;
@@ -224,5 +227,23 @@ public class Task implements Serializable{
 
     public void setImagesList(ArrayList<String> newImages){
         this.images = newImages;
+    }
+
+    /**
+     * Retrieces the location of the task
+     *
+     * @return a LatLng value holding the task location
+     */
+    public LatLng getLocation() {
+        return location;
+    }
+
+    /**
+     * Sets the location to a new LatLng object provided by the user's input
+     *
+     * @param location a LatLng object that stores the task location
+     */
+    public void setLocation(LatLng location) {
+        this.location = location;
     }
 }
