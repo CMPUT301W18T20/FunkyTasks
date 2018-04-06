@@ -78,6 +78,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     ImageConverterController imageConvert;
     Uri photoURI;
     MapView mapView;
+    LatLng taskLocation = null;
 
 
     @Override
@@ -126,6 +127,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                         return;
                     }
                     task.setImagesList(newImages);
+                    setTaskLocation(taskLocation);
                 }
 
                 new Thread(new Runnable() {
@@ -151,10 +153,6 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                     }
                 }).start();
-
-
-
-
 
 
                 intent.putExtra("username", username);
@@ -202,41 +200,8 @@ public class CreateTaskActivity extends AppCompatActivity {
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      *
-     * @param googleMap the map fragment that stores the map
+     * @param savedInstanceState a bundle holding the most recent state of this page of the app
      */
-
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
-//
-//        LatLng location;
-//        try {
-//            location = task.getLocation();
-//        } catch (Exception e) {
-//            location = new LatLng(53.68, -113.52);  // default load to Edmonton
-//        }
-//
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-//        mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
-//        UiSettings mapUiSettings = mMap.getUiSettings();
-//        mapUiSettings.setZoomControlsEnabled(true);
-//
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//
-//            @Override
-//            public void onMapClick(LatLng point) {
-////                task.setLocation(point);
-//                mMap.clear();
-//                mMap.addMarker(new MarkerOptions()
-//                        .position(point)
-//                        .draggable(true));
-//
-//            }
-//        });
-//
-//
-//    }
-
     public void loadMap(Bundle savedInstanceState) {
         mapView = this.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -262,7 +227,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                     @Override
                     public void onMapClick(LatLng point) {
-//                task.setLocation(point);
+                        taskLocation = point;
                         mMap.clear();
                         mMap.addMarker(new MarkerOptions()
                                 .position(point)
@@ -275,26 +240,14 @@ public class CreateTaskActivity extends AppCompatActivity {
         });
     }
 
-
     /**
-     * This method prepares the map fragment for displays and locates it within the window
-     * so the rest of the class can properly use it
-//     */
-//    public void prepareMap () {
-//        MapView mapView = this.findViewById(R.id.map);
-//        try {
-//            MapsInitializer.initialize(this);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        assert mapView != null;
-//        mapView.getMapAsync( this);
-//
-//
-//    }
-//
-
+     * Sets the server location of the task to the point on the map so it can later be retrieved
+     *
+     * @param location a LatLng object representing the tasks location
+     */
+    public void setTaskLocation(LatLng location) {
+        task.setLocation(location);
+    }
 
 
     @Override
@@ -392,6 +345,8 @@ public class CreateTaskActivity extends AppCompatActivity {
         return isAvailable;
     }
 
+
+    //https://stackoverflow.com/questions/16564550/in-version-2-map-view-does-not-show-map
 
     @Override
     public void onResume() {

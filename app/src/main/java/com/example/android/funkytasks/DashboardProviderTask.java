@@ -11,6 +11,7 @@ package com.example.android.funkytasks;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -42,7 +44,7 @@ import static com.example.android.funkytasks.SearchListViewAdapter.getLowestBid;
 /**
  * This activity displays the tasks to the task provider.
  */
-public class DashboardProviderTask extends BaseActivity implements OnMapReadyCallback {
+public class DashboardProviderTask extends BaseActivity {
 
     private TextView titleValue;
     private TextView descriptionValue;
@@ -63,6 +65,9 @@ public class DashboardProviderTask extends BaseActivity implements OnMapReadyCal
     private int index;
     private int EDIT_CODE = 1;
 
+    private GoogleMap mMap;
+    MapView mapView;
+
     ListViewAdapter listViewAdapter;
     ArrayList<Bid> bidList = new ArrayList<Bid>();
 
@@ -80,7 +85,8 @@ public class DashboardProviderTask extends BaseActivity implements OnMapReadyCal
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.dashboard_provider);
 //        setSupportActionBar(myToolbar);
 
-        prepareMap();
+        loadMap(savedInstanceState); // load and display the map
+
 
         // defining our views
         descriptionValue = findViewById(R.id.textDescriptionprovider);
@@ -197,42 +203,45 @@ public class DashboardProviderTask extends BaseActivity implements OnMapReadyCal
         return bidFragment;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        LatLng location;
-        try {
-            location = task.getLocation();
-        } catch (Exception e) {
-            location = new LatLng(53.68, -113.52);  // default load to Edmonton
-        }
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
-        googleMap.addMarker(new MarkerOptions().position(location).title(task.getTitle()));
-        UiSettings mapUiSettings = googleMap.getUiSettings();
-        mapUiSettings.setZoomControlsEnabled(true);
-
-    }
-
 
     /**
-     * This method prepares the map fragment for displays and locates it within the window
-     * so the rest of the class can properly use it
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     *
+     * @param savedInstanceState a bundle holding the most recent state of this page of the app
      */
-    public void prepareMap () {
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        try {
-            MapsInitializer.initialize(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void loadMap(Bundle savedInstanceState) {
+        mapView = this.findViewById(R.id.providerMap);
+        mapView.onCreate(savedInstanceState);
 
-        assert mapFragment != null;
-        mapFragment.getMapAsync( this);
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
 
+                LatLng location;
+                try {
+                    location = task.getLocation();
+                } catch (Exception e) {
+                    location = new LatLng(53.68, -113.52);  // default load to Edmonton
+                }
 
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                mMap.addMarker(new MarkerOptions()
+                        .position(location)
+                        .title(task.getTitle()));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+                UiSettings mapUiSettings = mMap.getUiSettings();
+                mapUiSettings.setZoomControlsEnabled(true);
+
+            }
+        });
     }
-
 
 
 
@@ -297,6 +306,32 @@ public class DashboardProviderTask extends BaseActivity implements OnMapReadyCal
         Intent intent = new Intent(this, MyTasksActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+
+    }
+
+    @Override
+    public void onPause() {
+        mapView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapView.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
 }

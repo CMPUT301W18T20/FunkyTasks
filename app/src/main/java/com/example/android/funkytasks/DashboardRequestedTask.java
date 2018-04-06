@@ -36,6 +36,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 import static java.security.AccessController.getContext;
@@ -58,6 +66,9 @@ public class DashboardRequestedTask extends BaseActivity {
     private String id;// id of the detailed task
     private Button updateStatus;
     private Button reassign;
+
+    private GoogleMap mMap;
+    MapView mapView;
 
     private ArrayList<Bitmap> images;
 
@@ -86,17 +97,19 @@ public class DashboardRequestedTask extends BaseActivity {
         Toolbar myToolbar = findViewById(R.id.DashboardRequestedTasktoolbar);
         setSupportActionBar(myToolbar);
 
+        loadMap(savedInstanceState); // load and display the map
+
         // set bids listview
         bidListView = findViewById(R.id.bidlistView);
         descriptionValue = findViewById(R.id.textDescription);
         titleValue = findViewById(R.id.taskName);
         statusValue = findViewById(R.id.taskStatus);
-        providerName = (TextView) findViewById(R.id.taskProviderUsername);
-        providerEmail = (TextView) findViewById(R.id.taskProviderEmail);
-        providerPhone = (TextView) findViewById(R.id.taskProviderPhone);
-        provideByShow =(TextView) findViewById(R.id.TextView);
-        updateStatus=(Button) findViewById(R.id.setToDone);
-        reassign=(Button) findViewById(R.id.reasignTask);
+        providerName = findViewById(R.id.taskProviderUsername);
+        providerEmail = findViewById(R.id.taskProviderEmail);
+        providerPhone = findViewById(R.id.taskProviderPhone);
+        provideByShow = findViewById(R.id.TextView);
+        updateStatus= findViewById(R.id.setToDone);
+        reassign= findViewById(R.id.reasignTask);
 
 
 
@@ -396,6 +409,46 @@ public class DashboardRequestedTask extends BaseActivity {
             Log.e("Bid get","not workng");
         }
 
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     *
+     * @param savedInstanceState a bundle holding the most recent state of this page of the app
+     */
+    public void loadMap(Bundle savedInstanceState) {
+        mapView = this.findViewById(R.id.requestedMap);
+        mapView.onCreate(savedInstanceState);
+
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+
+                LatLng location;
+                try {
+                    location = task.getLocation();
+                    Log.e("Location latlng", location.toString());
+                } catch (Exception e) {
+                    location = new LatLng(53.68, -113.52);  // default load to Edmonton
+                }
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+                mMap.addMarker(new MarkerOptions()
+                        .position(location)
+                        .title(task.getTitle()));
+                UiSettings mapUiSettings = mMap.getUiSettings();
+                mapUiSettings.setZoomControlsEnabled(true);
+
+            }
+        });
     }
 
     /**
