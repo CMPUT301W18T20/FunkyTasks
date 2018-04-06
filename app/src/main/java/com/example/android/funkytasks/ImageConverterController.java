@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class ImageConverterController {
 
     private static final int QUALITY= 100;
-    private static final int MAX_SIZE = 140;
+    private static final int MAX_SIZE = 100;
 
     /**
      * Converts a string to a bitmap

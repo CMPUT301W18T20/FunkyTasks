@@ -262,6 +262,10 @@ public class CreateTaskActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.camera:
+                if (newImages.size() >= 10){
+                    Toast.makeText(this, "Too many photos for task.", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     File photoFile = null;
@@ -324,6 +328,7 @@ public class CreateTaskActivity extends AppCompatActivity {
             }
 
             newImages.add(imageConvert.convertToString(bitmap));
+            Log.e("bitmap string",imageConvert.convertToString(bitmap));
 
         }
     }
