@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBPOgt9kev3k_XwOQHrhrXrz0jp4gKU9qE" />
+            android:value="AIzaSyAww_ua185NrMF0wczra6mATq0fqpIoNqU" />
         <activity
             android:name=".LoginActivity"
             android:theme="@style/FunkyTrial1">

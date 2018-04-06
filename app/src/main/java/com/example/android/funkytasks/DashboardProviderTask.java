@@ -26,6 +26,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 import static com.example.android.funkytasks.SearchListViewAdapter.getLowestBid;
@@ -33,7 +42,7 @@ import static com.example.android.funkytasks.SearchListViewAdapter.getLowestBid;
 /**
  * This activity displays the tasks to the task provider.
  */
-public class DashboardProviderTask extends BaseActivity {
+public class DashboardProviderTask extends BaseActivity implements OnMapReadyCallback {
 
     private TextView titleValue;
     private TextView descriptionValue;
@@ -71,6 +80,7 @@ public class DashboardProviderTask extends BaseActivity {
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.dashboard_provider);
 //        setSupportActionBar(myToolbar);
 
+        prepareMap();
 
         // defining our views
         descriptionValue = findViewById(R.id.textDescriptionprovider);
@@ -78,9 +88,9 @@ public class DashboardProviderTask extends BaseActivity {
         statusValue = findViewById(R.id.taskStatustext);
         lowestBidValue = findViewById(R.id.lowestBidAmount);
         myBidValue = findViewById(R.id.myBidAmount);
-        requesterName = (TextView) findViewById(R.id.taskRequesterUsername);
-        requesterEmail = (TextView) findViewById(R.id.taskRequesterEmail);
-        requesterPhone = (TextView) findViewById(R.id.taskRequesterPhone);
+        requesterName = findViewById(R.id.taskRequesterUsername);
+        requesterEmail = findViewById(R.id.taskRequesterEmail);
+        requesterPhone = findViewById(R.id.taskRequesterPhone);
 
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username"); // username of the user who logged in
@@ -186,6 +196,44 @@ public class DashboardProviderTask extends BaseActivity {
 
         return bidFragment;
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng location;
+        try {
+            location = task.getLocation();
+        } catch (Exception e) {
+            location = new LatLng(53.68, -113.52);  // default load to Edmonton
+        }
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+        googleMap.addMarker(new MarkerOptions().position(location).title(task.getTitle()));
+        UiSettings mapUiSettings = googleMap.getUiSettings();
+        mapUiSettings.setZoomControlsEnabled(true);
+
+    }
+
+
+    /**
+     * This method prepares the map fragment for displays and locates it within the window
+     * so the rest of the class can properly use it
+     */
+    public void prepareMap () {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        try {
+            MapsInitializer.initialize(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assert mapFragment != null;
+        mapFragment.getMapAsync( this);
+
+
+    }
+
+
 
 
     /**
