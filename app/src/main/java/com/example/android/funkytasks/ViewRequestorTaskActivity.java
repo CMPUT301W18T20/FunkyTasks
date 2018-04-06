@@ -27,6 +27,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 /**
@@ -44,6 +52,9 @@ public class ViewRequestorTaskActivity extends BaseActivity {
     private User user;
     private String cameFrom = "0";
 
+    private GoogleMap mMap;
+    MapView mapView;
+
     /**
      * Overrides the default onCreate function and prepares the app for interaction.
      * This function also loads all the task information and displays it on screen.
@@ -54,6 +65,8 @@ public class ViewRequestorTaskActivity extends BaseActivity {
     protected void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_requestor_task);
+
+        loadMap(savedInstanceState); // load and display the map
 
 
         TextView descriptionValue = findViewById(R.id.requestorTaskDescription);
@@ -250,6 +263,46 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         Log.e("Index", Integer.toString(i));
 
         return lowestBid;
+    }
+
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     *
+     * @param savedInstanceState a bundle holding the most recent state of this page of the app
+     */
+    public void loadMap(Bundle savedInstanceState) {
+        mapView = this.findViewById(R.id.requestorMap);
+        mapView.onCreate(savedInstanceState);
+
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+
+                LatLng location;
+                try {
+                    location = task.getLocation();
+                } catch (Exception e) {
+                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
+                }
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
+                mMap.addMarker(new MarkerOptions()
+                        .position(location)
+                        .title(task.getTitle()));
+                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+                UiSettings mapUiSettings = mMap.getUiSettings();
+                mapUiSettings.setZoomControlsEnabled(true);
+
+            }
+        });
     }
 
 }

@@ -215,7 +215,7 @@ public class CreateTaskActivity extends AppCompatActivity {
                 try {
                     location = task.getLocation();
                 } catch (Exception e) {
-                    location = new LatLng(53.68, -113.52);  // default load to Edmonton
+                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
                 }
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(location));

@@ -436,7 +436,7 @@ public class DashboardRequestedTask extends BaseActivity {
                     location = task.getLocation();
                     Log.e("Location latlng", location.toString());
                 } catch (Exception e) {
-                    location = new LatLng(53.68, -113.52);  // default load to Edmonton
+                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
                 }
 
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
