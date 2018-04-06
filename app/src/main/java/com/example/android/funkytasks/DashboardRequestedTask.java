@@ -146,19 +146,22 @@ public class DashboardRequestedTask extends BaseActivity {
                     TextView contactTextViewPhone = View.findViewById(R.id.contactTextView);
                     TextView contactTextViewEmail = View.findViewById(R.id.contactTextViewEmail);
                     TextView amountTextView = View.findViewById(R.id.amountTextView);
+                    TextView ratingView = View.findViewById(R.id.ratingView);
                     Button acceptBTN = View.findViewById(R.id.acceptButton);
                     Button declineBTN = View.findViewById(R.id.declineButton);
 
-                    //TODO get rating for provider
+
                     String bidderName = bidList.get(i).getBidder();
                     ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
                     getUser.execute(bidderName);
 
                     try{
                         bidder = getUser.get();
+                        double rating = bidder.getRating();
                         Log.e("Success",bidder.getUsername());
                         contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
                         contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
+                        ratingView.setText(Double.toString(rating) + "/5 \uD83C\uDF4C");
                     }
                     catch (Exception e){
                         Log.e("Error","Unable to get the bidder's username");
@@ -167,6 +170,8 @@ public class DashboardRequestedTask extends BaseActivity {
                     bidderTextView.setText(bidderName);
                     Double bidAmount = bidList.get(i).getAmount();
                     amountTextView.setText("$"+bidAmount.toString());
+
+
 
 
                     final int target=i;
@@ -346,7 +351,7 @@ public class DashboardRequestedTask extends BaseActivity {
     }
 
     /**
-     * Set the task status to "done"
+     * Set the task status to "done" and rate solver
      */
 
     public void setStatusDone(){

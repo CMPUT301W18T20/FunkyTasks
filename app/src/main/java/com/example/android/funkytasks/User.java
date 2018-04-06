@@ -29,8 +29,8 @@ public class User implements Serializable{
     private String username;
     private String email;
     private String phonenumber;
-    private float averagerating;
-    private List<Float> ratingList;
+    private double averagerating;
+    private List<Double> ratingList;
 
 
     @JestId
@@ -48,7 +48,7 @@ public class User implements Serializable{
         this.email = email;
         this.phonenumber = phonenumber;
         this.averagerating = 3;
-        this.ratingList = new ArrayList<Float>();
+        this.ratingList = new ArrayList<Double>();
     }
 
     /**
@@ -145,7 +145,7 @@ public class User implements Serializable{
      * @param newRating input rating from client
      */
 
-    public void addRatingToList(float newRating){
+    public void addRatingToList(double newRating){
         this.ratingList.add(newRating);
     }
 
@@ -154,10 +154,10 @@ public class User implements Serializable{
      * @param ratingList a list of ratings given to the user from clients
      */
 
-    private void calculateAverageRating(List<Float> ratingList){
+    private void calculateAverageRating(List<Double> ratingList){
         int i = 0;
-        float sum = 0;
-        for(float rating : ratingList){
+        double sum = 0;
+        for(double rating : ratingList){
             sum = sum + rating;
             i = i + 1;
         }
