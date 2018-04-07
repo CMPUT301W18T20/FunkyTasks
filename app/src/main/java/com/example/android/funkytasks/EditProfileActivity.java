@@ -69,7 +69,7 @@ public class EditProfileActivity extends BaseActivity {
 
         if (user != null){
             double rating = user.getRating();
-            TextView ratingView = findViewById(R.id.ratingView);
+            TextView ratingView = findViewById(R.id.ratingsViewProfile);
             ratingView.setText(Double.toString(user.getRating())+"/5 \uD83C\uDF4C");
 
             userName.setText(username);
