@@ -68,6 +68,18 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<LoginActivi
 
 
     }
+
+    //TODO create test a new task with a photo (grab a drawable photo placeholder in place of camera)
+    // https://stackoverflow.com/a/30207310
+    // THAT LINNK ^^ should help u with converting from drawable image to bitmap
+
+
+    //TODO create another test for going into view photo activity in task details
+        // activibty should assert true if theres a photo (we are in view photo actibity)
+    // and false if there isnt a photo (we are in task details activity)
+
+
+
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();

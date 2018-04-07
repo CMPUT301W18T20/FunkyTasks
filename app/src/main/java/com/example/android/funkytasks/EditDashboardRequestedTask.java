@@ -116,6 +116,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                         Toast.makeText(getApplicationContext(), "Too many photos for task.", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                     task.setImagesList(combined);
                 }
 
