@@ -30,6 +30,10 @@ public class EditProfileActivity extends BaseActivity {
     private String username;
     private User user;
 
+    private TextView userName;
+    private EditText email;
+    private EditText phone;
+
     /**
      * Overrides the built-in onCreate function and prepares the app for interaction.
      * This function loads the proper view and locates all the text fields
@@ -44,23 +48,29 @@ public class EditProfileActivity extends BaseActivity {
         Button done = findViewById(R.id.doneEditProfile);
 
         final Intent intent = getIntent();
+        userName = findViewById(R.id.EditUsername);
+        email = findViewById(R.id.EditEmail);
+        phone = findViewById(R.id.EditPhone);
+
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
 
-        Log.e("USERNAME", username);
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
         getUser.execute(username);
 
         try {
             user = getUser.get();
             Log.e("Got the username: ", user.getUsername());
+
+        } catch (Exception e) {
+            Log.e("Error", "We arnt getting the user");
+            return;
+        }
+
+        if (user != null){
             double rating = user.getRating();
             TextView ratingView = findViewById(R.id.ratingView);
             ratingView.setText(Double.toString(user.getRating())+"/5 \uD83C\uDF4C");
-            final TextView userName = findViewById(R.id.EditUsername);
-            final EditText email = findViewById(R.id.EditEmail);
-            final EditText phone = findViewById(R.id.EditPhone);
-
 
             userName.setText(username);
             email.setText(user.getEmail(), TextView.BufferType.EDITABLE);
@@ -70,28 +80,8 @@ public class EditProfileActivity extends BaseActivity {
                 @Override
                 public void onClick(View view) {
                     String newEmail = email.getText().toString();
-                    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                    if (!newEmail.matches(emailPattern)){
-                        Toast.makeText(EditProfileActivity.this,"Invalid email address format",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     String newPhone = phone.getText().toString();
-
-                    if (newPhone.length() != 10){
-                        Toast.makeText(EditProfileActivity.this,"Invalid phone number length",Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-                    getUser.execute(username);
-
-                    try {
-                        user = getUser.get();
-                        Log.e("Got the username: ", user.getUsername());
-
-
-                    } catch (Exception e) {
-                        Log.e("Error", "We arnt getting the user");
+                    if (!validateInput(newEmail,newPhone)){
                         return;
                     }
 
@@ -105,19 +95,29 @@ public class EditProfileActivity extends BaseActivity {
                     finish();
                 }
             });
-
-        } catch (Exception e) {
-            Log.e("Error", user.getUsername());
-            Log.e("Error", "We arnt getting the user");
-            return;
         }
 
-        //id of username textView = EditUsername
-        //id of email editText = EditEmail
-        //id of phone editText = EditPhone
+    }
 
+    /**
+     * Validates the user input of the phone and email
+     * @param newEmail the new user input email
+     * @param newPhone the new user input phone
+     * @return a boolean checking if input was ok or not
+     */
 
+    private boolean validateInput(String newEmail, String newPhone){
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if (!newEmail.matches(emailPattern)){
+            Toast.makeText(EditProfileActivity.this,"Invalid email address format",Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
+        if (newPhone.length() != 10){
+            Toast.makeText(EditProfileActivity.this,"Invalid phone number length",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 
 }
