@@ -50,7 +50,7 @@ public class ImageConverterController {
         image = getResizedBitmap(image,MAX_SIZE);
 
         ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, QUALITY, byteArrayBitmapStream);
+        image.compress(Bitmap.CompressFormat.PNG, QUALITY, byteArrayBitmapStream);
         byte[] b = byteArrayBitmapStream.toByteArray();
         encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
         return encodedImage;

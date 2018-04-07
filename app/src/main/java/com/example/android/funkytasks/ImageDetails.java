@@ -111,7 +111,6 @@ public class ImageDetails extends BaseActivity {
      * Checks if app running is on emulator or not
      * @return a boolean checking if we are running an emulator or not
      */
-    // https://stackoverflow.com/a/21505193
 
     public static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic")

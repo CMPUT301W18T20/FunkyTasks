@@ -112,6 +112,10 @@ public class EditDashboardRequestedTask extends BaseActivity {
                     }
                     ArrayList<String> combined = task.getImages();
                     combined.addAll(newImages);
+                    if (combined.size() >= 10){
+                        Toast.makeText(getApplicationContext(), "Too many photos for task.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     task.setImagesList(combined);
                 }
 
@@ -140,8 +144,6 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 LocalRequestedTaskController requestedTaskController = new LocalRequestedTaskController(getApplicationContext(), username);
                 requestedTaskController.updateRequestedTask(task, index);
-
-
 
 
                 Log.e("tasktitle edited",task.getTitle());
@@ -179,6 +181,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
     }
 
 
+    /**
+     * Create the option toolbar menu
+     * @param menu gets the menu xml file for the UI layout
+     * @return an option menu
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -187,14 +195,22 @@ public class EditDashboardRequestedTask extends BaseActivity {
     }
 
 
+    /**
+     * Checks which menu icon has been clicked
+     * @param item the icon that has been clicked
+     * @return a boolean if the icon has been clicked or not
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.camera:
-                if (newImages.size() >= 10){
-                    Toast.makeText(this, "Too many photos for task.", Toast.LENGTH_SHORT).show();
+                ArrayList<String> combined = task.getImages();
+                combined.addAll(newImages);
+                if (combined.size() >= 10){
+                    Toast.makeText(getApplicationContext(), "Too many photos for task.", Toast.LENGTH_SHORT).show();
                     return false;
                 }
+
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                     File photoFile = null;
@@ -224,20 +240,25 @@ public class EditDashboardRequestedTask extends BaseActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "PNG_" + timeStamp + "_";
+        String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".png",         /* suffix */
+                ".jpeg",  /* suffix */
                 storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
 
 
+    /**
+     * Grabs result from called activity
+     * @param requestCode the code which we started the activity
+     * @param resultCode the result of the called activity
+     * @param data the intent that called the new activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -252,6 +273,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             newImages.add(imageConvert.convertToString(bitmap));
 
         }
