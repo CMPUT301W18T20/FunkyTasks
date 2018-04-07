@@ -23,7 +23,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
 
-//TODO check if intent is for result or not
+
 
 /**
  * This activity allows a user to login
