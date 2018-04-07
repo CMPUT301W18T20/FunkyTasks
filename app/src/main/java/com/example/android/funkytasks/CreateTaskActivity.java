@@ -86,8 +86,6 @@ public class CreateTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
 
-        loadMap(savedInstanceState);
-
 
         setTitle("Create a Task");
 
@@ -105,6 +103,20 @@ public class CreateTaskActivity extends AppCompatActivity {
         title = findViewById(R.id.AddTitle);
         description = findViewById(R.id.AddDescription);
         newImages = new ArrayList<>();
+
+        Button loadMap = this.findViewById(R.id.addLocation);
+
+        loadMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
+                String taskTitle = null;
+                String activityName = "Create";
+                showMap.putExtra("task", taskTitle);
+                showMap.putExtra("name", activityName);
+                startActivity(showMap);
+            }
+        });
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -127,7 +139,6 @@ public class CreateTaskActivity extends AppCompatActivity {
                         return;
                     }
                     task.setImagesList(newImages);
-                    setTaskLocation(taskLocation);
                 }
 
                 new Thread(new Runnable() {
@@ -154,7 +165,6 @@ public class CreateTaskActivity extends AppCompatActivity {
                     }
                 }).start();
 
-
                 intent.putExtra("username", username);
                 //intent.putExtra("task", task); // send task our to main activity to post to server
                 setResult(RESULT_OK, intent);
@@ -162,6 +172,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
 
@@ -190,64 +201,6 @@ public class CreateTaskActivity extends AppCompatActivity {
         return true;
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     *
-     * @param savedInstanceState a bundle holding the most recent state of this page of the app
-     */
-    public void loadMap(Bundle savedInstanceState) {
-        mapView = this.findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);
-
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-
-                LatLng location;
-                try {
-                    location = task.getLocation();
-                } catch (Exception e) {
-                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
-                }
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
-                UiSettings mapUiSettings = mMap.getUiSettings();
-                mapUiSettings.setZoomControlsEnabled(true);
-
-                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                    @Override
-                    public void onMapClick(LatLng point) {
-                        taskLocation = point;
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions()
-                                .position(point)
-                                .draggable(true));
-
-                    }
-                });
-
-            }
-        });
-    }
-
-    /**
-     * Sets the server location of the task to the point on the map so it can later be retrieved
-     *
-     * @param location a LatLng object representing the tasks location
-     */
-    public void setTaskLocation(LatLng location) {
-        task.setLocation(location);
-    }
 
 
     @Override
@@ -351,31 +304,5 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
 
-    //https://stackoverflow.com/questions/16564550/in-version-2-map-view-does-not-show-map
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-
-    }
-
-    @Override
-    public void onPause() {
-        mapView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mapView.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
 
 }

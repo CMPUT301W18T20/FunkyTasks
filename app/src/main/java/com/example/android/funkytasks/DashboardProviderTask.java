@@ -69,7 +69,7 @@ public class DashboardProviderTask extends BaseActivity {
     MapView mapView;
 
     ListViewAdapter listViewAdapter;
-    ArrayList<Bid> bidList = new ArrayList<Bid>();
+    ArrayList<Bid> bidList = new ArrayList<>();
 
     /**
      * Overrides the onCreate super class and instantiates the proper view for this class
@@ -84,8 +84,6 @@ public class DashboardProviderTask extends BaseActivity {
         // TODO set toolbar for photos
 //        Toolbar myToolbar = (Toolbar) findViewById(R.id.dashboard_provider);
 //        setSupportActionBar(myToolbar);
-
-        loadMap(savedInstanceState); // load and display the map
 
 
         // defining our views
@@ -145,7 +143,7 @@ public class DashboardProviderTask extends BaseActivity {
                     ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
                     idBids.execute(id); // grab all current users in the system
 
-                    ArrayList<Bid> bidsList = new ArrayList<Bid>();
+                    ArrayList<Bid> bidsList = new ArrayList<>();
                     try {
                         bidsList = idBids.get();
                     } catch (Exception e) {
@@ -182,6 +180,20 @@ public class DashboardProviderTask extends BaseActivity {
             });
         }
 
+        Button loadMap = this.findViewById(R.id.seeLocation);
+
+        loadMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapIntent = new Intent(DashboardProviderTask.this, DisplayMap.class);
+                String taskTitle = task.getTitle();
+                String activityName = "Provider";
+                mapIntent.putExtra("task", taskTitle);
+                mapIntent.putExtra("name", activityName);
+                startActivity(mapIntent);
+            }
+        });
+
     }
 
     public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
@@ -203,45 +215,6 @@ public class DashboardProviderTask extends BaseActivity {
         return bidFragment;
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     *
-     * @param savedInstanceState a bundle holding the most recent state of this page of the app
-     */
-    public void loadMap(Bundle savedInstanceState) {
-        mapView = this.findViewById(R.id.providerMap);
-        mapView.onCreate(savedInstanceState);
-
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-
-                LatLng location;
-                try {
-                    location = task.getLocation();
-                } catch (Exception e) {
-                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
-                }
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-                mMap.addMarker(new MarkerOptions()
-                        .position(location)
-                        .title(task.getTitle()));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
-                UiSettings mapUiSettings = mMap.getUiSettings();
-                mapUiSettings.setZoomControlsEnabled(true);
-
-            }
-        });
-    }
 
 
 
@@ -307,31 +280,4 @@ public class DashboardProviderTask extends BaseActivity {
         intent.putExtra("username", username);
         startActivity(intent);
     }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-
-    }
-
-    @Override
-    public void onPause() {
-        mapView.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        mapView.onDestroy();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mapView.onLowMemory();
-    }
-
 }

@@ -79,7 +79,7 @@ public class DashboardRequestedTask extends BaseActivity {
     private User bidder;
     private User requester;
     ListViewAdapter listViewAdapter;
-    ArrayList<Bid> bidList = new ArrayList<Bid>();
+    ArrayList<Bid> bidList = new ArrayList<>();
 
     private int photoLength;
 
@@ -97,7 +97,7 @@ public class DashboardRequestedTask extends BaseActivity {
         Toolbar myToolbar = findViewById(R.id.DashboardRequestedTasktoolbar);
         setSupportActionBar(myToolbar);
 
-        loadMap(savedInstanceState); // load and display the map
+//        loadMap(savedInstanceState); // load and display the map
 
         // set bids listview
         bidListView = findViewById(R.id.bidlistView);
@@ -416,45 +416,6 @@ public class DashboardRequestedTask extends BaseActivity {
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     *
-     * @param savedInstanceState a bundle holding the most recent state of this page of the app
-     */
-    public void loadMap(Bundle savedInstanceState) {
-        mapView = this.findViewById(R.id.requestedMap);
-        mapView.onCreate(savedInstanceState);
-
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-
-                LatLng location;
-                try {
-                    location = task.getLocation();
-                    Log.e("Location latlng", location.toString());
-                } catch (Exception e) {
-                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
-                }
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
-                mMap.addMarker(new MarkerOptions()
-                        .position(location)
-                        .title(task.getTitle()));
-                UiSettings mapUiSettings = mMap.getUiSettings();
-                mapUiSettings.setZoomControlsEnabled(true);
-
-            }
-        });
-    }
 
     /**
      * Retrieve the task details in order to be displayed by the activity

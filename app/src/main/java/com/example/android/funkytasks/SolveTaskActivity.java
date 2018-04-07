@@ -52,7 +52,6 @@ public class SolveTaskActivity extends BaseActivity {
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        Log.e("PUBLIC",MainMenuActivity.username);
 
 //        ElasticSearchController.GetDefaultSearchTaskList getDefaultSearchTaskList = new ElasticSearchController.GetDefaultSearchTaskList();
 //        getDefaultSearchTaskList.execute(username);

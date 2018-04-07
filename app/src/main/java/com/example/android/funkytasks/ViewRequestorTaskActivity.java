@@ -52,8 +52,7 @@ public class ViewRequestorTaskActivity extends BaseActivity {
     private User user;
     private String cameFrom = "0";
 
-    private GoogleMap mMap;
-    MapView mapView;
+
 
     /**
      * Overrides the default onCreate function and prepares the app for interaction.
@@ -66,8 +65,6 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_requestor_task);
 
-        loadMap(savedInstanceState); // load and display the map
-
 
         TextView descriptionValue = findViewById(R.id.requestorTaskDescription);
         TextView titleValue = findViewById(R.id.requestorTaskName);
@@ -77,6 +74,7 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         TextView phoneNumberValue = findViewById(R.id.requestorPhoneNumber);
         TextView emailValue = findViewById(R.id.requestorEmail);
         Button photobtn = findViewById(R.id.viewphoto);
+        Button locationBtn = findViewById(R.id.showLocation);
 
 
         final Intent intent = getIntent();
@@ -115,7 +113,7 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
         idBids.execute(task.getId()); // grab all current users in the system
 
-        ArrayList<Bid> bidsList = new ArrayList<Bid>();
+        ArrayList<Bid> bidsList = new ArrayList<>();
         try {
             bidsList = idBids.get();
         } catch (Exception e) {
@@ -185,6 +183,19 @@ public class ViewRequestorTaskActivity extends BaseActivity {
 
 
 
+            }
+        });
+
+
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapIntent = new Intent(ViewRequestorTaskActivity.this, DisplayMap.class);
+                String taskTitle = task.getTitle();
+                String activityName = "Requestor Task";
+                mapIntent.putExtra("task", taskTitle);
+                mapIntent.putExtra("name", activityName);
+                startActivity(mapIntent);
             }
         });
 
@@ -263,46 +274,6 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         Log.e("Index", Integer.toString(i));
 
         return lowestBid;
-    }
-
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     *
-     * @param savedInstanceState a bundle holding the most recent state of this page of the app
-     */
-    public void loadMap(Bundle savedInstanceState) {
-        mapView = this.findViewById(R.id.requestorMap);
-        mapView.onCreate(savedInstanceState);
-
-        mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                mMap = googleMap;
-
-                LatLng location;
-                try {
-                    location = task.getLocation();
-                } catch (Exception e) {
-                    location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
-                }
-
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-                mMap.addMarker(new MarkerOptions()
-                        .position(location)
-                        .title(task.getTitle()));
-                mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
-                UiSettings mapUiSettings = mMap.getUiSettings();
-                mapUiSettings.setZoomControlsEnabled(true);
-
-            }
-        });
     }
 
 }
