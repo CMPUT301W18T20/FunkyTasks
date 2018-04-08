@@ -108,6 +108,7 @@ public class ViewRequestorTaskActivity extends BaseActivity {
 
         email = user.getEmail();
         phoneNumber = user.getPhonenumber();
+        TextView ratingView = findViewById(R.id.viewRatingVRT);
 
 
         ElasticSearchController.GetBidsByTaskID idBids = new ElasticSearchController.GetBidsByTaskID();
@@ -128,6 +129,7 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         usernameValue.setText(requester);
         phoneNumberValue.setText(phoneNumber);
         emailValue.setText(email);
+        ratingView.setText(Double.toString(user.getRating())+"/5 \uD83C\uDF4C");
 
 
         if (task.getStatus().equals("requested")) {
