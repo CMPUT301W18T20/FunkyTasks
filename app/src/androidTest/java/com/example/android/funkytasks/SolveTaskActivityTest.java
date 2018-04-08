@@ -75,16 +75,6 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
         solo.assertCurrentActivity("Wrong activity",SolveTaskActivity.class);
         solo.enterText((EditText) solo.getView(R.id.search), "map");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("Map 8");
-        solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("Map 8");
-        solo.waitForActivity("ViewRequestorTaskActivity.class");
-        solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
-        solo.clickOnButton("Bid");
-        solo.enterText((EditText) solo.getView(R.id.bidMoney), "10.00");
-        solo.clickOnText("Place Bid");
-        solo.waitForActivity("ViewRequestorTaskActivity.class");
-        solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
     }
 
 

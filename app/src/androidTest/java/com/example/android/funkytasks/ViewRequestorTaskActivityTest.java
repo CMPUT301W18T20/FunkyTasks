@@ -60,6 +60,7 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
     //cancel button bid
     public void testClickBidCancel(){
         goToViewRequeestedTask();
+        //exising task posted by another user with description "Solve"
         solo.enterText((EditText) solo.getView(R.id.search), "Solve");
         solo.clickOnView(solo.getView(R.id.searchButton));
         solo.waitForText("SolveTask");
@@ -76,6 +77,7 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
     //Bid on task
     public void testClickOnBid(){
         goToViewRequeestedTask();
+        //existing task posted by another user with description "place" that has not been bid on by the user "qwerty123"
         solo.enterText((EditText) solo.getView(R.id.search), "place");
         solo.clickOnView(solo.getView(R.id.searchButton));
         solo.clearEditText((EditText) solo.getView(R.id.search));
@@ -94,6 +96,7 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
 
     public void testClickBidUpdate(){
         goToViewRequeestedTask();
+        //existing task posted by another user with description "update" that has been bid on by the user "qwerty123"
         solo.enterText((EditText) solo.getView(R.id.search), "update");
         solo.clickOnView(solo.getView(R.id.searchButton));
         solo.waitForText("Update");
@@ -109,6 +112,50 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         solo.assertCurrentActivity("Wrong activity", SolveTaskActivity.class);
     }
 
+    public void testViewLocation(){
+        goToViewRequeestedTask();
+        //existing task posted by another user with description "update" that has been bid on by the user "qwerty123"
+        solo.enterText((EditText) solo.getView(R.id.search), "update");
+        solo.clickOnView(solo.getView(R.id.searchButton));
+        solo.waitForText("Update");
+        solo.clearEditText((EditText) solo.getView(R.id.search));
+        solo.clickOnText("Update");
+        solo.waitForActivity("ViewRequestorTaskActivity.class");
+        solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
+        solo.clickOnButton("View Location");
+        solo.waitForActivity("DisplayMap.class");
+        solo.assertCurrentActivity("Wrong acticity", DisplayMap.class);
+    }
+
+    public void testNoPhotos(){
+        goToViewRequeestedTask();
+        //existing task posted by another user with description "update" that has been bid on by the user "qwerty123"
+        solo.enterText((EditText) solo.getView(R.id.search), "update");
+        solo.clickOnView(solo.getView(R.id.searchButton));
+        solo.waitForText("Update");
+        solo.clearEditText((EditText) solo.getView(R.id.search));
+        solo.clickOnText("Update");
+        solo.waitForActivity("ViewRequestorTaskActivity.class");
+        solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
+        solo.clickOnButton("viewphoto");
+        solo.waitForText("No photos to show");
+        assertTrue(solo.searchText("No photos to show"));
+    }
+
+    public void testPhotos(){
+        goToViewRequeestedTask();
+        //existing task posted by another user with description "photo" and photo
+        solo.enterText((EditText) solo.getView(R.id.search), "photo");
+        solo.clickOnView(solo.getView(R.id.searchButton));
+        solo.waitForText("photo");
+        solo.clearEditText((EditText) solo.getView(R.id.search));
+        solo.clickOnText("photo");
+        solo.waitForActivity("ViewRequestorTaskActivity.class");
+        solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
+        solo.clickOnButton("viewphoto");
+        solo.waitForActivity("ImageDetails.class");
+        solo.assertCurrentActivity("Wrong activity", ImageDetails.class);
+    }
 
     @Before
     public void setUp() throws Exception {
