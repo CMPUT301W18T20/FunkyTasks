@@ -178,10 +178,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
 
                 Log.e("tasktitle edited",task.getTitle());
+                Log.e("new des",task.getDescription());
+                Log.e("new loc", task.getLocation().toString());
 
                 setResult(RESULT_OK,intent);
                 intent.putExtra("id",id);
-                intent.putExtra("updatedTask",task);
+                //intent.putExtra("updatedTask",task);
                 finish();
 
             }

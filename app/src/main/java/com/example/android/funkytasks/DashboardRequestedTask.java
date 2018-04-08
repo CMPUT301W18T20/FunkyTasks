@@ -324,7 +324,17 @@ public class DashboardRequestedTask extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
-            task = (Task) intent.getSerializableExtra("updatedTask");
+            id = intent.getExtras().getString("id");
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            getTask.execute(id);
+            try{
+                task = getTask.get();
+                Log.e("Task title",task.getTitle());
+                Log.e("des",task.getDescription());
+                Log.e("location",task.getLocation().toString());
+            } catch (Exception e) {
+                Log.e("ERROR","not working get task");
+            }
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
             photoLength = task.getImages().size();
