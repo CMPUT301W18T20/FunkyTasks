@@ -164,6 +164,7 @@
         android:layout_marginEnd="16dp"
         android:text="Task requestor email address"
         android:textStyle="italic"
+        android:visibility="invisible"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.687"
