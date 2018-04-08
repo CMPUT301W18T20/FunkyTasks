@@ -121,10 +121,9 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 task.setTitle(titleValue);
 
                 GlobalVariables globals = new GlobalVariables();
-                if (globals.getLocation() != null) {
-                    task.setLocation(globals.getLocation());
-                    globals.setLocation(null);
-                }
+                task.setLocation(globals.getLocation());
+                globals.setLocation(null);
+
 
                 if (newImages.size() > 0) {
                     boolean check = imageConvert.checkImages(newImages);
