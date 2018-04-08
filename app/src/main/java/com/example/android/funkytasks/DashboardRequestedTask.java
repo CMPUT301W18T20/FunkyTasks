@@ -459,6 +459,8 @@ public class DashboardRequestedTask extends BaseActivity {
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
 
+        Log.e("lcoation",task.getLocation().toString());
+
         if(task.getStatus().equals("assigned")){
 
             providerName.setText(task.getProvider());
