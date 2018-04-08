@@ -181,10 +181,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 Log.e("new des",task.getDescription());
                 Log.e("new loc", task.getLocation().toString());
 
-                setResult(RESULT_OK,intent);
-                intent.putExtra("id",id);
+                Intent requestedIntent = new Intent(EditDashboardRequestedTask.this, DashboardRequestedTask.class);
+                //setResult(RESULT_OK,intent);
+                requestedIntent.putExtra("username",username);
+                requestedIntent.putExtra("id",id);
                 //intent.putExtra("updatedTask",task);
-                finish();
+                startActivity(requestedIntent);
 
             }
         });

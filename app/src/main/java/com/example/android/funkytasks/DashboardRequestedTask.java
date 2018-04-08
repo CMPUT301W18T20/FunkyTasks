@@ -280,7 +280,7 @@ public class DashboardRequestedTask extends BaseActivity {
                     editIntent.putExtra("id", id);
                     editIntent.putExtra("index", index);
 //                    editIntent.putExtra("task", task);
-                    startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
+                    startActivity(editIntent); // go to activity to edit the task
                 }
                 else{
                     Toast.makeText(DashboardRequestedTask.this,
