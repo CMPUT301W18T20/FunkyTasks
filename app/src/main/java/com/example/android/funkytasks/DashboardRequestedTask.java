@@ -338,9 +338,26 @@ public class DashboardRequestedTask extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
             //task = (Task) intent.getSerializableExtra("updatedTask");
-            titleValue.setText(task.getTitle());
-            descriptionValue.setText(task.getDescription());
-            photoLength = task.getImages().size();
+            String title = intent.getExtras().getString("title");
+            String des = intent.getExtras().getString("des");
+            Integer imagesize = intent.getExtras().getInt("size");
+            LatLng point = intent.getParcelableExtra("location");
+
+            titleValue.setText(title);
+            descriptionValue.setText(des);
+            photoLength = imagesize;
+
+            task.setTitle(title);
+            task.setDescription(des);
+            task.setLocation(point);
+
+            if (isNetworkAvailable()){
+                Log.d("Network", "available");
+                ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
+                updateTask.execute(task);
+            }
+
+
 
         }
     }

@@ -181,12 +181,27 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 Log.e("new des",task.getDescription());
 
 
-                Intent requestedIntent = new Intent(EditDashboardRequestedTask.this, DashboardRequestedTask.class);
+                //Intent requestedIntent = new Intent(EditDashboardRequestedTask.this, DashboardRequestedTask.class);
+                intent.putExtra("title",task.getTitle());
+                intent.putExtra("des",task.getDescription());
+                intent.putExtra("size",task.getImages().size());
+
+                Bundle b = new Bundle();
+                LatLng point;
+                try {
+                    point = taskLoc;
+                } catch (Exception e) {
+                    point = new LatLng(53.68, -113.52);
+                }
+                b.putParcelable("location", point);
+                intent.putExtras(b);
+
                 setResult(RESULT_OK,intent);
-                requestedIntent.putExtra("username",username);
-                requestedIntent.putExtra("id",id);
-                intent.putExtra("updatedTask",task);
-                startActivity(requestedIntent);
+                finish();
+                //requestedIntent.putExtra("username",username);
+                //requestedIntent.putExtra("id",id);
+                //intent.putExtra("updatedTask",task);
+                //startActivity(requestedIntent);
 
             }
         });
