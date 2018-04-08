@@ -93,6 +93,14 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
     }
     //test for US 05.02.01
     public void viewProviderBiddedOnTaskTest(){
+        addTask();
+        goToMyTask();
+        solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
+        solo.clickOnText("To Solve");
+        solo.clickOnText("");
+        solo.clickOnText("");
+
+
 
     }
     //test for US 05.04.01

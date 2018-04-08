@@ -63,9 +63,9 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         //exising task posted by another user with description "Solve"
         solo.enterText((EditText) solo.getView(R.id.search), "Solve");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("SolveTask");
+        solo.waitForText("Solve");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("SolveTask");
+        solo.clickOnText("Solve");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("Bid");
@@ -81,7 +81,7 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         solo.enterText((EditText) solo.getView(R.id.search), "place");
         solo.clickOnView(solo.getView(R.id.searchButton));
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("Place");
+        solo.clickOnText("place");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("Bid");
@@ -99,9 +99,9 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         //existing task posted by another user with description "update" that has been bid on by the user "qwerty123"
         solo.enterText((EditText) solo.getView(R.id.search), "update");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("Update");
+        solo.waitForText("update");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("Update");
+        solo.clickOnText("update");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("Bid");
@@ -117,9 +117,9 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         //existing task posted by another user with description "update" that has been bid on by the user "qwerty123"
         solo.enterText((EditText) solo.getView(R.id.search), "update");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("Update");
+        solo.waitForText("update");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("Update");
+        solo.clickOnText("update");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
         solo.clickOnButton("View Location");
@@ -132,12 +132,12 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         //existing task posted by another user with description "update" that has been bid on by the user "qwerty123"
         solo.enterText((EditText) solo.getView(R.id.search), "update");
         solo.clickOnView(solo.getView(R.id.searchButton));
-        solo.waitForText("Update");
+        solo.waitForText("update");
         solo.clearEditText((EditText) solo.getView(R.id.search));
-        solo.clickOnText("Update");
+        solo.clickOnText("update");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
-        solo.clickOnButton("viewphoto");
+        solo.clickOnButton("ViewPhoto");
         solo.waitForText("No photos to show");
         assertTrue(solo.searchText("No photos to show"));
     }
@@ -152,7 +152,7 @@ public class ViewRequestorTaskActivityTest extends ActivityInstrumentationTestCa
         solo.clickOnText("photo");
         solo.waitForActivity("ViewRequestorTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", ViewRequestorTaskActivity.class);
-        solo.clickOnButton("viewphoto");
+        solo.clickOnButton("ViewPhoto");
         solo.waitForActivity("ImageDetails.class");
         solo.assertCurrentActivity("Wrong activity", ImageDetails.class);
     }
