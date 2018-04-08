@@ -109,6 +109,11 @@ public class CreateTaskActivity extends AppCompatActivity {
         loadMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                task = new Task(titleValue, descriptionValue, username);
+
+                ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+                postTask.execute(task);
+
                 Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
                 String taskTitle = null;
                 String activityName = "Create";

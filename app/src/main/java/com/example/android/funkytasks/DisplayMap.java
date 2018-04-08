@@ -34,7 +34,6 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        Log.e("In DisplayMap", "we are");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
@@ -67,8 +66,6 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
             }
         }
 
-
-
     }
 
 
@@ -85,6 +82,9 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        Log.e("Passed name", passedName);
+        final String createStr = "Create";
+        final String editStr = "Edit";
 
         LatLng location;
         if (taskName != null) {
@@ -96,39 +96,7 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
             } catch (Exception e) {
                 location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
             }
-
-            if (passedName.equals("Create")) {
-                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                    @Override
-                    public void onMapClick(LatLng point) {
-                        task.setLocation(point);
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions()
-                                .position(point)
-                                .draggable(true));
-
-                    }
-                });
-            }
-
-            if (passedName.equals("Edit")) {
-                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-                    @Override
-                    public void onMapClick(LatLng point) {
-                        task.setLocation(point);
-                        ElasticSearchController.updateTask update = new ElasticSearchController.updateTask();
-                        update.execute(task);
-                        mMap.clear();
-                        mMap.addMarker(new MarkerOptions()
-                                .position(point)
-                                .draggable(true));
-                    }
-                });
-
-            }
-        } else {
+        }  else {
             location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
             if (!passedName.equals("Create")) {
                 Toast.makeText(DisplayMap.this,
@@ -138,6 +106,26 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
 
 
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+                if (passedName.trim().equalsIgnoreCase(createStr) ||
+                        passedName.trim().equalsIgnoreCase(editStr)) {
+                    Log.e("Add click listener", "is executing");
+                    task.setLocation(point);
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions()
+                            .position(point)
+                            .draggable(true));
+
+                } else {
+                    Toast.makeText(DisplayMap.this,
+                            "You can't edit the location", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
         UiSettings mapUiSettings = mMap.getUiSettings();
@@ -146,16 +134,5 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
-//    /**
-//     * Manipulates the map once available.
-//     * This callback is triggered when the map is ready to be used.
-//     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-//     * we just add a marker near Sydney, Australia.
-//     * If Google Play services is not installed on the device, the user will be prompted to install
-//     * it inside the SupportMapFragment. This method will only be triggered once the user has
-//     * installed Google Play services and returned to the app.
-//     *
-//     * @param savedInstanceState a bundle holding the most recent state of this page of the app
-//     */
 
 }
