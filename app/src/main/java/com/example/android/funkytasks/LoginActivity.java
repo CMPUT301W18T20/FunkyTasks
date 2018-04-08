@@ -90,36 +90,51 @@ public class LoginActivity extends AppCompatActivity{
      */
     public void checkUserName(String checkUsername) throws IOException {
 
-        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
-        allUsers.execute(""); // grab all current users in the system
-
-        ArrayList<User> userList = new ArrayList<User>();
-
-        try{
-            userList = allUsers.get();
+        if (checkUser()){
+            Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainMenuActivity.class);
+            username = checkUsername;
+            intent.putExtra("username", username);
+            LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(), username);
+            localController.SaveRequestedTask();
+            startActivity(intent);
+            finish();
         }
-        catch (Exception e)
-        {
-            Log.e("Error", "Failed to get list of users");
-        }
-
-
-        for (User postedUser: userList){
-            Log.e("postedUser",postedUser.getUsername()); // print out all users in system
-            if (postedUser.getUsername().equals(checkUsername)){ // if user is in th system, log them in
-                Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, MainMenuActivity.class);
-                username = checkUsername;
-                intent.putExtra("username", postedUser.getUsername());
-                LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(), username);
-                localController.SaveRequestedTask();
-                startActivity(intent);
-                finish();
-            }
+        else{
+            Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
-        return;
+//        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+//        allUsers.execute(""); // grab all current users in the system
+//
+//        ArrayList<User> userList = new ArrayList<User>();
+//
+//        try{
+//            userList = allUsers.get();
+//        }
+//        catch (Exception e)
+//        {
+//            Log.e("Error", "Failed to get list of users");
+//        }
+//
+//
+//        for (User postedUser: userList){
+//            Log.e("postedUser",postedUser.getUsername()); // print out all users in system
+//            if (postedUser.getUsername().equals(checkUsername)){ // if user is in th system, log them in
+//                Toast.makeText(LoginActivity.this, "Logging in", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(this, MainMenuActivity.class);
+//                username = checkUsername;
+//                intent.putExtra("username", postedUser.getUsername());
+//                LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(), username);
+//                localController.SaveRequestedTask();
+//                startActivity(intent);
+//                finish();
+//            }
+//        }
+//
+//        Toast.makeText(LoginActivity.this, "Incorrect username", Toast.LENGTH_SHORT).show();
+//        return;
 
     }
 
@@ -132,5 +147,30 @@ public class LoginActivity extends AppCompatActivity{
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
 
+    }
+
+    public boolean checkUser(){
+        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
+        allUsers.execute(""); // grab all current users in the system
+
+        ArrayList<User> userList = new ArrayList<User>();
+
+        try{
+        userList = allUsers.get();
+        }
+        catch (Exception e)
+        {
+        Log.e("Error", "Failed to get list of users");
+        }
+
+
+        for (User postedUser: userList) {
+            Log.e("postedUser", postedUser.getUsername()); // print out all users in system
+            if (postedUser.getUsername().equals(username)) { // if user is in th system, log them in
+                return true;
+            }
+        }
+
+        return false;
     }
 }
