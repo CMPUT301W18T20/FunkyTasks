@@ -1,6 +1,8 @@
 package com.example.android.funkytasks;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.test.filters.SmallTest;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
@@ -14,6 +16,8 @@ import org.junit.After;
 import org.junit.Before;
 
 import java.util.ArrayList;
+
+import static com.example.android.funkytasks.CreateTaskActivity.REQUEST_IMAGE_CAPTURE;
 
 /**
  * Created by jimi on 2018-03-15.
@@ -59,26 +63,20 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<LoginActivi
     }
 
 
-    /*public void testAddLocation(){
+    //no test for camera since robotium doesnt support checking another application
+
+    public void testAddLocation(){
         goToCreateTaskActivity();
         solo.clickOnButton("Add Location");
         solo.waitForActivity("DisplayMap.class");
         solo.assertCurrentActivity("Wrong activity", DisplayMap.class);
-    }*/
-
-
-    //TODO create test a new task with a photo (grab a drawable photo placeholder in place of camera)
-    // https://stackoverflow.com/a/30207310
-    // THAT LINNK ^^ should help u with converting from drawable image to bitmap
-    public void testAddPhoto(){
-        goToCreateTaskActivity();
-        solo.clickOnView(solo.getView(R.id.camera));
-
     }
+
 
     //TODO create another test for going into view photo activity in task details
     // activibty should assert true if theres a photo (we are in view photo actibity)
     // and false if there isnt a photo (we are in task details activity)
+    //https://stackoverflow.com/a/30207310
 
 
 

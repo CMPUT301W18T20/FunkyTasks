@@ -68,12 +68,12 @@ public class EditProfileActivityTest extends ActivityInstrumentationTestCase2{
         goToEditProfile();
         solo.assertCurrentActivity("Wrong activity", EditProfileActivity.class);
         String newPhone = "1112221111";
-        String newEmail = "123@EMAIL.COM";
+        String newEmail = "12345@gmail.com";
         solo.clearEditText((EditText) solo.getView(R.id.EditPhone));
         solo.clearEditText((EditText) solo.getView(R.id.EditEmail));
         solo.enterText((EditText) solo.getView(R.id.EditPhone), newPhone);
         solo.enterText((EditText) solo.getView(R.id.EditEmail), newEmail);
-        solo.clickOnButton("DONE");
+        solo.clickOnText("DONE");
         solo.waitForActivity("MainMenuActivity.class");
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
         solo.clickOnView(solo.getView(R.id.profileActionBar));
@@ -86,7 +86,7 @@ public class EditProfileActivityTest extends ActivityInstrumentationTestCase2{
         solo.clearEditText((EditText) solo.getView(R.id.EditEmail));
         solo.enterText((EditText) solo.getView(R.id.EditPhone), "2221112222");
         solo.enterText((EditText) solo.getView(R.id.EditEmail), "321@email.com");
-        solo.clickOnButton("DONE");
+        solo.clickOnText("DONE");
         solo.waitForActivity("MainMenuActivity.class");
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
     }
