@@ -54,7 +54,7 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<LoginActivi
     //TODO:US 01.01.02 and US 01.01.03
     public void testCreateTask(){
         goToCreateTaskActivity();
-        solo.enterText((EditText) solo.getView(R.id.AddTitle), result.getRequester());
+        solo.enterText((EditText) solo.getView(R.id.AddTitle), result.getTitle());
         solo.enterText((EditText) solo.getView(R.id.AddDescription), result.getDescription());
         solo.clickOnView(solo.getView(R.id.fab));
         solo.waitForActivity("MainMenuActivity.class");
