@@ -693,7 +693,7 @@ public class ElasticSearchController {
                 JestResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     returnBid = result.getSourceAsObject(Bid.class);
-                    Log.e("return task works",returnBid.getBidId());
+                    //Log.e("return task works",returnBid.getBidId());
                     return returnBid;
                 } else {
                     Log.e("Nothing", "Theres no bid in database");
