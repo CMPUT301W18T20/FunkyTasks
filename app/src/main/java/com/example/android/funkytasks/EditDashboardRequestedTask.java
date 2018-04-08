@@ -131,7 +131,16 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 task.setDescription(descriptionValue);
                 task.setTitle(titleValue);
-                task.setLocation(taskLoc);
+                Bundle b = new Bundle();
+                LatLng point;
+                try {
+                    point = taskLoc;
+                } catch (Exception e) {
+                    point = task.getLocation();
+                }
+                b.putParcelable("location", point);
+                intent.putExtras(b);
+                task.setLocation(point);
 
                 if (newImages.size() > 0) {
                     boolean check = imageConvert.checkImages(newImages);
@@ -186,15 +195,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 intent.putExtra("des",task.getDescription());
                 intent.putExtra("size",task.getImages().size());
 
-                Bundle b = new Bundle();
-                LatLng point;
-                try {
-                    point = taskLoc;
-                } catch (Exception e) {
-                    point = new LatLng(53.68, -113.52);
-                }
-                b.putParcelable("location", point);
-                intent.putExtras(b);
+
 
                 setResult(RESULT_OK,intent);
                 finish();
