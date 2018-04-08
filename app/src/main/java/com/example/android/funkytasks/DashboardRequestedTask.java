@@ -131,6 +131,7 @@ public class DashboardRequestedTask extends BaseActivity {
                 Log.e("ERROR","not working get task");
             }
         } else {
+            //task = (Task) intent.getSerializableExtra("task");
             LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
             taskList = localController.loadRequestedTask();
             for (Task eachTask: taskList) {
@@ -291,7 +292,7 @@ public class DashboardRequestedTask extends BaseActivity {
                     editIntent.putExtra("username", username);
                     editIntent.putExtra("id", id);
                     editIntent.putExtra("index", index);
-//                    editIntent.putExtra("task", task);
+                    //editIntent.putExtra("task", task);
                     startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }
                 else{
@@ -336,7 +337,7 @@ public class DashboardRequestedTask extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
-            task = (Task) intent.getSerializableExtra("updatedTask");
+            //task = (Task) intent.getSerializableExtra("updatedTask");
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
             photoLength = task.getImages().size();
