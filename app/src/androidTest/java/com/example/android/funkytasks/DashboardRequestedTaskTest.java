@@ -94,6 +94,8 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         assertFalse(solo.searchText("Dummy task"));
 
     }
+    //test for US 05.05.01
+    public void testViewRequestorViewBids(){}
     //test for US 05.06.01
     public void testAcceptBid(){}
     //test for US 05.07.01
