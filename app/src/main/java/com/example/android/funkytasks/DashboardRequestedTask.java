@@ -66,6 +66,7 @@ public class DashboardRequestedTask extends BaseActivity {
     private String id;// id of the detailed task
     private Button updateStatus;
     private Button reassign;
+    private ArrayList<Task> taskList;
 
     private GoogleMap mMap;
     MapView mapView;
@@ -116,18 +117,29 @@ public class DashboardRequestedTask extends BaseActivity {
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        //task = (Task) intent.getSerializableExtra("task");
+
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        try{
-            task = getTask.get();
-            Log.e("Task title",task.getTitle());
-        } catch (Exception e) {
-            Log.e("ERROR","not working get task");
+        if (isNetworkAvailable()) {
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            getTask.execute(id);
+            try{
+                task = getTask.get();
+                Log.e("Task title",task.getTitle());
+            } catch (Exception e) {
+                Log.e("ERROR","not working get task");
+            }
+        } else {
+            LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
+            taskList = localController.loadRequestedTask();
+            for (Task eachTask: taskList) {
+                if (eachTask.getId().equals(id)){
+                    task = eachTask;
+                }
+            }
         }
+
 
         setTaskDetails(task); // set the contents of the screen to the task details
 
@@ -139,95 +151,95 @@ public class DashboardRequestedTask extends BaseActivity {
         ressignTask();
 
 
-            bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                // if we click on a bid, create a pop up window to display bid details
+        bidListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // if we click on a bid, create a pop up window to display bid details
 
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    final AlertDialog.Builder Builder = new AlertDialog.Builder(DashboardRequestedTask.this);
-                    View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
-                    Builder.setView(View);
-                    final AlertDialog dialog=Builder.create();
-                    dialog.show();
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                final AlertDialog.Builder Builder = new AlertDialog.Builder(DashboardRequestedTask.this);
+                View View=getLayoutInflater().inflate(R.layout.bids_dialog,null);
+                Builder.setView(View);
+                final AlertDialog dialog=Builder.create();
+                dialog.show();
 
-                    TextView bidderTextView = View.findViewById(R.id.bidderTextView);
-                    TextView contactTextViewPhone = View.findViewById(R.id.contactTextView);
-                    TextView contactTextViewEmail = View.findViewById(R.id.contactTextViewEmail);
-                    TextView amountTextView = View.findViewById(R.id.amountTextView);
-                    TextView ratingView = View.findViewById(R.id.ratingView);
-                    Button acceptBTN = View.findViewById(R.id.acceptButton);
-                    Button declineBTN = View.findViewById(R.id.declineButton);
-
-
-                    String bidderName = bidList.get(i).getBidder();
-                    ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
-                    getUser.execute(bidderName);
-
-                    try{
-                        bidder = getUser.get();
-                        double rating = bidder.getRating();
-                        Log.e("Success",bidder.getUsername());
-                        contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
-                        contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
-                        ratingView.setText(Double.toString(rating) + "/5 \uD83C\uDF4C");
-                    }
-                    catch (Exception e){
-                        Log.e("Error","Unable to get the bidder's username");
-                    }
-                    // set the provider's contact info
-                    bidderTextView.setText(bidderName);
-                    Double bidAmount = bidList.get(i).getAmount();
-                    amountTextView.setText("$"+bidAmount.toString());
+                TextView bidderTextView = View.findViewById(R.id.bidderTextView);
+                TextView contactTextViewPhone = View.findViewById(R.id.contactTextView);
+                TextView contactTextViewEmail = View.findViewById(R.id.contactTextViewEmail);
+                TextView amountTextView = View.findViewById(R.id.amountTextView);
+                TextView ratingView = View.findViewById(R.id.ratingView);
+                Button acceptBTN = View.findViewById(R.id.acceptButton);
+                Button declineBTN = View.findViewById(R.id.declineButton);
 
 
+                String bidderName = bidList.get(i).getBidder();
+                ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
+                getUser.execute(bidderName);
+
+                try{
+                    bidder = getUser.get();
+                    double rating = bidder.getRating();
+                    Log.e("Success",bidder.getUsername());
+                    contactTextViewPhone.setText("PHONE: "+bidder.getPhonenumber());
+                    contactTextViewEmail.setText("EMAIL: "+bidder.getEmail());
+                    ratingView.setText(Double.toString(rating) + "/5 \uD83C\uDF4C");
+                }
+                catch (Exception e){
+                    Log.e("Error","Unable to get the bidder's username");
+                }
+                // set the provider's contact info
+                bidderTextView.setText(bidderName);
+                Double bidAmount = bidList.get(i).getAmount();
+                amountTextView.setText("$"+bidAmount.toString());
 
 
-                    final int target=i;
-                    //accept or decline bids
 
-                    if(!task.getStatus().equals("bidded")){
-                        acceptBTN.setVisibility(View.GONE);
-                        declineBTN.setVisibility(View.GONE);
-                    }
-                    if(!bidList.get(i).getStatus().equals("")){
-                        acceptBTN.setVisibility(View.GONE);
-                        declineBTN.setVisibility(View.GONE);
-                    }
 
-                    acceptBTN.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
-                                Toast.makeText(DashboardRequestedTask.this,
-                                        "Already accepted the bid", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            acceptBid(target);
-                            dialog.dismiss();
-                            statusValue.setText("assigned");
-                            setAdapter();
-                        }
-                    });
-                    declineBTN.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
-                                Toast.makeText(DashboardRequestedTask.this,
-                                        "Cannot decline a bid with current task status",
-                                        Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            declineBids(target);
-                            dialog.dismiss();
-                            setAdapter();
-                        }
-                    });
+                final int target=i;
+                //accept or decline bids
 
+                if(!task.getStatus().equals("bidded")){
+                    acceptBTN.setVisibility(View.GONE);
+                    declineBTN.setVisibility(View.GONE);
+                }
+                if(!bidList.get(i).getStatus().equals("")){
+                    acceptBTN.setVisibility(View.GONE);
+                    declineBTN.setVisibility(View.GONE);
                 }
 
-            });
+                acceptBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
+                            Toast.makeText(DashboardRequestedTask.this,
+                                    "Already accepted the bid", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        acceptBid(target);
+                        dialog.dismiss();
+                        statusValue.setText("assigned");
+                        setAdapter();
+                    }
+                });
+                declineBTN.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (task.getStatus().equals("assigned") || task.getStatus().equals("done")){
+                            Toast.makeText(DashboardRequestedTask.this,
+                                    "Cannot decline a bid with current task status",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        declineBids(target);
+                        dialog.dismiss();
+                        setAdapter();
+                    }
+                });
 
-            Button locationBtn = this.findViewById(R.id.viewLocation);
+            }
+
+        });
+
+        Button locationBtn = this.findViewById(R.id.viewLocation);
 
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,7 +292,7 @@ public class DashboardRequestedTask extends BaseActivity {
                     editIntent.putExtra("id", id);
                     editIntent.putExtra("index", index);
 //                    editIntent.putExtra("task", task);
-                    startActivity(editIntent); // go to activity to edit the task
+                    startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }
                 else{
                     Toast.makeText(DashboardRequestedTask.this,
@@ -324,17 +336,7 @@ public class DashboardRequestedTask extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == EDIT_CODE && resultCode == RESULT_OK) { // returning from editing the task, update screen contents
-            id = intent.getExtras().getString("id");
-            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(id);
-            try{
-                task = getTask.get();
-                Log.e("Task title",task.getTitle());
-                Log.e("des",task.getDescription());
-                Log.e("location",task.getLocation().toString());
-            } catch (Exception e) {
-                Log.e("ERROR","not working get task");
-            }
+            task = (Task) intent.getSerializableExtra("updatedTask");
             titleValue.setText(task.getTitle());
             descriptionValue.setText(task.getDescription());
             photoLength = task.getImages().size();
@@ -458,7 +460,6 @@ public class DashboardRequestedTask extends BaseActivity {
         titleValue.setText(task.getTitle());
         descriptionValue.setText(task.getDescription());
         statusValue.setText(task.getStatus());
-
 
         if(task.getStatus().equals("assigned")){
 
