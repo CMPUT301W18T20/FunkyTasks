@@ -70,6 +70,7 @@ public class CreateTaskActivity extends AppCompatActivity {
     private ArrayList<String> newImages;
     private Task task;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int MAP_RESULT = 2;
     private EditText title;
     private EditText description;
     private ArrayList<Task> tasks;
@@ -78,7 +79,8 @@ public class CreateTaskActivity extends AppCompatActivity {
     ImageConverterController imageConvert;
     Uri photoURI;
     MapView mapView;
-    LatLng taskLocation = null;
+    public LatLng taskLoc = null;
+    final GlobalVariables globals = new GlobalVariables();
 
 
     @Override
@@ -113,19 +115,12 @@ public class CreateTaskActivity extends AppCompatActivity {
                 Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
                 String taskID = task.getId();
                 String activityName = "Create";
-                showMap.putExtra("taskID", taskID);
+                showMap.putExtra("task", taskID);
                 showMap.putExtra("name", activityName);
-                startActivity(showMap);
+                startActivityForResult(showMap, MAP_RESULT);
             }
         });
 
-        final GlobalVariables globals = new GlobalVariables();
-        try {
-            Log.e("Global loc create", globals.getLocation().toString());
-        } catch (Exception e) {
-            Log.e("Can not print", "global loc from create");
-        }
-        final LatLng taskLoc = globals.getLocation();
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -140,8 +135,6 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                 task = new Task(titleValue, descriptionValue, username);
                 task.setLocation(taskLoc);
-                globals.setLocation(null);
-
 
 
                 if (newImages.size() != 0) {
@@ -188,7 +181,6 @@ public class CreateTaskActivity extends AppCompatActivity {
 
 
     }
-
 
 
     /**
@@ -295,6 +287,12 @@ public class CreateTaskActivity extends AppCompatActivity {
 
             newImages.add(imageConvert.convertToString(bitmap));
             Log.e("bitmap string",imageConvert.convertToString(bitmap));
+
+        }
+
+        if (requestCode == MAP_RESULT && resultCode == RESULT_OK) {
+            LatLng point = data.getParcelableExtra("location");
+            taskLoc = point;
 
         }
     }

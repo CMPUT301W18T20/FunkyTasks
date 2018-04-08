@@ -136,7 +136,7 @@ public class SolveTaskActivity extends BaseActivity {
                 catch(Exception e){
                     Log.e("Task get","not workng");
                 }
-                intent.putExtra("task",detailedTask);
+                //intent.putExtra("task",detailedTask);
                 intent.putExtra("position",i);
                 intent.putExtra("id",detailedTask.getId());
                 startActivity(intent);

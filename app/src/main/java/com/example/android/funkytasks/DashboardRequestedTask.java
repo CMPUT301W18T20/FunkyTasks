@@ -116,10 +116,18 @@ public class DashboardRequestedTask extends BaseActivity {
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username");
         username = LoginActivity.username;
-        task = (Task) intent.getSerializableExtra("task");
+        //task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
 
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(id);
+        try{
+            task = getTask.get();
+            Log.e("Task title",task.getTitle());
+        } catch (Exception e) {
+            Log.e("ERROR","not working get task");
+        }
 
         setTaskDetails(task); // set the contents of the screen to the task details
 
@@ -271,7 +279,7 @@ public class DashboardRequestedTask extends BaseActivity {
                     editIntent.putExtra("username", username);
                     editIntent.putExtra("id", id);
                     editIntent.putExtra("index", index);
-                    editIntent.putExtra("task", task);
+//                    editIntent.putExtra("task", task);
                     startActivityForResult(editIntent, EDIT_CODE); // go to activity to edit the task
                 }
                 else{

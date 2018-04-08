@@ -83,10 +83,18 @@ public class EditDashboardRequestedTask extends BaseActivity {
         index = intent.getExtras().getInt("index");
         Log.e("index", String.valueOf(index));
         id = intent.getExtras().getString("id");
-        task = (Task) intent.getSerializableExtra("task");
+        //task = (Task) intent.getSerializableExtra("task");
         username = intent.getExtras().getString("username");
 
 
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(id);
+        try{
+            task = getTask.get();
+            Log.e("Task title",task.getTitle());
+        } catch (Exception e) {
+            Log.e("ERROR","not working get task");
+        }
 
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
@@ -101,7 +109,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 Intent showMap = new Intent(EditDashboardRequestedTask.this, DisplayMap.class);
                 String taskID = task.getId();
                 String activityName = "Edit";
-                showMap.putExtra("task", taskID);
+                showMap.putExtra("task", id);
                 showMap.putExtra("name", activityName);
                 startActivity(showMap);
             }

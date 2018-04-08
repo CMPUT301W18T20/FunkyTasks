@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +41,28 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
 
+        Button saveBtn = this.findViewById(R.id.saveLocation);
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LatLng point;
+                Intent intent = new Intent();
+                Bundle b = new Bundle();
+                try {
+                    point = taskPoint;
+                } catch (Exception e) {
+                    point = new LatLng(53.68, -113.52);
+                }
+                b.putParcelable("location", point);
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finish();
+
+            }
+        });
+
+
 
         try {
             MapsInitializer.initialize(getApplicationContext());
@@ -53,19 +77,25 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
         Intent passedIntent = getIntent();
         Bundle passedItems = passedIntent.getExtras();
-        taskID = passedItems.getString("taskID");
+        taskID = passedItems.getString("task");
         passedName = passedItems.getString("name");
+//        Log.e("Task ID", taskID.toString());
 
-        if (taskID != null) {
-            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(taskID);
-            try {
-                task = getTask.get();
-                Log.e("Task title", task.getTitle());
-            } catch (Exception e) {
-                Log.e("Unable to load", "task");
-            }
+        if (passedName.equals("Request") || passedName.equals("Requestor Task")
+                || passedName.equals("Provider")) {
+            saveBtn.setVisibility(View.GONE);
         }
+
+
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(taskID);
+        try {
+            task = getTask.get();
+            Log.e("Task location", task.getLocation().toString());
+        } catch (Exception e) {
+            Log.e("Unable to load", "task");
+        }
+
 
     }
 
@@ -87,7 +117,7 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         final String createStr = "Create";
         final String editStr = "Edit";
 
-        LatLng location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary;
+        LatLng location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
         if (taskID != null) {
             Log.e("TaskID", taskID);
             try {
@@ -140,16 +170,5 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
 
     }
-
-
-    @Override
-    public void onBackPressed() {
-        Log.e("In", "onBackPressed");
-        Log.e("Glob loc in back press", taskPoint.toString());
-        GlobalVariables globals = new GlobalVariables();
-        globals.setLocation(taskPoint);
-        super.onBackPressed();
-    }
-
 
 }

@@ -236,7 +236,7 @@ public class MyRequestedTasksFragment extends Fragment {
 
 
 
-        intent.putExtra("task", detailedTask);
+//        intent.putExtra("task", detailedTask);
         intent.putExtra("position", i);
         intent.putExtra("id", detailedTask.getId());
         startActivityForResult(intent,DELETECODE);
