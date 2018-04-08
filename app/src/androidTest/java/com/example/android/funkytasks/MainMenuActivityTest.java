@@ -65,8 +65,6 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
         solo.clickOnView(solo.getView(R.id.profileActionBar));
         solo.waitForActivity("EditProfileActivity.class");
         solo.assertCurrentActivity("Wrong activity", EditProfileActivity.class);
-        //solo.goBack();
-        //solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
 
     }
 
@@ -77,8 +75,6 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
         solo.clickOnButton("create a funky task");
         solo.waitForActivity("CreateTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", CreateTaskActivity.class);
-        //solo.goBack();
-        //solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
     }
 
     public void testSolveTask() throws Exception{
@@ -97,9 +93,18 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
         solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
     }
 
+    public void testNotification() throws Exception{
+        login();
+        solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
+        solo.clickOnView(solo.getView(R.id.item_notification));
+        //check for popup window?
+    }
+
     @Override
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
+
+
 
 }
