@@ -179,7 +179,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 Log.e("tasktitle edited",task.getTitle());
                 Log.e("new des",task.getDescription());
-                Log.e("new loc", task.getLocation().toString());
+
 
                 Intent requestedIntent = new Intent(EditDashboardRequestedTask.this, DashboardRequestedTask.class);
                 //setResult(RESULT_OK,intent);
