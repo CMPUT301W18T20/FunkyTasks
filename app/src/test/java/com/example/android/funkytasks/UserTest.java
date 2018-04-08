@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by fc1 on 2018-02-20.
@@ -52,19 +53,19 @@ public class UserTest extends TestCase {
     }
 
     @Test
-    public void testGetRating() {
-        //User user = new User("Kenw", "kenw@ualberta.ca", "101-001-0011");
-        Double rating = 3.0;
-        assertEquals(rating, user.getRating());
+    public void testRating() {
+        Double rating1 = 5.0;
+        Double rating2 = 10.0;
+        //test addRatingToList
+        user.addRatingToList(rating1);
+        user.addRatingToList(rating2);
+        Double avg = (rating1 + rating2 )/ 2;
+        //test setRating
+        user.setRating();
+        //test getRating and calculateAverageRating
+        assertEquals(avg, user.getRating());
     }
 
-    @Test
-    public void testSetRating() {
-        //User user = new User("Kenw", "kenw@ualberta.ca", "101-001-0011");
-        user.setRating(5);
-        Double rating = 5.0;
-        assertEquals(rating, user.getRating());
-    }
 
     @Test
     public void testSetID(){

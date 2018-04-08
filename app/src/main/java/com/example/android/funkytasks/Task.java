@@ -211,14 +211,6 @@ public class Task implements Serializable{
         return images;
     }
 
-    /**
-     * Adds the image of the task to the task's current list of photos
-     * @param image a new image to attach to the task's current list of images
-     */
-
-    public void addImage(String image) {
-        images.add(image);
-    }
 
     /**
      * Replaces the task's list of photos with a new list(newImages)

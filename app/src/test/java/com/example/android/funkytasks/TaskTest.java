@@ -1,5 +1,7 @@
 package com.example.android.funkytasks;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
@@ -18,6 +20,7 @@ public class TaskTest extends TestCase{
     private String inputStatus = "requested";
     private String inputRequester ="Ken";
     private Task test=new Task(inputTitle,inputDescription,inputRequester);
+    private LatLng location = new LatLng(10, 20);
 
 
     @Test
@@ -153,4 +156,11 @@ public class TaskTest extends TestCase{
         assertEquals(id, test.getOfflineId());
     }
 
+    @Test
+    public void testLocation(){
+        //test for setLocation
+        test.setLocation(location);
+        //test for getLocation
+        assertEquals(location,test.getLocation());
+    }
 }

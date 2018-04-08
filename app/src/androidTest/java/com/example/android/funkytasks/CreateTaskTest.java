@@ -53,30 +53,30 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<LoginActivi
 
         solo.waitForActivity("MainMenuActivity.class");
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
-//        ElasticSearchController.GetTask getTask=new ElasticSearchController.GetTask();
-//        getTask.execute(result.getId());
-//        try{
-//            createdTask=getTask.get();
-//            Log.e("Get all Tasks","success");
-//        }
-//        catch (Exception e){
-//            Log.e("Get all Tasks","failed");
-//        }
-//        if(createdTask.equals(result)){
-//            Log.e("CreateTaskTest","success");
-//        }
-
 
     }
+
+    /*public void testAddLocation(){
+        goToCreateTaskActivity();
+        solo.clickOnButton("Add Location");
+        solo.waitForActivity("DisplayMap.class");
+        solo.assertCurrentActivity("Wrong activity", DisplayMap.class);
+    }*/
+
 
     //TODO create test a new task with a photo (grab a drawable photo placeholder in place of camera)
     // https://stackoverflow.com/a/30207310
     // THAT LINNK ^^ should help u with converting from drawable image to bitmap
+    public void testAddPhoto(){
+        goToCreateTaskActivity();
+        solo.clickOnView(solo.getView(R.id.camera));
 
+    }
 
     //TODO create another test for going into view photo activity in task details
-        // activibty should assert true if theres a photo (we are in view photo actibity)
+    // activibty should assert true if theres a photo (we are in view photo actibity)
     // and false if there isnt a photo (we are in task details activity)
+
 
 
 

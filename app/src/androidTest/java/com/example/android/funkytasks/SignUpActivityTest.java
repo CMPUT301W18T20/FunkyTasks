@@ -58,7 +58,6 @@ public class SignUpActivityTest extends ActivityInstrumentationTestCase2<SignUpA
     //signing up an existing user
     public void testFailedSignUp(){
         solo.assertCurrentActivity("Wrong Activity", SignUpActivity.class);
-        //existing user "qwerty123"
         addUser();
         solo.enterText((EditText) solo.getView(R.id.editAddUsername), user.getUsername());
         solo.enterText((EditText) solo.getView(R.id.editAddPhone), user.getPhonenumber());
