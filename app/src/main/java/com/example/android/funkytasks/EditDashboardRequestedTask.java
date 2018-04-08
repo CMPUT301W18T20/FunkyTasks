@@ -33,6 +33,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -54,11 +56,13 @@ public class EditDashboardRequestedTask extends BaseActivity {
     private String titleValue;
     private String descriptionValue;
     private final int REQUEST_IMAGE_CAPTURE = 1;
+    private final int EDIT_LOCATION = 2;
     private ArrayList<String> newImages;
     private ArrayList<Task> tasks;
 
     private ImageConverterController imageConvert;
     private Uri photoURI;
+    private LatLng taskLoc = null;
 
 
     /**
@@ -111,7 +115,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 String activityName = "Edit";
                 showMap.putExtra("task", id);
                 showMap.putExtra("name", activityName);
-                startActivity(showMap);
+                startActivityForResult(showMap,EDIT_LOCATION);
             }
         });
 
@@ -127,11 +131,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 task.setDescription(descriptionValue);
                 task.setTitle(titleValue);
-
-                GlobalVariables globals = new GlobalVariables();
-                task.setLocation(globals.getLocation());
-                globals.setLocation(null);
-
+                task.setLocation(taskLoc);
 
                 if (newImages.size() > 0) {
                     boolean check = imageConvert.checkImages(newImages);
@@ -306,6 +306,10 @@ public class EditDashboardRequestedTask extends BaseActivity {
             }
 
             newImages.add(imageConvert.convertToString(bitmap));
+        }
+        if (requestCode == EDIT_LOCATION && resultCode == RESULT_OK){
+            LatLng point = data.getParcelableExtra("location");
+            taskLoc = point;
 
         }
     }
