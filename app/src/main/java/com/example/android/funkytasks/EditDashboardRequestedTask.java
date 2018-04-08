@@ -99,9 +99,9 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
 
                 Intent showMap = new Intent(EditDashboardRequestedTask.this, DisplayMap.class);
-                String taskTitle = null;
+                String taskID = task.getId();
                 String activityName = "Edit";
-                showMap.putExtra("task", taskTitle);
+                showMap.putExtra("task", taskID);
                 showMap.putExtra("name", activityName);
                 startActivity(showMap);
             }

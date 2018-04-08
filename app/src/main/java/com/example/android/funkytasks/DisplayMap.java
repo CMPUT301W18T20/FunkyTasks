@@ -27,7 +27,8 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
     MapView mapView;
     Task task;
     String passedName;
-    String taskName;
+    String taskID;
+    LatLng taskPoint = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +53,16 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
         Intent passedIntent = getIntent();
         Bundle passedItems = passedIntent.getExtras();
-        taskName = passedItems.getString("task");
+        taskID = passedItems.getString("taskID");
         passedName = passedItems.getString("name");
 
-        if (taskName != null) {
+        if (taskID != null) {
 
             ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(taskName);
+            getTask.execute(taskID);
             try {
                 task = getTask.get();
+                Log.e("Task title", task.getTitle());
             } catch (Exception e) {
                 Log.e("Unable to load", "task");
             }
@@ -86,18 +88,19 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         final String createStr = "Create";
         final String editStr = "Edit";
 
-        LatLng location;
-        if (taskName != null) {
+        LatLng location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary;
+        if (taskID != null) {
             try {
                 location = task.getLocation();
+                Log.e("Location", location.toString());
                 mMap.addMarker(new MarkerOptions()
-                        .position(location)
-                        .title(task.getTitle()));
+                        .position(location));
             } catch (Exception e) {
                 location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
             }
-        }  else {
-            location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
+        }
+
+        if (taskID == null) {
             if (!passedName.equals("Create")) {
                 Toast.makeText(DisplayMap.this,
                         "This task does not have a location", Toast.LENGTH_LONG).show();
@@ -113,8 +116,10 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
                 if (passedName.trim().equalsIgnoreCase(createStr) ||
                         passedName.trim().equalsIgnoreCase(editStr)) {
                     Log.e("Add click listener", "is executing");
-                    GlobalVariables globals = new GlobalVariables();
-                    globals.setLocation(point);
+                    taskPoint = point;
+
+                    Log.e("Point", point.toString());
+
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(point)
@@ -133,6 +138,14 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         mapUiSettings.setZoomControlsEnabled(true);
 
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        GlobalVariables globals = new GlobalVariables();
+        globals.setLocation(taskPoint);
+        super.onBackPressed();
     }
 
 

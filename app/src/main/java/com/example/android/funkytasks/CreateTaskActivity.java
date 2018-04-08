@@ -115,9 +115,9 @@ public class CreateTaskActivity extends AppCompatActivity {
                 postTask.execute(task);
 
                 Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
-                String taskTitle = null;
+                String taskID = task.getId();
                 String activityName = "Create";
-                showMap.putExtra("task", taskTitle);
+                showMap.putExtra("task", taskID);
                 showMap.putExtra("name", activityName);
                 startActivity(showMap);
             }
@@ -137,6 +137,11 @@ public class CreateTaskActivity extends AppCompatActivity {
                 task = new Task(titleValue, descriptionValue, username);
 
                 GlobalVariables globals = new GlobalVariables();
+                try {
+                    Log.e("Global loc create", globals.getLocation().toString());
+                } catch (Exception e) {
+                    Log.e("Can not print", "global loc from create");
+                }
                 if (globals.getLocation() != null) {
                     task.setLocation(globals.getLocation());
                     globals.setLocation(null);

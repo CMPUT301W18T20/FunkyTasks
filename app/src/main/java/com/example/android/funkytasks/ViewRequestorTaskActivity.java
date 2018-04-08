@@ -191,9 +191,9 @@ public class ViewRequestorTaskActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent mapIntent = new Intent(ViewRequestorTaskActivity.this, DisplayMap.class);
-                String taskTitle = task.getTitle();
+                String taskID = task.getId();
                 String activityName = "Requestor Task";
-                mapIntent.putExtra("task", taskTitle);
+                mapIntent.putExtra("task", taskID);
                 mapIntent.putExtra("name", activityName);
                 startActivity(mapIntent);
             }

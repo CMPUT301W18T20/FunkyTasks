@@ -24,7 +24,7 @@ public class GlobalVariables extends Application{
 
 
     private ArrayList<User> userArrayList = new ArrayList<User>();
-    private LatLng location = null;
+    private LatLng location;
 
     /**
      * Returns the array list of current users

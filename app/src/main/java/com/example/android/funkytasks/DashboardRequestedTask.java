@@ -225,9 +225,9 @@ public class DashboardRequestedTask extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent mapIntent = new Intent(DashboardRequestedTask.this, DisplayMap.class);
-                String taskTitle = task.getTitle();
+                String taskID = task.getId();
                 String activityName = "Edit";
-                mapIntent.putExtra("task", taskTitle);
+                mapIntent.putExtra("task", taskID);
                 mapIntent.putExtra("name", activityName);
                 startActivity(mapIntent);
             }

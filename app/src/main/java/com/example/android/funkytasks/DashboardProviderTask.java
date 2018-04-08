@@ -186,9 +186,9 @@ public class DashboardProviderTask extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent mapIntent = new Intent(DashboardProviderTask.this, DisplayMap.class);
-                String taskTitle = task.getTitle();
+                String taskID = task.getId();
                 String activityName = "Provider";
-                mapIntent.putExtra("task", taskTitle);
+                mapIntent.putExtra("task", taskID);
                 mapIntent.putExtra("name", activityName);
                 startActivity(mapIntent);
             }

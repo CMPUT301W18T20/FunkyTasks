@@ -213,8 +213,8 @@ public class MyRequestedTasksFragment extends Fragment {
 
         detailedTask = taskList.get(i);
 
-        Log.d("task title base", detailedTask.getTitle());
-        Log.d("task description base", detailedTask.getDescription());
+//        Log.d("task title base", detailedTask.getTitle());
+//        Log.d("task description base", detailedTask.getDescription());
 
         new Thread(new Runnable() {
             public void run() {
