@@ -16,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by eivenlour on 2018-03-30.
  */
-// https://stackoverflow.com/questions/10350449/how-to-check-the-internet-connection-periodically-in-whole-application
+
 
 public class BaseActivity extends AppCompatActivity {
 
