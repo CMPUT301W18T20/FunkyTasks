@@ -218,6 +218,20 @@ public class DashboardRequestedTask extends BaseActivity {
                 }
 
             });
+
+            Button locationBtn = this.findViewById(R.id.viewLocation);
+
+        locationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mapIntent = new Intent(DashboardRequestedTask.this, DisplayMap.class);
+                String taskTitle = task.getTitle();
+                String activityName = "Edit";
+                mapIntent.putExtra("task", taskTitle);
+                mapIntent.putExtra("name", activityName);
+                startActivity(mapIntent);
+            }
+        });
     }
 
     /**
