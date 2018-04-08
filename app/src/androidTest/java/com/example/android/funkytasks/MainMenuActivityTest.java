@@ -97,7 +97,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2 {
         login();
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
         solo.clickOnView(solo.getView(R.id.item_notification));
-        //check for popup window?
+        solo.waitForText("You");
+        assertTrue(solo.searchText("You"));
     }
 
     @Override
