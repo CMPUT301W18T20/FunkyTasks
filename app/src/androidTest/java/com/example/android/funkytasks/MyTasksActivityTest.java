@@ -94,6 +94,8 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
 
 
 
+
+
     @After
     public void tearDown() throws Exception {
         ElasticSearchController.deleteTask DeTask = new ElasticSearchController.deleteTask();

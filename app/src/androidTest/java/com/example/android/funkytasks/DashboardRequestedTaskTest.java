@@ -50,6 +50,7 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
     }
 
 
+    //test for US 01.02.01
     public void goToDashboardRequested(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
         addUser();
@@ -69,6 +70,7 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         postTask.execute(newTask);
     }
 
+    //test for US 01.03.01
     public void testEdit(){
         addTask();
         goToDashboardRequested();
@@ -80,6 +82,7 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
 
     }
 
+    //test for US 01.04.01
     public void testDelete(){
         addTask();
         goToDashboardRequested();
@@ -90,8 +93,9 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
         assertFalse(solo.searchText("Dummy task"));
 
-
     }
+
+
 
     @After
     public void tearDown() throws Exception {
