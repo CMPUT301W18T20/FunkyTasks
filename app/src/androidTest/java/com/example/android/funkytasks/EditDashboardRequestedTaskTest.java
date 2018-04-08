@@ -74,6 +74,7 @@ public class EditDashboardRequestedTaskTest extends ActivityInstrumentationTestC
     }
 
 
+
     public void testClickSave() throws Exception{
         goToEditTask();
         solo.assertCurrentActivity("Wrong activity", EditDashboardRequestedTask.class);

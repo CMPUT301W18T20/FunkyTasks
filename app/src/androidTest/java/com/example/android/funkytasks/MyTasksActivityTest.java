@@ -70,6 +70,7 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
     }
 
 
+
     public void testRequesterTab(){
         addTask();
         goToMyTask();
@@ -90,6 +91,31 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
         solo.waitForActivity("DashboardProviderTask.class");
         solo.assertCurrentActivity("Wrong activity", DashboardProviderTask.class);
     }
+    //test for US 05.02.01
+    public void viewProviderBiddedOnTaskTest(){
+
+    }
+    //test for US 05.04.01
+    public void viewRequestorBiddedTaskTest(){
+
+    }
+    //test for US 05.05.01
+    public void requestorViewBids(){
+
+    }
+
+    //test for US 06.02.01
+    public void testViewRequestorAssignedTask(){
+
+    }
+    //US 06.01.01
+    public void viewproviderAsignedTask(){
+    }
+
+
+
+
+
 
 
 

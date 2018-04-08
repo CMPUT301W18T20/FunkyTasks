@@ -90,6 +90,7 @@ public class DashboardProviderTaskTest extends ActivityInstrumentationTestCase2<
     }
 
 
+
     @After
     public void tearDown() throws Exception {
         solo.finishOpenedActivities();
