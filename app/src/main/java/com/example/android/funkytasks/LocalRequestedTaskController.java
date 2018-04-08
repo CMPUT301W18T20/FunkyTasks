@@ -81,17 +81,18 @@ public class LocalRequestedTaskController {
         getAllTask.execute(username);
         try {
             taskList = getAllTask.get();
+            for (Task eachtask : taskList) {
+                Log.d("task title base", eachtask.getTitle());
+                Log.d("task description base", eachtask.getDescription());
+            }
 
         } catch (Exception e) {
-            Log.e("Error", "We arnt getting the list of tasks");
+            Log.e("Error", "We aren't getting the list of tasks");
             return;
 
         }
 
-        for (Task eachtask : taskList) {
-            Log.d("task title base", eachtask.getTitle());
-            Log.d("task description base", eachtask.getDescription());
-        }
+
 
         FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));

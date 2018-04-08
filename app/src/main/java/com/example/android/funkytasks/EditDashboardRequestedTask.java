@@ -78,7 +78,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
         final Intent intent = getIntent();
         imageConvert = new ImageConverterController();
 
-        newImages = new ArrayList<String>();
+        newImages = new ArrayList<>();
 
         index = intent.getExtras().getInt("index");
         Log.e("index", String.valueOf(index));
@@ -91,6 +91,23 @@ public class EditDashboardRequestedTask extends BaseActivity {
         editTitle.setText(task.getTitle());
         editDescription.setText(task.getDescription());
 
+        Button loadMap = this.findViewById(R.id.editLocation);
+        loadMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                task = new Task(titleValue, descriptionValue, username);
+
+
+                Intent showMap = new Intent(EditDashboardRequestedTask.this, DisplayMap.class);
+                String taskTitle = null;
+                String activityName = "Edit";
+                showMap.putExtra("task", taskTitle);
+                showMap.putExtra("name", activityName);
+                startActivity(showMap);
+            }
+        });
+
+
 
         saveBT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +119,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 task.setDescription(descriptionValue);
                 task.setTitle(titleValue);
+
+                GlobalVariables globals = new GlobalVariables();
+                if (globals.getLocation() != null) {
+                    task.setLocation(globals.getLocation());
+                    globals.setLocation(null);
+                }
 
                 if (newImages.size() > 0) {
                     boolean check = imageConvert.checkImages(newImages);

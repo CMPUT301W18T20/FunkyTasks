@@ -136,6 +136,12 @@ public class CreateTaskActivity extends AppCompatActivity {
 
                 task = new Task(titleValue, descriptionValue, username);
 
+                GlobalVariables globals = new GlobalVariables();
+                if (globals.getLocation() != null) {
+                    task.setLocation(globals.getLocation());
+                    globals.setLocation(null);
+                }
+
                 if (newImages.size() != 0) {
                     boolean check = imageConvert.checkImages(newImages);
                     if (!check) {

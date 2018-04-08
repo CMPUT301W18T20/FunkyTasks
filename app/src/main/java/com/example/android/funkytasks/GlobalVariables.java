@@ -12,6 +12,8 @@ package com.example.android.funkytasks;
 
 import android.app.Application;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 
 /**
@@ -22,6 +24,7 @@ public class GlobalVariables extends Application{
 
 
     private ArrayList<User> userArrayList = new ArrayList<User>();
+    private LatLng location = null;
 
     /**
      * Returns the array list of current users
@@ -39,5 +42,13 @@ public class GlobalVariables extends Application{
      */
     public void setUserArrayList(ArrayList<User> passedArrayList){
         this.userArrayList = passedArrayList;
+    }
+
+    public void setLocation(LatLng location) {
+        this.location = location;
+    }
+
+    public LatLng getLocation() {
+        return location;
     }
 }

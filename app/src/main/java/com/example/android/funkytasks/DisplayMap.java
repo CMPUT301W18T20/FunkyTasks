@@ -113,7 +113,8 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
                 if (passedName.trim().equalsIgnoreCase(createStr) ||
                         passedName.trim().equalsIgnoreCase(editStr)) {
                     Log.e("Add click listener", "is executing");
-                    task.setLocation(point);
+                    GlobalVariables globals = new GlobalVariables();
+                    globals.setLocation(point);
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(point)
