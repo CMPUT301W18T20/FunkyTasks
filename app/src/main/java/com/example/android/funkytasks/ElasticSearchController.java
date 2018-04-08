@@ -659,6 +659,54 @@ public class ElasticSearchController {
     }
 
     /**
+     * This function searches for and returns a bid
+     */
+    public static class GetBid extends AsyncTask<String,Void,Bid>{
+        // grabs details of one specific bid
+
+        /**
+         * Performed in the background, this function searches for and returns a bid based
+         * on the given search parameters.
+         *
+         * @param search_parameters a string representing the parameters the search controller
+         *                          takes in to perform its search
+         * @return returns the bid; null if nothing is found, a single bid if it is found
+         */
+        @Override
+        protected Bid doInBackground(String... search_parameters){
+            verifySettings();
+            Bid returnBid;
+
+            String query = "{\n" +
+                    "    \"query\" : {\n" +
+                    "       \"constant_score\" : {\n" +
+                    "           \"filter\" : {\n" +
+                    "               \"term\" : {\"bidID\": \"" + search_parameters[0] + "\"}\n" +
+                    "             }\n" +
+                    "         }\n" +
+                    "    }\n" +
+                    "}";
+
+            Search search = new Search.Builder(query).addIndex(indexType).addType(bidType).build();
+
+            try {
+                JestResult result = client.execute(search);
+                if (result.isSucceeded()) {
+                    returnBid = result.getSourceAsObject(Bid.class);
+                    Log.e("return task works",returnBid.getBidId());
+                    return returnBid;
+                } else {
+                    Log.e("Nothing", "Theres no bid in database");
+                }
+            } catch (Exception e) {
+                Log.e("Error", "Something went wrong with getting bid!");
+            }
+            return null;
+        }
+
+    }
+
+    /**
      * Locates and updates a bid in the server
      */
     public static class updateBid extends AsyncTask<Bid,Void,Void>{
