@@ -133,14 +133,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 task.setTitle(titleValue);
                 Bundle b = new Bundle();
                 LatLng point;
-                try {
-                    point = taskLoc;
-                } catch (Exception e) {
-                    point = task.getLocation();
+                if (taskLoc == null) {
+                    taskLoc = task.getLocation();
                 }
-                b.putParcelable("location", point);
+                b.putParcelable("location", taskLoc);
                 intent.putExtras(b);
-                task.setLocation(point);
+                task.setLocation(taskLoc);
 
                 if (newImages.size() > 0) {
                     boolean check = imageConvert.checkImages(newImages);
