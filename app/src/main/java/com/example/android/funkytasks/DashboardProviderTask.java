@@ -99,9 +99,18 @@ public class DashboardProviderTask extends BaseActivity {
         final Intent intent = getIntent();
         username = intent.getExtras().getString("username"); // username of the user who logged in
         username = LoginActivity.username;
-        task = (Task) intent.getSerializableExtra("task");
+        //task = (Task) intent.getSerializableExtra("task");
         index = intent.getExtras().getInt("position");
         id = intent.getExtras().getString("id");
+
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(id);
+        try{
+            task = getTask.get();
+            Log.e("Task title",task.getTitle());
+        } catch (Exception e) {
+            Log.e("ERROR","not working get task");
+        }
 
         multiFunctionButton = findViewById(R.id.multiFunction); // update bid button
 
