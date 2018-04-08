@@ -57,7 +57,6 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         passedName = passedItems.getString("name");
 
         if (taskID != null) {
-
             ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
             getTask.execute(taskID);
             try {
@@ -90,6 +89,7 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
         LatLng location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary;
         if (taskID != null) {
+            Log.e("TaskID", taskID);
             try {
                 location = task.getLocation();
                 Log.e("Location", location.toString());
@@ -117,9 +117,10 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
                         passedName.trim().equalsIgnoreCase(editStr)) {
                     Log.e("Add click listener", "is executing");
                     taskPoint = point;
-
+//                    task.setLocation(point);
+//                    ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
+//                    update.execute(task);
                     Log.e("Point", point.toString());
-
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
                             .position(point)
@@ -143,6 +144,8 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onBackPressed() {
+        Log.e("In", "onBackPressed");
+        Log.e("Glob loc in back press", taskPoint.toString());
         GlobalVariables globals = new GlobalVariables();
         globals.setLocation(taskPoint);
         super.onBackPressed();

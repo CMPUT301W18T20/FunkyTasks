@@ -110,18 +110,22 @@ public class CreateTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 task = new Task(titleValue, descriptionValue, username);
-
-                ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-                postTask.execute(task);
-
                 Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
                 String taskID = task.getId();
                 String activityName = "Create";
-                showMap.putExtra("task", taskID);
+                showMap.putExtra("taskID", taskID);
                 showMap.putExtra("name", activityName);
                 startActivity(showMap);
             }
         });
+
+        final GlobalVariables globals = new GlobalVariables();
+        try {
+            Log.e("Global loc create", globals.getLocation().toString());
+        } catch (Exception e) {
+            Log.e("Can not print", "global loc from create");
+        }
+        final LatLng taskLoc = globals.getLocation();
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -130,22 +134,15 @@ public class CreateTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean input = checkInput();
-                if (!input){
+                if (!input) {
                     return;
                 }
 
                 task = new Task(titleValue, descriptionValue, username);
+                task.setLocation(taskLoc);
+                globals.setLocation(null);
 
-                GlobalVariables globals = new GlobalVariables();
-                try {
-                    Log.e("Global loc create", globals.getLocation().toString());
-                } catch (Exception e) {
-                    Log.e("Can not print", "global loc from create");
-                }
-                if (globals.getLocation() != null) {
-                    task.setLocation(globals.getLocation());
-                    globals.setLocation(null);
-                }
+
 
                 if (newImages.size() != 0) {
                     boolean check = imageConvert.checkImages(newImages);
