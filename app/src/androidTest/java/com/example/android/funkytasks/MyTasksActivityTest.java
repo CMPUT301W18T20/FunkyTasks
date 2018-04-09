@@ -16,6 +16,9 @@ import static org.junit.Assert.*;
 /**
  * Created by ${fc1} on 2018-03-19.
  */
+
+//Perform this test with pre-existing account test1111.
+
 public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
     private User user;

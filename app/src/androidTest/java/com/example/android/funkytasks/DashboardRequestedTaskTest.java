@@ -16,10 +16,17 @@ import static org.junit.Assert.*;
 /**
  * Created by ${fc1} on 2018-03-17.
  */
+
+//before testing
+// 1.create accounts with username "testing1","testing2","testing3"
+//2.create four tasks by "testing1", with title"test","testEdit","testDelete","testAccept","testDone","testReassign1","testReassign2"
+//3.place bids by "testing2" on every tasks except "testEdit"
+//4. place a bid by "testing3" on "testReassign2"
+//5. accept bids with "testing1" on "testDone","testReassign1","testReassign2"
+
+
 public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
-    private User user;
-    private Task newTask;
 
     public DashboardRequestedTaskTest(){
         super(LoginActivity.class);
@@ -27,34 +34,14 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
     @Before
     public void setUp() throws Exception {
         solo = new Solo(getInstrumentation(), getActivity());
-    }
-
-    public void addUser(){
-        user = new User("qwerty123", "123@gmail.com", "1112221111");
-        ElasticSearchController.GetAllUsers allUsers = new ElasticSearchController.GetAllUsers();
-        allUsers.execute(); // grab all current users in the system
-        ArrayList<User> userList = new ArrayList<User>();
-        try {
-            userList = allUsers.get();
-        } catch (Exception e) {
-            Log.e("Error", "Failed to get list of users");
-        }
-        for (User postedUser : userList) {
-            Log.e("ALl usernames", postedUser.getUsername());
-            if (postedUser.getUsername().equals(user.getUsername())) {
-                return;
-            }
-        }
-        ElasticSearchController.PostUser postUser = new ElasticSearchController.PostUser();
-        postUser.execute(user);
+        goToDashboardRequestedTask();
     }
 
 
     //test for US 01.02.01
-    public void goToDashboardRequested(){
+    public void goToDashboardRequestedTask(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
-        addUser();
-        solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
+        solo.enterText((EditText) solo.getView(R.id.editLoginName), "testing1");
         solo.clickOnButton("Login");
         solo.waitForActivity("MainMenuActivity.class");
         solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
@@ -62,50 +49,88 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         solo.waitForActivity("MyTasksActivity.class");
         solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
         solo.clickOnActionBarItem(R.id.tabItem);
-    }
 
-    public void addTask(){
-        newTask = new Task("Dummy task", "Testing", "qwerty123");
-        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
-        postTask.execute(newTask);
+    }
+    //test for US 05.05.01
+    public void testRequestorViewBids(){
+        assertTrue(solo.searchText("test"));
+        solo.clickOnText("test");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.waitForText("testing2");
+        solo.clickOnText("testing2");
     }
 
     //test for US 01.03.01
     public void testEdit(){
-        addTask();
-        goToDashboardRequested();
-        solo.clickOnText(newTask.getTitle());
+        assertTrue(solo.searchText("testEdit"));
+        solo.clickOnText("testEdit");
         solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
         solo.clickOnView(solo.getView(R.id.editRequestedTask));
         solo.waitForActivity("EditDashboardRequestedTask.class");
         solo.assertCurrentActivity("Wrong activity", EditDashboardRequestedTask.class);
-
     }
+    //test for US 05.07.01
+    public void testDeclineBid(){
+        assertTrue(solo.searchText("test"));
+        solo.clickOnText("test");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.waitForText("testing2");
+        solo.clickOnText("testing2");
+        solo.waitForText("DECLINE");
+        solo.clickOnText("DECLINE");
+        assertTrue(solo.searchText("declined"));
+    }
+    //test for US 05.06.01
+    public void testAcceptBid(){
+        assertTrue(solo.searchText("testAccept"));
+        solo.clickOnText("testAccept");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        assertTrue(solo.searchText("testing2"));
+        solo.clickOnText("testing2");
+        solo.waitForText("ACCEPT");
+        solo.clickOnText("ACCEPT");
+        assertTrue(solo.searchText("accepted"));
+        assertTrue(solo.searchText("assigned"));
+    }
+
 
     //test for US 01.04.01
     public void testDelete(){
-        addTask();
-        goToDashboardRequested();
-        assertTrue(solo.searchText("Dummy task"));
-        solo.clickOnText("Dummy task");
+        assertTrue(solo.searchText("testDelete"));
+        solo.clickOnText("testDelete");
         solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
         solo.clickOnView(solo.getView(R.id.deleteActionBar));
         solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
-        assertFalse(solo.searchText("Dummy task"));
+        assertFalse(solo.searchText("testDelete"));
+    }
+
+//    //test for US 07.01.01
+    public void testSetTaskDone(){
+        assertTrue(solo.searchText("testDone"));
+        solo.clickOnText("testDone");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.waitForText("FINISH TASK");
+        solo.clickOnText("FINISH TASK");
+    }
+    //test for US 07.02.01
+    public void testReassignToRequested(){
+        assertTrue(solo.searchText("testReassign1"));
+        solo.clickOnText("testReassign1");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.waitForText("Reassign");
+        solo.clickOnText("Reassign");
+        assertTrue(solo.searchText("requested"));
 
     }
-    //test for US 05.05.01
-    public void testViewRequestorViewBids(){}
-    //test for US 05.06.01
-    public void testAcceptBid(){}
-    //test for US 05.07.01
-    public void testDeclineBid(){}
-    //test for US 07.01.01
-    public void testSetTaskDone(){}
-    //test for US 07.02.01
-    public void testReassignToRequested(){}
     //test for US 07.03.01
-    public void testReassignRequested(){}
+    public void testReassignToBidded(){
+        assertTrue(solo.searchText("testReassign2"));
+        solo.clickOnText("testReassign2");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.waitForText("Reassign");
+        solo.clickOnText("Reassign");
+        assertTrue(solo.searchText("bidded"));
+    }
 
 
 
