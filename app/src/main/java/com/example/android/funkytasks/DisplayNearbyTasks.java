@@ -50,28 +50,19 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            // ask permissions here using below code
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_CODE);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapFrag);
 
-        } else {
-
-            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.mapFrag);
-
-            try {
-                MapsInitializer.initialize(getApplicationContext());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            assert mapFragment != null;
-            mapFragment.getMapAsync(this);
+        try {
+            MapsInitializer.initialize(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
+
+
 
     }
 

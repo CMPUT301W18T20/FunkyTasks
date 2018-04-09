@@ -10,8 +10,12 @@
 
 package com.example.android.funkytasks;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +38,8 @@ public class SolveTaskActivity extends BaseActivity {
     SearchListViewAdapter searchListViewAdapter;
     ArrayList<Task> taskList = new ArrayList<Task>();
     ListView taskView;
+    int REQUEST_CODE;
+
 
     /**
      * Instantiates the view and prepares it for the user. This function also takes in
@@ -78,11 +84,24 @@ public class SolveTaskActivity extends BaseActivity {
         final EditText search = findViewById(R.id.search);
 
         Button nearby = findViewById(R.id.viewNearby);
+
+
         nearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (SolveTaskActivity.this, DisplayNearbyTasks.class);
-                startActivity(intent);
+                int permissionCheck = ContextCompat.checkSelfPermission(SolveTaskActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    // ask permissions here using below code
+                    ActivityCompat.requestPermissions(SolveTaskActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_CODE);
+
+                } else {
+
+                    Intent intent = new Intent(SolveTaskActivity.this, DisplayNearbyTasks.class);
+                    startActivity(intent);
+                }
             }
         });
 
