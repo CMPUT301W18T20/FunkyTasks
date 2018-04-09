@@ -107,6 +107,9 @@ public class RateActivityTest extends ActivityInstrumentationTestCase2<LoginActi
     }
     @After
     public void tearDown() throws Exception {
+        ElasticSearchController.deleteTask DeTask = new ElasticSearchController.deleteTask();
+        DeTask.execute(result.getId());
+        solo.finishOpenedActivities();
     }
 
 }

@@ -20,8 +20,7 @@ import static org.junit.Assert.*;
 public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
     private User user;
-    private User requester;
-    private Task newTask;
+    private Task newTask = new Task("SolveTaskTest", "SolveTaskTest", "monica11");
 
 
     public SolveTaskActivityTest(){
@@ -56,6 +55,11 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
     }
 
 
+    public void addTask(){
+        ElasticSearchController.PostTask postTask = new ElasticSearchController.PostTask();
+        postTask.execute(newTask);
+    }
+
     public void goToSolveTask(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
         addUser();
@@ -71,16 +75,21 @@ public class SolveTaskActivityTest extends ActivityInstrumentationTestCase2<Logi
     public void testSolveTask(){
         //Task title:SolveTask, description:  for solve task testing
         // test for US.05,01,01
+        addTask();
+        solo.sleep(500);
         goToSolveTask();
         solo.assertCurrentActivity("Wrong activity",SolveTaskActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.search), "map");
+        solo.enterText((EditText) solo.getView(R.id.search), newTask.getDescription());
         solo.clickOnView(solo.getView(R.id.searchButton));
+        solo.assertCurrentActivity("Wrong activity",SolveTaskActivity.class);
     }
 
 
 
     @After
     public void tearDown() throws Exception {
+        ElasticSearchController.deleteTask DeTask = new ElasticSearchController.deleteTask();
+        DeTask.execute(newTask.getId());
         solo.finishOpenedActivities();
     }
 

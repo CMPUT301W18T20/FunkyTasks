@@ -13,6 +13,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -39,6 +41,7 @@ public class ImageDetails extends BaseActivity {
     PicturePagerAdapter picturePagerAdapter;
     private ArrayList<String> images;
     private ArrayList<Bitmap> imageBitmaps;
+    private ArrayList<Task> taskList;
 
     private String username; // username of the person who logged in
     private Task task;
@@ -69,13 +72,24 @@ public class ImageDetails extends BaseActivity {
 
         id = intent.getExtras().getString("id");
 
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        try {
-            task = getTask.get();
-            Log.e("Return task title", task.getTitle());
-        } catch (Exception e) {
-            Log.e("Error", "Task get not working");
+        if (isNetworkAvailable()) {
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            getTask.execute(id);
+            try{
+                task = getTask.get();
+                Log.e("Task title",task.getTitle());
+            } catch (Exception e) {
+                Log.e("ERROR","not working get task");
+            }
+        } else {
+            //task = (Task) intent.getSerializableExtra("task");
+            LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
+            taskList = localController.loadRequestedTask();
+            for (Task eachTask: taskList) {
+                if (eachTask.getId().equals(id)){
+                    task = eachTask;
+                }
+            }
         }
 
 
@@ -124,5 +138,19 @@ public class ImageDetails extends BaseActivity {
                 || "google_sdk".equals(Build.PRODUCT);
     }
 
+
+    /**
+     * This fucntion checks for connectivity, returns true if the device is connected to the internet, false if the device is not.
+     * @return a boolean indicating connectivity to the internet
+     */
+    public boolean isNetworkAvailable() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        boolean isAvailable = false;
+        if (networkInfo != null && networkInfo.isConnected()) {
+            isAvailable = true;
+        }
+        return isAvailable;
+    }
 
 }
