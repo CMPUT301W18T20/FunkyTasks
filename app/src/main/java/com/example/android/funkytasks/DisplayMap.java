@@ -185,7 +185,7 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         });
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
         UiSettings mapUiSettings = mMap.getUiSettings();
         mapUiSettings.setZoomControlsEnabled(true);
 
