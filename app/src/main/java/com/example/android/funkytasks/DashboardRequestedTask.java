@@ -289,6 +289,11 @@ public class DashboardRequestedTask extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteActionBar: // if clicked on the delete button
+                if (!isNetworkAvailable()){
+                    Toast.makeText(DashboardRequestedTask.this,
+                            "Can't delete task offline", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
                 Intent intent = getIntent();
                 onDeleteTask(); // delete the task and any bids along with it
                 intent.putExtra("id", id);
@@ -556,14 +561,13 @@ public class DashboardRequestedTask extends BaseActivity {
             deleteTask.execute(id);
             Log.e("deleted","task");
         }
+        else{
+            Toast.makeText(DashboardRequestedTask.this,
+                    "Can't delete task offline", Toast.LENGTH_SHORT).show();
+        }
 
 
-        //delete in controller too
-        LocalRequestedTaskController controller = new LocalRequestedTaskController(getApplicationContext(), username);
-        Log.e("delete in requested", task.getTitle());
-        controller.deleteTask(index);
-        OfflineController offlineController = new OfflineController(getApplicationContext(), username);
-        offlineController.deleteTask(task);
+
     }
 
     /**
