@@ -1,50 +1,42 @@
+/**
+ * DisplayNearbyTasks
+ *
+ * Version 1.0.0
+ *
+ * Created by Funky Tasks on 2018-04-08.
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
-import android.Manifest;
+
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
-import android.location.Address;
 import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Timer;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+
 
 /**
- * Created by jpoulin on 2018-04-08.
+ * This class displays all tasks within 5 kilometers of the user's current position
  */
 
 public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCallback {
@@ -53,10 +45,19 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     public LocationManager locationManager;
     LatLng point;
 
+    private ArrayList<Task> taskList = null;
+
     int REQUEST_CODE;
     String username;
 
 
+    /**
+     * Sets up the activity for use, finds the map fragment, sets up the location manager, and calls
+     * networkConnection to establish the network connection for the map.
+     *
+     * @param savedInstanceState a bundle representing the state of the app when it was last
+     *                           on this screen
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +91,17 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
 
+    /**
+     * This function calls distance() to calculate the distance between the user and all the placed
+     * tasks. A task will not appear on the map if: the current user posted the task, the task
+     * has been assigned or completed, the task does not have a location.
+     */
     public void calculateDistance() {
         Log.e("Calculate distance", "is executing");
 
         // if the task is posted by the user, don't display it
 
-        ArrayList<Task> taskList = null;
+
         ElasticSearchController.GetAllTaskList getAllTaskList = new ElasticSearchController.GetAllTaskList();
         getAllTaskList.execute();
         try {
@@ -108,21 +114,24 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
             for (Task task : taskList) {
                 String taskRequester = task.getRequester();
                 if (!taskRequester.equals(username)) {
-                    Log.d("Iterating", "in the nearby for loop");
-                    LatLng taskLoc = task.getLocation();
-                    if (taskLoc != null) {
-                        double taskLat = taskLoc.latitude;
-                        double taskLon = taskLoc.longitude;
-                        double myLat = point.latitude;
-                        double myLon = point.longitude;
+                    if (task.getStatus().equalsIgnoreCase("Requested")
+                            || task.getStatus().equalsIgnoreCase("Bidded")) {
+                        Log.d("Iterating", "in the nearby for loop");
+                        LatLng taskLoc = task.getLocation();
+                        if (taskLoc != null) {
+                            double taskLat = taskLoc.latitude;
+                            double taskLon = taskLoc.longitude;
+                            double myLat = point.latitude;
+                            double myLon = point.longitude;
 
-                        double dist = distance(taskLat, myLat, taskLon, myLon, 0, 0);
+                            double dist = distance(taskLat, myLat, taskLon, myLon, 0, 0);
 
-                        if (dist <= 5000) {
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(taskLoc)
-                                    .title(task.getTitle()));
+                            if (dist <= 5000) {
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(taskLoc)
+                                        .title(task.getTitle()));
 
+                            }
                         }
                     }
                 }
@@ -147,9 +156,9 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         mMap = googleMap;
 
 
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(point, 12);
+        mMap.animateCamera(cameraUpdate);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
         try {
             mMap.setMyLocationEnabled(true);
         } catch (SecurityException e) {
@@ -159,45 +168,36 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         mapUiSettings.setZoomControlsEnabled(true);
         calculateDistance();
 
-//
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//
-//            @Override
-//            public void onMapClick(LatLng point) {
-//                // TODO Auto-generated method stub
-//
-//                mMap.clear();
-//
-//
-//            }
-//        });
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String taskTitle = marker.getTitle();
+                for (Task task: taskList) {
+                    if (task.getTitle().equals(taskTitle)) {
+                        String taskId = task.getId();
+                        Intent intent = new Intent(DisplayNearbyTasks.this, ViewRequestorTaskActivity.class);
+                        intent.putExtra("id", taskId);
+                        startActivity(intent);
+                    }
+                }
 
-//        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-//        exec.scheduleAtFixedRate(new Runnable() {
-//            public void run() {
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-//            }
-//        }, 0, 1, TimeUnit.SECONDS); // execute every 60 seconds
-
+                }
+            });
 
     }
 
-    public void makeUseOfNewLocation(Location location) {
-        double pointLat = location.getLatitude();
-        double pointLon = location.getLongitude();
-        LatLng place = new LatLng(pointLat, pointLon);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
-        try {
-            mMap.setMyLocationEnabled(true);
-        } catch (SecurityException e) {
-            Log.e("ERROR", "no security permissions");
-        }
-        UiSettings mapUiSettings = mMap.getUiSettings();
-        mapUiSettings.setZoomControlsEnabled(true);
-    }
-
+    /**
+     * This function calculates the distance between two given map points and returns it as a double.
+     * Taken from: https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude-what-am-i-doi
+     *
+     * @param lat1 the first latitude for the calculation
+     * @param lat2 the second latitude for the calculation
+     * @param lon1 the first longitude for the calculation
+     * @param lon2 the second longitude for the calculation
+     * @param el1 the first elevation (if applicable)
+     * @param el2 the second elevation (if applicable)
+     * @return a double representing the distance between the points
+     */
     public static double distance(double lat1, double lat2, double lon1,
                                   double lon2, double el1, double el2) {
 
@@ -219,6 +219,10 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
 
+    /**
+     * This function tests the network connection and finds the current location based on
+     * that connection.
+     */
     public void networkConnection() {
         LocationProvider provider = locationManager.getProvider("network");
         double latitude = 0.0;
@@ -236,17 +240,22 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
             Log.e("ERROR", "unknown location error");
         }
 
-        point = new LatLng(latitude, longitude);
+//        point = new LatLng(latitude, longitude);
 
         getCurrentLocation(locationManager);
     }
 
 
+    /**
+     * Gets the current location of the user/phone/emulator and sets the class variable to contain
+     * that location
+     *
+     * @param locationManager a Location Manager object that helps manage the apps location
+     */
 
     public void getCurrentLocation(LocationManager locationManager) {
 
         Criteria criteria = new Criteria();
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(criteria, true);
         try {
             Location location = locationManager.getLastKnownLocation(provider);
@@ -259,7 +268,5 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
     }
 
+
 }
-
-
-

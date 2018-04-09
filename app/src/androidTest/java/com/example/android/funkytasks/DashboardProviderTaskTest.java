@@ -16,6 +16,9 @@ import static org.junit.Assert.*;
 /**
  * Created by ${fc1} on 2018-03-19.
  */
+//before testing;
+    //assign tasks with title "test" and "testEdit" to user "qwerty123"
+
 public class DashboardProviderTaskTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
     private User user;
@@ -88,6 +91,24 @@ public class DashboardProviderTaskTest extends ActivityInstrumentationTestCase2<
         solo.clickOnButton("Cancel");
         assertTrue(solo.searchText("REQUESTED BY"));
     }
+    public void testViewPhoto(){
+        goToDashboardProvider();
+        assertTrue(solo.searchText("test"));
+        solo.clickOnText("test");
+        solo.assertCurrentActivity("Wrong activity", DashboardProviderTask.class);
+        solo.clickOnView(solo.getView(R.id.picdetails));
+        solo.waitForActivity("ImageDetails.class");
+        solo.assertCurrentActivity("Wrong activity", ImageDetails.class);
+    }
+    public void testNoPhoto(){
+        goToDashboardProvider();
+        assertTrue(solo.searchText("testEdit"));
+        solo.clickOnText("testEdit");
+        solo.assertCurrentActivity("Wrong activity", DashboardProviderTask.class);
+        solo.clickOnView(solo.getView(R.id.picdetails));
+        solo.assertCurrentActivity("Wrong activity", DashboardProviderTask.class);
+    }
+
 
 
 

@@ -94,7 +94,7 @@ public class ImageConverterController {
      * Scales down the size of an image
      * @param image a bitmap for the image we want to scale
      * @param maxSize a integer representing how large we want the image to be
-     * @return
+     * @return a scaled bitmap object
      */
     public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
