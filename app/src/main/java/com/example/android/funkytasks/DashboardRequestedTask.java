@@ -131,6 +131,9 @@ public class DashboardRequestedTask extends BaseActivity {
                 if (eachTask.getId().equals(id)){
                     task = eachTask;
                 }
+                if (eachTask.getOfflineId().equals(id)){
+                    task = eachTask;
+                }
             }
         }
 
