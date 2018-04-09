@@ -128,10 +128,10 @@ public class DashboardRequestedTask extends BaseActivity {
             LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
             taskList = localController.loadRequestedTask();
             for (Task eachTask: taskList) {
-                if (eachTask.getId().equals(id)){
+                if ((eachTask.getId() != null) && (eachTask.getId().equals(id))){
                     task = eachTask;
                 }
-                if (eachTask.getOfflineId().equals(id)){
+                if ((eachTask.getOfflineId() != null) && (eachTask.getOfflineId().equals(id))){
                     task = eachTask;
                 }
             }
