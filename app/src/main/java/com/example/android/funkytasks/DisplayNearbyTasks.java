@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
@@ -221,7 +223,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
             Log.e("ERROR", "unknown location error");
         }
 
-        point = new LatLng(latitude, longitude);
+//        point = new LatLng(latitude, longitude);
 
         getCurrentLocation(locationManager);
     }
@@ -231,7 +233,6 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     public void getCurrentLocation(LocationManager locationManager) {
 
         Criteria criteria = new Criteria();
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(criteria, true);
         try {
             Location location = locationManager.getLastKnownLocation(provider);
@@ -243,5 +244,6 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         }
 
     }
+
 
 }
