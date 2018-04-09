@@ -286,6 +286,12 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
     String mCurrentPhotoPath;
 
+    /**
+     * This function creates the image file to be stored by the task object.
+     *
+     * @return a file holding the image to be stored
+     * @throws IOException throws an exception when the file stream can not be established
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

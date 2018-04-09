@@ -6,6 +6,24 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.funkytasks.SolveTaskActivity">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/viewNearby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
+            android:text="Near Me"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:layout_editor_absoluteY="8dp" />
+    </RelativeLayout>
+
     <EditText
         android:id="@+id/search"
         android:layout_width="0dp"
@@ -50,5 +68,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
+
+
 
 </android.support.constraint.ConstraintLayout>

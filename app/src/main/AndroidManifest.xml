@@ -70,6 +70,8 @@
         <activity android:name=".BaseActivity" />
         <activity android:name=".RateActivity"></activity>
         <activity android:name=".DisplayMap"></activity>
+        <activity android:name=".DisplayNearbyTasks"></activity>
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

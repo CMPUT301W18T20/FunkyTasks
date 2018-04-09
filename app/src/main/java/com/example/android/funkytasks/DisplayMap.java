@@ -1,3 +1,13 @@
+/**
+ * DisplayMap
+ *
+ * Version 1.0.0
+ *
+ * Created by Funky Tasks on 2018-04-06.
+ *
+ * Copyright information: https://github.com/CMPUT301W18T20/FunkyTasks/wiki/Reuse-Statement
+ */
+
 package com.example.android.funkytasks;
 
 import android.content.Intent;
@@ -19,8 +29,10 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+
+
 /**
- * Created by jpoulin on 2018-04-06.
+ * This activity loads the map and its functionality
  */
 
 public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
@@ -32,6 +44,15 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
     String taskID;
     LatLng taskPoint = null;
 
+
+    /**
+     * This onCreate function loads the view and prepares all the buttons for clicking. It checks
+     * which view called the activity so it can properly behave. Sometimes the map is interactive,
+     * sometimes it isn't based on which activity called this one. This function also locates
+     * and initializes my map.
+     *
+     * @param savedInstanceState a bundle holding the state of the screen when it was last loaded
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 

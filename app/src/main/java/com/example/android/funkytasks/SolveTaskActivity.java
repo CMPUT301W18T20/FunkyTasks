@@ -77,6 +77,15 @@ public class SolveTaskActivity extends BaseActivity {
 
         final EditText search = findViewById(R.id.search);
 
+        Button nearby = findViewById(R.id.viewNearby);
+        nearby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent (SolveTaskActivity.this, DisplayNearbyTasks.class);
+                startActivity(intent);
+            }
+        });
+
         Button searchButton = findViewById(R.id.searchButton);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
