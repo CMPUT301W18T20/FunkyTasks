@@ -25,6 +25,8 @@ public class RateActivityTest extends ActivityInstrumentationTestCase2<LoginActi
         solo = new Solo(getInstrumentation(), getActivity());
     }
 
+
+
     public void PostTask(){
         solo.assertCurrentActivity("Wrong activity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
@@ -66,12 +68,42 @@ public class RateActivityTest extends ActivityInstrumentationTestCase2<LoginActi
         assertFalse(solo.searchText("Place Bid"));
         solo.waitForActivity("SolveTaskActivity.class");
         solo.assertCurrentActivity("Wrong activity", SolveTaskActivity.class);
+        solo.goBack();
+        solo.goBack();
 
+    }
+
+    public void accept(){
+        solo.enterText((EditText) solo.getView(R.id.editLoginName), "qwerty123");
+        solo.clickOnButton("Login");
+        solo.waitForActivity("MainMenuActivity.class");
+        solo.assertCurrentActivity("Wrong activity", MainMenuActivity.class);
+        solo.clickOnView(solo.getView(R.id.fab));
+        solo.waitForActivity("MyTasksActivity.class");
+        solo.assertCurrentActivity("Wrong activity", MyTasksActivity.class);
+        solo.clickOnActionBarItem(R.id.tabItem);
+        assertTrue(solo.searchText(result.getTitle()));
+        solo.clickOnText(result.getTitle());
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        assertTrue(solo.searchText("monica11"));
+        solo.clickOnText("monica11");
+        solo.waitForText("PLACED BY");
+        assertTrue(solo.searchButton("ACCEPT"));
+        solo.clickOnText("ACCEPT");
     }
 
     public void testRate(){
         PostTask();
         bidOnTask();
+        accept();
+        solo.clickOnText("FINISH TASK");
+        solo.waitForActivity("RateActivity.class");
+        solo.assertCurrentActivity("Wrong activity", RateActivity.class);
+        solo.setProgressBar(0,5);
+        solo.clickOnButton("Rate");
+        solo.waitForActivity("DashboardRequestedTask.class");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+
     }
     @After
     public void tearDown() throws Exception {
