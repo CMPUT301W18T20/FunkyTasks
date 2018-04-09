@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 //before testing
 // 1.create accounts with username "testing1","testing2","testing3"
-//2.create four tasks by "testing1", with title"test","testEdit","testDelete","testAccept","testDone","testReassign1","testReassign2"
+//2.create four tasks by "testing1", with title"test"(with photp),"testEdit","testDelete","testAccept","testDone","testReassign1","testReassign2"
 //3.place bids by "testing2" on every tasks except "testEdit"
 //4. place a bid by "testing3" on "testReassign2"
 //5. accept bids with "testing1" on "testDone","testReassign1","testReassign2"
@@ -130,6 +130,23 @@ public class DashboardRequestedTaskTest extends ActivityInstrumentationTestCase2
         solo.waitForText("Reassign");
         solo.clickOnText("Reassign");
         assertTrue(solo.searchText("bidded"));
+    }
+
+    // test for viewing photo
+    public void testViewPhoto(){
+        assertTrue(solo.searchText("test"));
+        solo.clickOnText("test");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.clickOnView(solo.getView(R.id.picdetails));
+        solo.waitForActivity("ImageDetails.class");
+        solo.assertCurrentActivity("Wrong activity", ImageDetails.class);
+    }
+    public void testNoPhoto(){
+        assertTrue(solo.searchText("testEdit"));
+        solo.clickOnText("testEdit");
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
+        solo.clickOnView(solo.getView(R.id.picdetails));
+        solo.assertCurrentActivity("Wrong activity", DashboardRequestedTask.class);
     }
 
 
