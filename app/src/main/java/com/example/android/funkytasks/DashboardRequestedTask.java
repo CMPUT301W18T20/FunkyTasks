@@ -527,32 +527,40 @@ public class DashboardRequestedTask extends BaseActivity {
      */
     public void onDeleteTask(){
         // delete the task along with any other associated bids with it
-        if (!task.getStatus().equals("requested")) {
-            // to delete any bids associated with the task
-            ArrayList<Bid> bids;
-            ElasticSearchController.GetBidsByTaskID taskBids = new ElasticSearchController.GetBidsByTaskID();
-            taskBids.execute(task.getId());
-            try {
-                bids = taskBids.get();
-                Log.e("It works", "got list of bids");
+        if (isNetworkAvailable()){
+            if (!task.getStatus().equals("requested")) {
+                // to delete any bids associated with the task
+                ArrayList<Bid> bids;
+                ElasticSearchController.GetBidsByTaskID taskBids = new ElasticSearchController.GetBidsByTaskID();
+                taskBids.execute(task.getId());
+                try {
+                    bids = taskBids.get();
+                    Log.e("It works", "got list of bids");
 
-                ElasticSearchController.deleteBid deleteBids = new ElasticSearchController.deleteBid();
-                for (Bid bid : bids) {
-                    deleteBids.execute(bid.getId());
+                    ElasticSearchController.deleteBid deleteBids = new ElasticSearchController.deleteBid();
+                    for (Bid bid : bids) {
+                        deleteBids.execute(bid.getId());
+                    }
+                    Log.e("It works", "Deleted all related bids to this task");
+                } catch (Exception e) {
+                    Log.e("Error", "With getting bids by task id");
                 }
-                Log.e("It works", "Deleted all related bids to this task");
-            } catch (Exception e) {
-                Log.e("Error", "With getting bids by task id");
+                Toast.makeText(DashboardRequestedTask.this,
+                        "Deleted associated bids with task", Toast.LENGTH_SHORT).show();
+
             }
-            Toast.makeText(DashboardRequestedTask.this,
-                    "Deleted associated bids with task", Toast.LENGTH_SHORT).show();
-
+            ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
+            deleteTask.execute(id);
+            Log.e("deleted","task");
         }
-        ElasticSearchController.deleteTask deleteTask = new ElasticSearchController.deleteTask();
-        deleteTask.execute(id);
-        Log.e("deleted","task");
 
 
+        //delete in controller too
+        LocalRequestedTaskController controller = new LocalRequestedTaskController(getApplicationContext(), username);
+        Log.e("delete in requested", task.getTitle());
+        controller.deleteTask(index);
+        OfflineController offlineController = new OfflineController(getApplicationContext(), username);
+        offlineController.deleteTask(task);
     }
 
     /**

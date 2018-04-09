@@ -179,16 +179,16 @@ public class LocalRequestedTaskController {
         }
     }
 
-    public void deleteTask(Task task){
+    public void deleteTask(int index){
         taskList = loadRequestedTask();
-        taskList.remove(task);
+        taskList.remove(index);
 
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
             Gson gson = new Gson();
             gson.toJson(taskList, out);
-            Log.e("Got the tasks ", taskList.toString());
+            Log.e("Got the tasksssss ", taskList.toString());
             out.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -161,5 +161,26 @@ public class OfflineController {
         }
     }
 
+    public void deleteTask(Task task){
+        try {
+            fileExists();
+            Log.d("task deletedddddd", task.getTitle());
+            taskList.remove(task);
+            FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+            Gson gson = new Gson();
+            gson.toJson(taskList, out);
+            out.flush();
+            Log.d("Tasks size", String.valueOf(taskList.size()));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
