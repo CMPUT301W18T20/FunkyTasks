@@ -208,7 +208,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
                 intent.putExtra("title",task.getTitle());
                 intent.putExtra("des",task.getDescription());
                 intent.putExtra("size",task.getImages().size());
-
+                intent.putExtra("pics",task.getImages());
 
 
                 setResult(RESULT_OK,intent);

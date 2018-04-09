@@ -333,6 +333,7 @@ public class DashboardRequestedTask extends BaseActivity {
             String des = intent.getExtras().getString("des");
             Integer imagesize = intent.getExtras().getInt("size");
             LatLng point = intent.getParcelableExtra("location");
+            ArrayList<String> images = (ArrayList<String>)intent.getStringArrayListExtra("pics");
 
             titleValue.setText(title);
             descriptionValue.setText(des);
@@ -341,6 +342,7 @@ public class DashboardRequestedTask extends BaseActivity {
 
             task.setTitle(title);
             task.setDescription(des);
+            task.setImagesList(images);
             task.setLocation(point);
 
             if (isNetworkAvailable()){

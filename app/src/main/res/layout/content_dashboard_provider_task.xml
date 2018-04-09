@@ -94,7 +94,7 @@
         android:id="@+id/multiFunction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/buttonshape"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -162,10 +162,10 @@
         android:id="@+id/viewphoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="244dp"
+        android:layout_marginTop="4dp"
         android:text="viewphoto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/taskStatustext"
@@ -173,11 +173,12 @@
 
     <Button
         android:id="@+id/seeLocation"
-        android:layout_width="155dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="View Location"
-        app:layout_constraintTop_toBottomOf="@+id/viewphoto"
-        tools:layout_editor_absoluteX="182dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewphoto" />
 
 
 </android.support.constraint.ConstraintLayout>
