@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapsInitializer;
@@ -155,9 +156,9 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         mMap = googleMap;
 
 
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(point, 12);
+        mMap.animateCamera(cameraUpdate);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
         try {
             mMap.setMyLocationEnabled(true);
         } catch (SecurityException e) {
