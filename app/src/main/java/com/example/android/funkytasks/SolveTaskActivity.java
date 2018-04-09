@@ -100,6 +100,7 @@ public class SolveTaskActivity extends BaseActivity {
                 } else {
 
                     Intent intent = new Intent(SolveTaskActivity.this, DisplayNearbyTasks.class);
+                    intent.putExtra("username", LoginActivity.username);
                     startActivity(intent);
                 }
             }
