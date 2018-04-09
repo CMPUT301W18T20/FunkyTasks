@@ -106,7 +106,10 @@ public class EditDashboardRequestedTask extends BaseActivity {
             LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
             tasks = localController.loadRequestedTask();
             for (Task eachTask: tasks) {
-                if (eachTask.getId().equals(id)){
+                if ((eachTask.getId() != null) && (eachTask.getId().equals(id))){
+                    task = eachTask;
+                }
+                if ((eachTask.getOfflineId() != null) && (eachTask.getOfflineId().equals(id))){
                     task = eachTask;
                 }
             }
