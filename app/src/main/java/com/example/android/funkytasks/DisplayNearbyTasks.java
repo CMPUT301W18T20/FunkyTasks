@@ -91,7 +91,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         ArrayList<Task> taskList = null;
         ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
-        getAllTask.execute();
+        getAllTask.execute("");
         try {
             taskList = getAllTask.get();    // get all the tasks in the server
         } catch (Exception e) {
