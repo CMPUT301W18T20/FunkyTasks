@@ -1,12 +1,16 @@
 package com.example.android.funkytasks;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -34,6 +38,8 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     private Timer t = new Timer();
     LatLng point;
 
+    int REQUEST_CODE;
+
 
 
     @Override
@@ -44,6 +50,15 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapFrag);
 
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // ask permissions here using below code
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE);
+        }
+
 
         try {
             MapsInitializer.initialize(getApplicationContext());
@@ -51,33 +66,9 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
             e.printStackTrace();
         }
 
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                makeUseOfNewLocation(location);
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-// Register the listener with the Location Manager to receive location updates
-        try {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        } catch (SecurityException e) {
-            Log.e("ERROR", "no network access");
-        }
-
-
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+
 
 
         ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
@@ -144,24 +135,65 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        Location location;
+
+//
+//        try {
+//            mMap.setMyLocationEnabled(true);
+//        } catch (SecurityException e) {
+//            Log.e("ERROR", "no permission");
+//        }
+//
+//
+//        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//
+////        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE); //<-- NEW CODE
+//        try {
+//            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //<-- NEW CODE
+////            Log.e("Location", location.toString());
+//        } catch (SecurityException e) {
+//            Log.e("ERROR", "line 68 permissions");
+//        }
+
+
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                makeUseOfNewLocation(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+        // Register the listener with the Location Manager to receive location updates
         try {
-            mMap.setMyLocationEnabled(true);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         } catch (SecurityException e) {
-            Log.e("ERROR", "no permission");
+            Log.e("ERROR", "no network access");
         }
 
+
         Criteria criteria = new Criteria();
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(criteria, true);
         double latitude = 0.0;
         double longitude = 0.0;
         try {
-            Location location = locationManager.getLastKnownLocation(provider);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
+            Location place = locationManager.getLastKnownLocation(provider);
+            latitude = place.getLatitude();
+            longitude = place.getLongitude();
         } catch (SecurityException e) {
             Log.e("ERROR", "no location manager");
         }
+
+        calculateDistance();
 
         point = new LatLng(latitude, longitude);
 
@@ -209,6 +241,8 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         return Math.sqrt(distance);
     }
+
+
 
 }
 
