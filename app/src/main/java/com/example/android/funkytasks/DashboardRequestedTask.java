@@ -130,9 +130,12 @@ public class DashboardRequestedTask extends BaseActivity {
             for (Task eachTask: taskList) {
                 if ((eachTask.getId() != null) && (eachTask.getId().equals(id))){
                     task = eachTask;
+                    break;
+
                 }
                 if ((eachTask.getOfflineId() != null) && (eachTask.getOfflineId().equals(id))){
                     task = eachTask;
+                    break;
                 }
             }
         }
