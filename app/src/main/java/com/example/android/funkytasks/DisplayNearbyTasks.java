@@ -32,6 +32,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -52,6 +53,8 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
     public LocationManager locationManager;
     LatLng point;
+
+    private ArrayList<Task> taskList = null;
 
     int REQUEST_CODE;
     String username;
@@ -95,7 +98,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         // if the task is posted by the user, don't display it
 
-        ArrayList<Task> taskList = null;
+
         ElasticSearchController.GetAllTaskList getAllTaskList = new ElasticSearchController.GetAllTaskList();
         getAllTaskList.execute();
         try {
@@ -108,21 +111,24 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
             for (Task task : taskList) {
                 String taskRequester = task.getRequester();
                 if (!taskRequester.equals(username)) {
-                    Log.d("Iterating", "in the nearby for loop");
-                    LatLng taskLoc = task.getLocation();
-                    if (taskLoc != null) {
-                        double taskLat = taskLoc.latitude;
-                        double taskLon = taskLoc.longitude;
-                        double myLat = point.latitude;
-                        double myLon = point.longitude;
+                    if (task.getStatus().equalsIgnoreCase("Requested")
+                            || task.getStatus().equalsIgnoreCase("Bidded")) {
+                        Log.d("Iterating", "in the nearby for loop");
+                        LatLng taskLoc = task.getLocation();
+                        if (taskLoc != null) {
+                            double taskLat = taskLoc.latitude;
+                            double taskLon = taskLoc.longitude;
+                            double myLat = point.latitude;
+                            double myLon = point.longitude;
 
-                        double dist = distance(taskLat, myLat, taskLon, myLon, 0, 0);
+                            double dist = distance(taskLat, myLat, taskLon, myLon, 0, 0);
 
-                        if (dist <= 5000) {
-                            mMap.addMarker(new MarkerOptions()
-                                    .position(taskLoc)
-                                    .title(task.getTitle()));
+                            if (dist <= 5000) {
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(taskLoc)
+                                        .title(task.getTitle()));
 
+                            }
                         }
                     }
                 }
@@ -159,43 +165,22 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         mapUiSettings.setZoomControlsEnabled(true);
         calculateDistance();
 
-//
-//        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-//
-//            @Override
-//            public void onMapClick(LatLng point) {
-//                // TODO Auto-generated method stub
-//
-//                mMap.clear();
-//
-//
-//            }
-//        });
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String taskTitle = marker.getTitle();
+                for (Task task: taskList) {
+                    if (task.getTitle().equals(taskTitle)) {
+                        String taskId = task.getId();
+                        Intent intent = new Intent(DisplayNearbyTasks.this, ViewRequestorTaskActivity.class);
+                        intent.putExtra("id", taskId);
+                        startActivity(intent);
+                    }
+                }
 
-//        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-//        exec.scheduleAtFixedRate(new Runnable() {
-//            public void run() {
-//                mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-//            }
-//        }, 0, 1, TimeUnit.SECONDS); // execute every 60 seconds
+                }
+            });
 
-
-    }
-
-    public void makeUseOfNewLocation(Location location) {
-        double pointLat = location.getLatitude();
-        double pointLon = location.getLongitude();
-        LatLng place = new LatLng(pointLat, pointLon);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
-        try {
-            mMap.setMyLocationEnabled(true);
-        } catch (SecurityException e) {
-            Log.e("ERROR", "no security permissions");
-        }
-        UiSettings mapUiSettings = mMap.getUiSettings();
-        mapUiSettings.setZoomControlsEnabled(true);
     }
 
     public static double distance(double lat1, double lat2, double lon1,
@@ -260,6 +245,3 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
 }
-
-
-
