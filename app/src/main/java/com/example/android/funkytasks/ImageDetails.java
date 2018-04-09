@@ -86,7 +86,10 @@ public class ImageDetails extends BaseActivity {
             LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
             taskList = localController.loadRequestedTask();
             for (Task eachTask: taskList) {
-                if (eachTask.getId().equals(id)){
+                if ((eachTask.getId() != null) && (eachTask.getId().equals(id))){
+                    task = eachTask;
+                }
+                if ((eachTask.getOfflineId() != null) && (eachTask.getOfflineId().equals(id))){
                     task = eachTask;
                 }
             }
