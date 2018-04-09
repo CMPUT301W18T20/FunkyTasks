@@ -94,7 +94,7 @@
         android:id="@+id/multiFunction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/buttonshape"
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -164,18 +164,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
         android:text="viewphoto"
-        app:layout_constraintBottom_toTopOf="@+id/multiFunction"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/taskRequesterEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <Button
         android:id="@+id/seeLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
         android:layout_marginEnd="4dp"
         android:text="View Location"
-        app:layout_constraintBottom_toTopOf="@+id/multiFunction"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/taskNamerequester"
+        />
 
 
 </android.support.constraint.ConstraintLayout>

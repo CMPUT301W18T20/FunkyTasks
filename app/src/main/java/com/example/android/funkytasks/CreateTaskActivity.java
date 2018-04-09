@@ -117,13 +117,18 @@ public class CreateTaskActivity extends AppCompatActivity {
         loadMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                task = new Task(titleValue, descriptionValue, username);
-                Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
-                String taskID = task.getId();
-                String activityName = "Create";
-                showMap.putExtra("task", taskID);
-                showMap.putExtra("name", activityName);
-                startActivityForResult(showMap, MAP_RESULT);
+                if (title.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(CreateTaskActivity.this,
+                            "Please enter a title first", Toast.LENGTH_SHORT).show();
+                } else {
+                    task = new Task(titleValue, descriptionValue, username);
+                    Intent showMap = new Intent(CreateTaskActivity.this, DisplayMap.class);
+                    String taskID = task.getId();
+                    String activityName = "Create";
+                    showMap.putExtra("task", taskID);
+                    showMap.putExtra("name", activityName);
+                    startActivityForResult(showMap, MAP_RESULT);
+                }
             }
         });
 
