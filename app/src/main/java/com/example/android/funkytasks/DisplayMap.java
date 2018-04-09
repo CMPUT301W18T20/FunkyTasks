@@ -10,7 +10,12 @@
 
 package com.example.android.funkytasks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -38,11 +44,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    MapView mapView;
     Task task;
     String passedName;
     String taskID;
     LatLng taskPoint = null;
+    public LocationManager locationManager;
 
 
     /**
@@ -61,6 +67,9 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapView);
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
 
         Button saveBtn = this.findViewById(R.id.saveLocation);
 
@@ -138,7 +147,7 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
         final String createStr = "Create";
         final String editStr = "Edit";
 
-        LatLng location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
+        LatLng location = new LatLng(53.5444, -113.4909);
         if (taskID != null) {
             Log.e("TaskID", taskID);
             try {
@@ -147,7 +156,7 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
                 mMap.addMarker(new MarkerOptions()
                         .position(location));
             } catch (Exception e) {
-                location = new LatLng(53.68, -113.52);  // default load to Edmonton except it's actually Calgary
+                location = new LatLng(53.5444, -113.4909);
             }
         }
 
@@ -168,9 +177,6 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
                         passedName.trim().equalsIgnoreCase(editStr)) {
                     Log.e("Add click listener", "is executing");
                     taskPoint = point;
-//                    task.setLocation(point);
-//                    ElasticSearchController.updateTask update=new ElasticSearchController.updateTask();
-//                    update.execute(task);
                     Log.e("Point", point.toString());
                     mMap.clear();
                     mMap.addMarker(new MarkerOptions()
@@ -184,12 +190,14 @@ public class DisplayMap extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, 12);
+        mMap.animateCamera(cameraUpdate);
+        try {
+            mMap.setMyLocationEnabled(true);
+        } catch (SecurityException e) {
+            Log.e("ERROR", "no security permission");
+        }
         UiSettings mapUiSettings = mMap.getUiSettings();
         mapUiSettings.setZoomControlsEnabled(true);
-
-
     }
-
 }
