@@ -107,7 +107,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
         loadMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                task = new Task(titleValue, descriptionValue, username);
+//                task = new Task(titleValue, descriptionValue, username);
 
 
                 Intent showMap = new Intent(EditDashboardRequestedTask.this, DisplayMap.class);
