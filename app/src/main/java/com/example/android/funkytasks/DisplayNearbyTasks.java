@@ -47,9 +47,8 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_nearby);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapFrag);
 
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -58,29 +57,21 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE);
+
         } else {
-            Toast.makeText(DisplayNearbyTasks.this, "Please provide access",
-                    Toast.LENGTH_LONG).show();
-        }
 
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.mapFrag);
 
-        try {
-            MapsInitializer.initialize(getApplicationContext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
-
-
-
-        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        exec.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                // TODO I guess
+            try {
+                MapsInitializer.initialize(getApplicationContext());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }, 0, 1, TimeUnit.SECONDS); // execute every 60 seconds
+
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
+        }
 
     }
 
@@ -193,6 +184,13 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 //
 //            }
 //        });
+
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+        exec.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
+            }
+        }, 0, 1, TimeUnit.SECONDS); // execute every 60 seconds
 
 
     }
