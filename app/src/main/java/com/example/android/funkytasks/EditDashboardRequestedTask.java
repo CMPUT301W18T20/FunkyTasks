@@ -91,13 +91,25 @@ public class EditDashboardRequestedTask extends BaseActivity {
         username = intent.getExtras().getString("username");
 
 
-        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-        getTask.execute(id);
-        try{
-            task = getTask.get();
-            Log.e("Task title",task.getTitle());
-        } catch (Exception e) {
-            Log.e("ERROR","not working get task");
+        if (isNetworkAvailable()) {
+            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+            getTask.execute(id);
+            try{
+                task = getTask.get();
+                Log.e("Task title",task.getTitle());
+            } catch (Exception e) {
+                Log.e("ERROR","not working get task");
+            }
+
+        } else {
+            //task = (Task) intent.getSerializableExtra("task");
+            LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
+            tasks = localController.loadRequestedTask();
+            for (Task eachTask: tasks) {
+                if (eachTask.getId().equals(id)){
+                    task = eachTask;
+                }
+            }
         }
 
         editTitle.setText(task.getTitle());
