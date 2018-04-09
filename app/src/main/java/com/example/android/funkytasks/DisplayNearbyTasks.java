@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,11 +53,14 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         int permissionCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
-        if(permissionCheck != PackageManager.PERMISSION_GRANTED) {
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
             // ask permissions here using below code
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE);
+        } else {
+            Toast.makeText(DisplayNearbyTasks.this, "Please provide access",
+                    Toast.LENGTH_LONG).show();
         }
 
 
@@ -81,12 +85,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
     public void calculateDistance() {
-        // get all the tasks in a list
-        // for each task in the list,
-        // determine if it's within 5km
-        // of the user's current position.
-        // if it is, display it with a point on the map.
-        // if it isn't, ignore it and move on
+
         // if the task is posted by the user, don't display it
 
         ArrayList<Task> taskList = null;
@@ -121,7 +120,6 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
 
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -137,26 +135,8 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         Location location;
 
-//
-//        try {
-//            mMap.setMyLocationEnabled(true);
-//        } catch (SecurityException e) {
-//            Log.e("ERROR", "no permission");
-//        }
-//
-//
 //        // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//
-////        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE); //<-- NEW CODE
-//        try {
-//            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //<-- NEW CODE
-////            Log.e("Location", location.toString());
-//        } catch (SecurityException e) {
-//            Log.e("ERROR", "line 68 permissions");
-//        }
-
-
 
         // Define a listener that responds to location updates
         LocationListener locationListener = new LocationListener() {
@@ -181,7 +161,6 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
 
         Criteria criteria = new Criteria();
-//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(criteria, true);
         double latitude = 0.0;
         double longitude = 0.0;
