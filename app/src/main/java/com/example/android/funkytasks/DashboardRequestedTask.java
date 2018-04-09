@@ -238,17 +238,19 @@ public class DashboardRequestedTask extends BaseActivity {
         });
 
         Button locationBtn = this.findViewById(R.id.viewLocation);
-        if (!task.getStatus().equals("requested")){
-            locationBtn.setVisibility(View.GONE);
-        }
 
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!task.getStatus().equals("requested")){
-                    Toast.makeText(DashboardRequestedTask.this,
-                            "Cannot edit location",
-                            Toast.LENGTH_SHORT).show();
+                try{
+                    LatLng checkLtn = task.getLocation();
+                    if (checkLtn == null){
+                        Toast.makeText(DashboardRequestedTask.this, "No location to show", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                catch(Exception e){
+                    Toast.makeText(DashboardRequestedTask.this, "No location to show", Toast.LENGTH_LONG).show();
                     return;
                 }
                 Intent mapIntent = new Intent(DashboardRequestedTask.this, DisplayMap.class);

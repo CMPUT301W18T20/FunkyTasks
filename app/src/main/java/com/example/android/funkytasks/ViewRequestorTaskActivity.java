@@ -192,6 +192,17 @@ public class ViewRequestorTaskActivity extends BaseActivity {
         locationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try{
+                    LatLng checkLtn = task.getLocation();
+                    if (checkLtn == null){
+                        Toast.makeText(ViewRequestorTaskActivity.this, "No location to show", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                catch(Exception e){
+                    Toast.makeText(ViewRequestorTaskActivity.this, "No location to show", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent mapIntent = new Intent(ViewRequestorTaskActivity.this, DisplayMap.class);
                 String taskID = task.getId();
                 String activityName = "Requestor Task";

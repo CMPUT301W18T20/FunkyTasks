@@ -194,6 +194,17 @@ public class DashboardProviderTask extends BaseActivity {
         loadMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try{
+                    LatLng checkLtn = task.getLocation();
+                    if (checkLtn == null){
+                        Toast.makeText(DashboardProviderTask.this, "No location to show", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+                catch(Exception e){
+                    Toast.makeText(DashboardProviderTask.this, "No location to show", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 Intent mapIntent = new Intent(DashboardProviderTask.this, DisplayMap.class);
                 String taskID = task.getId();
                 String activityName = "Provider";
