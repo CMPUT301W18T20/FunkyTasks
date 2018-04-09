@@ -50,11 +50,6 @@ import java.util.concurrent.TimeUnit;
 public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Timer t = new Timer();
-    private GoogleApiClient mGoogleApiClient;
-    public static final String TAG = DisplayNearbyTasks.class.getSimpleName();
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
     public LocationManager locationManager;
     LatLng point;
 
@@ -112,22 +107,23 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         if (taskList != null) {
             for (Task task : taskList) {
                 String taskRequester = task.getRequester();
-                if (!taskRequester.equals(username));
-                Log.d("Iterating", "in the nearby for loop");
-                LatLng taskLoc = task.getLocation();
-                if (taskLoc != null) {
-                    double taskLat = taskLoc.latitude;
-                    double taskLon = taskLoc.longitude;
-                    double myLat = point.latitude;
-                    double myLon = point.longitude;
+                if (!taskRequester.equals(username)) {
+                    Log.d("Iterating", "in the nearby for loop");
+                    LatLng taskLoc = task.getLocation();
+                    if (taskLoc != null) {
+                        double taskLat = taskLoc.latitude;
+                        double taskLon = taskLoc.longitude;
+                        double myLat = point.latitude;
+                        double myLon = point.longitude;
 
-                    double dist = distance(taskLat, myLat, taskLon, myLon, 0,0);
+                        double dist = distance(taskLat, myLat, taskLon, myLon, 0, 0);
 
-                    if (dist <= 5000) {
-                        mMap.addMarker(new MarkerOptions()
-                                .position(taskLoc)
-                                .title(task.getTitle()));
+                        if (dist <= 5000) {
+                            mMap.addMarker(new MarkerOptions()
+                                    .position(taskLoc)
+                                    .title(task.getTitle()));
 
+                        }
                     }
                 }
 
@@ -150,7 +146,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        calculateDistance();
+
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
@@ -161,6 +157,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         }
         UiSettings mapUiSettings = mMap.getUiSettings();
         mapUiSettings.setZoomControlsEnabled(true);
+        calculateDistance();
 
 //
 //        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -241,93 +238,28 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
         point = new LatLng(latitude, longitude);
 
-        getCurrentLocation(locationManager); }
-//        boolean networkEnabled = false;
-//
-//
-////        // Acquire a reference to the system Location Manager
-//        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//
-//        // Define a listener that responds to location updates
-//        LocationListener locationListener = new LocationListener() {
-//            public void onLocationChanged(Location location) {
-//                // Called when a new location is found by the network location provider.
-//                makeUseOfNewLocation(location);
-//
-//            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-//        };
-//
-//        try {
-//            networkEnabled = locationManager
-//                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-//        } catch (Exception ex) {
-//        }
-//
-//        if (networkEnabled) {
-//            try {
-//                locationManager.requestLocationUpdates(
-//                        LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-//            } catch (SecurityException e) {
-//                Toast.makeText(DisplayNearbyTasks.this, "No Network Access",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        }
-
+        getCurrentLocation(locationManager);
+    }
 
 
 
     public void getCurrentLocation(LocationManager locationManager) {
 
-
-            double latitude = 0.0;
-            double longitude = 0.0;
-            // Got last known location. In some rare situations this can be null.
-                try {
-                    Location place = locationManager
-                            .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (place != null) {
-                        latitude = place.getLatitude();
-                        longitude = place.getLongitude();
-                    }
-                } catch (SecurityException e) {
-                    Log.e("ERROR", "no location manager");
-                } catch (Exception e) {
-                    Log.e("ERROR", "unknown location error");
-                }
-
-                point = new LatLng(latitude, longitude);
-
-
-                    }
-
-
-//        Criteria criteria = new Criteria();
-//
-//        LocationProvider provider = locationManager.getProvider("network");
-//        double latitude = 0.0;
-//        double longitude = 0.0;
-//
-//        // Register the listener with the Location Manager to receive location updates
-//        try {
-//            Location place = locationManager
-//                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//            latitude = place.getLatitude();
-//            longitude = place.getLongitude();
-//        } catch (SecurityException e) {
-//            Log.e("ERROR", "no location manager");
-//        } catch (Exception e) {
-//            Log.e("ERROR", "unknown location error");
-//        }
-//
-//        point = new LatLng(latitude, longitude);
+        Criteria criteria = new Criteria();
+//        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        String provider = locationManager.getBestProvider(criteria, true);
+        try {
+            Location location = locationManager.getLastKnownLocation(provider);
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            point = new LatLng(latitude, longitude);
+        } catch (SecurityException e) {
+            Log.e("ERROR", "security permissions 254");
+        }
 
     }
+
+}
 
 
 
