@@ -83,6 +83,12 @@ public class CreateTaskActivity extends AppCompatActivity {
     final GlobalVariables globals = new GlobalVariables();
 
 
+    /**
+     * Overrides the onCreate super class and instantiates the proper view for this class
+     *
+     * @param savedInstanceState a bundle of the previous saved instance state that is used to
+     *                           load a snapshot of the app in the state it was last in
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,6 +213,11 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Create option menu in the toolbar
+     * @param menu grabs the menu object the layout is placed in
+     * @return an options menu containing the toolbar
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -216,6 +227,11 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Checks which menu icon has been clicked on
+     * @param item the toolbar where the button icons are placed in
+     * @return a boolean if the icon is placed
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -253,21 +269,33 @@ public class CreateTaskActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
+    /**
+     * Create file for the image
+     * @return a file for the image
+     * @throws IOException if we can't create the file
+     */
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpeg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpeg",
+                storageDir
         );
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+    /**
+     * Call back from the activity we have called previously
+     * @param requestCode which code we passed to the activity we called
+     * @param resultCode the code we get from the called activity
+     * @param data the intent
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -297,8 +325,6 @@ public class CreateTaskActivity extends AppCompatActivity {
         }
     }
 
-
-    //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
 
     /**
      * This fucntion checks for connectivity, returns true if the device is connected to the internet, false if the device is not.

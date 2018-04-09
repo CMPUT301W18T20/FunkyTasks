@@ -122,14 +122,7 @@ public class DashboardRequestedTask extends BaseActivity {
         id = intent.getExtras().getString("id");
 
         if (isNetworkAvailable()) {
-            ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
-            getTask.execute(id);
-            try{
-                task = getTask.get();
-                Log.e("Task title",task.getTitle());
-            } catch (Exception e) {
-                Log.e("ERROR","not working get task");
-            }
+            getUpdatedTask();
         } else {
             //task = (Task) intent.getSerializableExtra("task");
             LocalRequestedTaskController localController = new LocalRequestedTaskController(getApplicationContext(),username);
@@ -143,6 +136,7 @@ public class DashboardRequestedTask extends BaseActivity {
 
 
         setTaskDetails(task); // set the contents of the screen to the task details
+        photoLength = task.getImages().size();
 
         if (isNetworkAvailable()){
             setBids(); // grab the associated bids of the task
@@ -302,13 +296,10 @@ public class DashboardRequestedTask extends BaseActivity {
                 break;
 
             case R.id.picdetails:
-                photoLength = task.getImages().size();
                 if (photoLength > 0){
-                    String code = "requestDetails";
                     Intent picIntent = new Intent(DashboardRequestedTask.this,ImageDetails.class);
                     picIntent.putExtra("username", username);
                     picIntent.putExtra("id", id);
-                    picIntent.putExtra("code",code);
                     startActivity(picIntent);
                 }
                 else{
@@ -346,6 +337,7 @@ public class DashboardRequestedTask extends BaseActivity {
             titleValue.setText(title);
             descriptionValue.setText(des);
             photoLength = imagesize;
+            Log.e("phonelen",String.valueOf(photoLength));
 
             task.setTitle(title);
             task.setDescription(des);
@@ -355,12 +347,26 @@ public class DashboardRequestedTask extends BaseActivity {
                 Log.d("Network", "available");
                 ElasticSearchController.updateTask updateTask = new ElasticSearchController.updateTask();
                 updateTask.execute(task);
+
+                getUpdatedTask();
             }
 
 
 
         }
     }
+
+    private void getUpdatedTask(){
+        ElasticSearchController.GetTask getTask = new ElasticSearchController.GetTask();
+        getTask.execute(id);
+        try{
+            task = getTask.get();
+            Log.e("Task title",task.getTitle());
+        } catch (Exception e) {
+            Log.e("ERROR","not working get task");
+        }
+    }
+
     /**
      *Reasign a task, clear all the bids placed and change status to requested.
      */
@@ -597,6 +603,10 @@ public class DashboardRequestedTask extends BaseActivity {
 
     }
 
+    /**
+     * Function goes back to the activity we want when we click on the back button
+     */
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MyTasksActivity.class);
@@ -604,7 +614,12 @@ public class DashboardRequestedTask extends BaseActivity {
         startActivity(intent);
     }
 
-    //https://stackoverflow.com/questions/30343011/how-to-check-if-an-android-device-is-online
+    /**
+     * Checks for internet connection
+     * @return boolean if we are connected to the internet or not
+     */
+
+
     public boolean isNetworkAvailable() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();

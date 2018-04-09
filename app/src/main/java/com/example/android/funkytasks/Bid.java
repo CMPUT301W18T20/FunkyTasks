@@ -154,9 +154,18 @@ public class Bid {
     public void setDeclined(){
         this.status=statuses[2];
     }
+
+    /**
+     * gets the status of the bid
+     * @return status of the bid
+     */
     public String getStatus(){
         return this.status;
     }
+
+    /**
+     * sets the status of the bid to be blank
+     */
     public void setStatus(){
         this.status=statuses[0];
     }

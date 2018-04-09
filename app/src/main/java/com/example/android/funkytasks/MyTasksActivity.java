@@ -203,6 +203,9 @@ public class MyTasksActivity extends BaseActivity {
         }
     }
 
+    /**
+     * checks which activity we go to when we press the back button
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainMenuActivity.class);

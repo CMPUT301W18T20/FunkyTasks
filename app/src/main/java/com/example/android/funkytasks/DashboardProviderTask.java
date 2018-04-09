@@ -205,6 +205,15 @@ public class DashboardProviderTask extends BaseActivity {
 
     }
 
+    /**
+     * Create a fragment for bidding
+     * @param bidFragment
+     * @param requester the username of the requester
+     * @param bidder username of the bidder
+     * @param id task id
+     * @return a fragment to change bids in
+     */
+
     public DialogFragment newInstance(DialogFragment bidFragment, String requester, String bidder, String id) {
 
         // Supply num input as an argument.

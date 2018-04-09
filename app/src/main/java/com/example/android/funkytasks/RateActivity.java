@@ -16,6 +16,12 @@ public class RateActivity extends AppCompatActivity {
     String uname;
     User solver;
 
+    /**
+     * Overrides the onCreate super class and instantiates the proper view for this class
+     *
+     * @param savedInstanceState a bundle of the previous saved instance state that is used to
+     *                           load a snapshot of the app in the state it was last in
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

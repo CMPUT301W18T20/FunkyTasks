@@ -155,7 +155,11 @@ public class EditDashboardRequestedTask extends BaseActivity {
                     }
 
                     task.setImagesList(combined);
+                    Log.e("combined",String.valueOf(combined.size()));
+
                 }
+
+
 
                 new Thread(new Runnable() {
                     public void run() {
@@ -186,7 +190,7 @@ public class EditDashboardRequestedTask extends BaseActivity {
 
                 Log.e("tasktitle edited",task.getTitle());
                 Log.e("new des",task.getDescription());
-
+                Log.e("size",String.valueOf(task.getImages().size()));
 
                 //Intent requestedIntent = new Intent(EditDashboardRequestedTask.this, DashboardRequestedTask.class);
                 intent.putExtra("title",task.getTitle());

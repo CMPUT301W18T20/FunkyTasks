@@ -38,6 +38,12 @@ public class TaskDashboardActivity extends BaseActivity {
     ArrayList<Task> requestedTasks;
     User user;
 
+    /**
+     * Overrides the onCreate super class and instantiates the proper view for this class
+     *
+     * @param savedInstanceState a bundle of the previous saved instance state that is used to
+     *                           load a snapshot of the app in the state it was last in
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +78,9 @@ public class TaskDashboardActivity extends BaseActivity {
 
     }
 
+    /**
+     * checks which screen we go back to for the back button
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainMenuActivity.class);
@@ -79,12 +88,20 @@ public class TaskDashboardActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    /**
+     * sets the list view adapter
+     * @param tasklist a list containing the tasks
+     */
     public void setListViewAdapter(ArrayList<Task> tasklist){
         listViewAdapter = new ListViewAdapter(this, R.layout.listviewitem, tasklist);
         listViewAdapter.notifyDataSetChanged();
         listView.setAdapter(listViewAdapter);
 
     }
+
+    /**
+     * Sets the list by grabbing all the tasks associated with the user
+     */
 
     public void getTask(){
         ElasticSearchController.GetUser getUser = new ElasticSearchController.GetUser();
@@ -121,14 +138,11 @@ public class TaskDashboardActivity extends BaseActivity {
 
 
     }
-    public void showBided(){
-        if(statusCheckbox.isChecked()){
-            setListViewAdapter(biddedTaskList);
-        }
-        else{
-            setListViewAdapter(taskList);
-        }
-    }
+
+    /**
+     * if we click on the task, grab its details
+     * @param i position we clicked on the task
+     */
 
     public void taskOnClick(int i){
         Intent intent = new Intent(TaskDashboardActivity.this, DashboardRequestedTask.class);

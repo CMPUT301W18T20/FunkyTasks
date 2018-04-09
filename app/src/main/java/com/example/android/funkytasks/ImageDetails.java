@@ -78,6 +78,7 @@ public class ImageDetails extends BaseActivity {
             Log.e("Error", "Task get not working");
         }
 
+
         imageBitmaps = imageConverter.stringToImageList(task.getImages());
         if (isEmulator()){
             picturePagerAdapter = new PicturePagerAdapter(ImageDetails.this, imageBitmaps);
