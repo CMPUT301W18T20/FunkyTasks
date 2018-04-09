@@ -51,7 +51,6 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<LoginActivi
     }
 
     //test for US 01.01.01
-    //TODO:US 01.01.02 and US 01.01.03
     public void testCreateTask(){
         goToCreateTaskActivity();
         solo.enterText((EditText) solo.getView(R.id.AddTitle), result.getTitle());
@@ -71,12 +70,6 @@ public class CreateTaskTest extends ActivityInstrumentationTestCase2<LoginActivi
         solo.waitForActivity("DisplayMap.class");
         solo.assertCurrentActivity("Wrong activity", DisplayMap.class);
     }
-
-
-    //TODO create another test for going into view photo activity in task details
-    // activibty should assert true if theres a photo (we are in view photo actibity)
-    // and false if there isnt a photo (we are in task details activity)
-    //https://stackoverflow.com/a/30207310
 
 
 
