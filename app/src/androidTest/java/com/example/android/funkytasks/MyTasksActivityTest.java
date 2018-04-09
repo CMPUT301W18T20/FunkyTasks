@@ -17,8 +17,9 @@ import static org.junit.Assert.*;
  * Created by ${fc1} on 2018-03-19.
  */
 
-//Perform this test with pre-existing account test1111.
-
+//Perform this test with pre-existing account test1111 and test2222.
+    //create task providerBd and providerAs with test2222, and let test1111 bid on these two tasks, and assign requesterAs to test1111.
+    //create task requestorBd and requestorAs with test1111, and assign requestorAs to test2222,and bid requestorBd with test2222.
 public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
     private User user;
@@ -53,6 +54,7 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
         solo.clickOnText("MY ASSOCIATED TASKS");
         solo.waitForText("BIDDED ON");
         solo.clickOnText("BIDDED ON");
+        assertTrue(solo.searchText("providerBd"));
     }
     //test for US 05.04.01
     public void testViewRequestorBiddedTaskTest(){
@@ -63,6 +65,8 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
         solo.clickOnText("My Tasks");
         solo.waitForText("Bidded");
         solo.clickOnText("Bidded");
+        assertTrue(solo.searchText("requestorBd"));
+
     }
 
     //test for US 06.02.01
@@ -74,6 +78,7 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
         solo.clickOnText("My Tasks");
         solo.waitForText("Assigned");
         solo.clickOnText("Assigned");
+        assertTrue(solo.searchText("requesterAs"));
     }
     //US 06.01.01
     public void testViewproviderAsignedTask(){
@@ -84,6 +89,7 @@ public class MyTasksActivityTest  extends ActivityInstrumentationTestCase2<Login
         solo.clickOnText("MY ASSOCIATED TASKS");
         solo.waitForText("SOLVING");
         solo.clickOnText("SOLVING");
+        assertTrue(solo.searchText("providerAs"));
     }
 
     @After

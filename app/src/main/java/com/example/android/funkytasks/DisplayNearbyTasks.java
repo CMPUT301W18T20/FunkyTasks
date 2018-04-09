@@ -2,11 +2,13 @@ package com.example.android.funkytasks;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +43,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     LatLng point;
 
     int REQUEST_CODE;
+    String username;
 
 
 
@@ -47,6 +51,9 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_nearby);
+
+        Intent intent = getIntent();
+        username = intent.getStringExtra("username");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
@@ -67,33 +74,40 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
     public void calculateDistance() {
+        Log.e("Calculate distance", "is executing");
 
         // if the task is posted by the user, don't display it
 
         ArrayList<Task> taskList = null;
-        ElasticSearchController.GetAllTask getAllTask = new ElasticSearchController.GetAllTask();
-        getAllTask.execute("");
+        ElasticSearchController.GetAllTaskList getAllTaskList = new ElasticSearchController.GetAllTaskList();
+        getAllTaskList.execute();
         try {
-            taskList = getAllTask.get();    // get all the tasks in the server
+            taskList = getAllTaskList.get();    // get all the tasks in the server
         } catch (Exception e) {
             Log.e("ERROR", "can't get the tasks");
         }
 
         if (taskList != null) {
             for (Task eachTask : taskList) {
+                if (!eachTask.getProvider().equals(username));
                 Log.d("Iterating", "in the nearby for loop");
                 LatLng taskLoc = eachTask.getLocation();
-                double taskLat = taskLoc.latitude;
-                double taskLon = taskLoc.longitude;
-                double myLat = point.latitude;
-                double myLon = point.longitude;
-
-                double dist = distance(taskLat, myLat, taskLon, myLon, 0,0);
-
-                if (dist < 5000) {
+                if (taskLoc != null) {
                     mMap.addMarker(new MarkerOptions()
-                            .position(taskLoc));
+                            .position(taskLoc)
+                            .title(eachTask.getTitle()));
+                    double taskLat = taskLoc.latitude;
+                    double taskLon = taskLoc.longitude;
+                    double myLat = point.latitude;
+                    double myLon = point.longitude;
 
+                    double dist = distance(taskLat, myLat, taskLon, myLon, 0,0);
+
+                    if (dist < 5000) {
+                        mMap.addMarker(new MarkerOptions()
+                                .position(taskLoc));
+
+                    }
                 }
 
             }
@@ -143,15 +157,19 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
 
 
         Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria, true);
+
+        LocationProvider provider = locationManager.getProvider("network");
         double latitude = 0.0;
         double longitude = 0.0;
+
         try {
-            Location place = locationManager.getLastKnownLocation(provider);
+            Location place = locationManager.getLastKnownLocation("network");
             latitude = place.getLatitude();
             longitude = place.getLongitude();
         } catch (SecurityException e) {
             Log.e("ERROR", "no location manager");
+        } catch (Exception e) {
+            Log.e("ERROR", "unknown location error");
         }
 
         calculateDistance();
@@ -159,7 +177,7 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
         point = new LatLng(latitude, longitude);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(point));
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(8.0f));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
         UiSettings mapUiSettings = mMap.getUiSettings();
         mapUiSettings.setZoomControlsEnabled(true);
 
@@ -187,7 +205,14 @@ public class DisplayNearbyTasks extends FragmentActivity implements OnMapReadyCa
     }
 
     public void makeUseOfNewLocation(Location location) {
-        Log.e("Location", location.toString());
+        double pointLat = location.getLatitude();
+        double pointLon = location.getLongitude();
+        LatLng place = new LatLng(pointLat, pointLon);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(place));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(10.0f));
+        UiSettings mapUiSettings = mMap.getUiSettings();
+        mapUiSettings.setZoomControlsEnabled(true);
     }
 
     public static double distance(double lat1, double lat2, double lon1,
