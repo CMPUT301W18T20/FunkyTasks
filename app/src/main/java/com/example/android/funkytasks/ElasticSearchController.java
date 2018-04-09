@@ -563,7 +563,7 @@ public class ElasticSearchController {
     /**
      *  If a user doesn't know what to search for, it displays all tasks posted by other users
      */
-    public static class GetDefaultSearchTaskList extends AsyncTask<String,Void,ArrayList<Task>> {
+    public static class GetAllTaskList extends AsyncTask<String,Void,ArrayList<Task>> {
 
         /**
          * This function displays all the tasks other users have posted if no search criteria
@@ -577,7 +577,6 @@ public class ElasticSearchController {
             verifySettings();
 
             int size = 50000;
-            String username = searchParameters[0];
 
             String query = "{\n"+
                     "\"size\":" + size + ",\n"+
@@ -594,18 +593,6 @@ public class ElasticSearchController {
                 SearchResult result = client.execute(search);
                 if (result.isSucceeded()) {
                     tasks = new ArrayList<>(result.getSourceAsObjectList(Task.class));
-
-                    for (Iterator<Task> iterator = tasks.iterator(); iterator.hasNext(); ) {
-                        Task task = iterator.next();
-                        Log.e("Task title ", task.getTitle());
-                        Log.e("Requester and username ", task.getRequester() + "-" + username);
-                        if (task.getRequester().equals(username)) {
-                            Log.e("Deleting ", task.getRequester() + "-" +username);
-                            iterator.remove();
-                        } else if (task.getStatus().equals("accepted") || task.getStatus().equals("done")) {
-                            iterator.remove();
-                        }
-                    }
                     return tasks;
                 } else {
                     Log.e("Nothing", "No tasks in database");
